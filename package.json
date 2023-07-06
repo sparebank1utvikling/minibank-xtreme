@@ -18,7 +18,8 @@
     "pree2e": "vite build --mode=test"
   },
   "dependencies": {
-    "electron-updater": "^5.3.0"
+    "electron-updater": "^5.3.0",
+    "terminal.css": "^0.7.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.32.0",

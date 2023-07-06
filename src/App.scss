@@ -1,8 +1,43 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+body {
+  background-color: #001032;
+  color: #33AF85;
+}
+
+.menu-grid {
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  grid-template-areas:
+  "a a a"
+  "b . c"
+  "d . e"
+  "f . g";
+}
+
+.menu-title {
+  grid-area: a;
+  display: flex;
+  justify-content: center;
+}
+
+.menu-item--left {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+}
+
+.menu-item--right {
+  display: flex;
+  flex-flow: row-reverse nowrap;
+  justify-content: flex-start;
 }
 
 .logo-box {
