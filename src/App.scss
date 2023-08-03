@@ -89,6 +89,23 @@ body {
 .faktura-spill {
   display: flex;
   justify-content: center;
+
+  &-info-fields {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 10px 10px 10px;
+    font-weight: bolder;
+    font-size: 20px;
+    background-color: white;
+    height: 50px;
+  }
+
+  &-input-field {
+    &:focus {
+      border: solid 3px #1a95e0 !important;
+    }
+  }
 }
 
 .fakura-fields {
