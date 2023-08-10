@@ -5,6 +5,7 @@ import Menu from './components/Menu/Menu'
 import { FakturaSpill } from './components/FakturaSpill/FakturaSpill'
 import HowToSequence from './components/HowToSequence/HowToSequence'
 import PinSpill from './components/PINSpill/PINSpill'
+import { Leaderboard } from "@/components/Leaderboard/Leaderboard";
 
 console.log('[App.tsx]', `Hello world from Electron ${process.versions.electron}!`)
 
@@ -32,6 +33,8 @@ function App() {
         <Route path={"/faktura"} element={<FakturaSpill/>}/>
         <Route path={"/pin/intro"} element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"}/>}/>
         <Route path={"/pin"} element={<PinSpill/>}/>
+        <Route path={"/leaderboard"} element={<Leaderboard gameTitle="Betal faktura" filePath="./betalFaktura.scv" />}/>
+        <Route path={"/leaderboard2"} element={<Leaderboard gameTitle="PIN" filePath="./pin.csv" />}/>
       </Routes>
     </Router>
   )

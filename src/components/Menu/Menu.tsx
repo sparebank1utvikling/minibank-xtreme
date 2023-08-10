@@ -34,6 +34,7 @@ const Menu = () => {
         }
     }
   return (
+    <>
     <div className='menu-grid' tabIndex={0} onKeyUp={(event) => handleInput(event)} ref={mainMenu}>
       <div className={'menu-title'}><h1>MINIBANK XTREME</h1></div>
       <div className={'menu-item--left'} style={{gridArea: 'b'}}> <h3><Link to={"/faktura/intro"}>{'> '}Betal faktura</Link></h3></div>
@@ -43,6 +44,9 @@ const Menu = () => {
       <div className={'menu-item--left'} style={{gridArea: 'f'}}> <h3>{'>'} Jeg er også et spill</h3></div>
       <div className={'menu-item--right'} style={{gridArea: 'g'}}><h3>Jeg er også et spill {'<'}</h3></div>
     </div>
+     <p> <Link to={"/leaderboard"}>Leaderboard her!</Link></p>
+      <p><Link to={"/leaderboard2"}>Leaderboard-2 her!</Link></p>
+    </>
   )
 }
 
