@@ -27,6 +27,9 @@ div {
   "b . c"
   "d . e"
   "f . g";
+  &:focus{
+    outline: none
+  }
 }
 
 .menu-title {

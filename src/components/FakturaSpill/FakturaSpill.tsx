@@ -1,6 +1,6 @@
 import 'terminal.css'
 import React, {Dispatch, useEffect, useRef, useState} from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const FakturaSpill = () => {
   const NUM_ROUNDS = 2
@@ -91,8 +91,15 @@ export const FakturaSpill = () => {
     }
   }, [kidSuccess])
 
+    const navigate = useNavigate()
+    const handleInput = (event: React.KeyboardEvent) => {
+        if(event.key === 'Home') {
+          navigate("/")
+        }
+    }
+
   return(
-    <div className={'faktura-spill'}>
+    <div className={'faktura-spill'} tabIndex={0} onKeyUp={(event) => handleInput(event)}>
       {!done &&
       <fieldset>
         <legend>Betale faktura!</legend>
