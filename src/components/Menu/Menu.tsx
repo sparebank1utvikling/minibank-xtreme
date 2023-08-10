@@ -11,7 +11,6 @@ const Menu = () => {
   }, [])
     const navigate = useNavigate()
     const handleInput = (event: React.KeyboardEvent) => {
-        console.log("wæææææ")
         switch (event.key) {
             case '7':
                 console.log(event)
@@ -38,7 +37,7 @@ const Menu = () => {
     <div className='menu-grid' tabIndex={0} onKeyUp={(event) => handleInput(event)} ref={mainMenu}>
       <div className={'menu-title'}><h1>MINIBANK XTREME</h1></div>
       <div className={'menu-item--left'} style={{gridArea: 'b'}}> <h3><Link to={"/faktura/intro"}>{'> '}Betal faktura</Link></h3></div>
-      <div className={'menu-item--right'} style={{gridArea: 'c'}}><h3>Jeg er også et spill {'<'}</h3></div>
+      <div className={'menu-item--right'} style={{gridArea: 'c'}}><h3><Link to={"/pin/intro"}>Ny PIN på kort{' <'}</Link></h3></div>
       <div className={'menu-item--left'} style={{gridArea: 'd'}}> <h3>{'>'} Jeg er også et spill</h3></div>
       <div className={'menu-item--right'} style={{gridArea: 'e'}}><h3>Jeg er også et spill {'<'}</h3></div>
       <div className={'menu-item--left'} style={{gridArea: 'f'}}> <h3>{'>'} Jeg er også et spill</h3></div>
