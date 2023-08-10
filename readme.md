@@ -21,4 +21,12 @@ Les deg opp på doc på electron arkitektur [her](https://www.electronjs.org/doc
 3. Quiz om bank 
 4. Whackamole med knappene på minibanken: Knappene lyser opp også må du trykke før de slutter å lyse igjen
 5. Oppdatere passord: Passwordgame
+6. Få ny pin-kode 
  
+
+### Backlog:
+ - Leaderboard (skrive til fil)
+ - Navigere meny med key-inputs
+ - How-to kort
+ - Lage Password-game
+ - Lage ny pin-kode spill

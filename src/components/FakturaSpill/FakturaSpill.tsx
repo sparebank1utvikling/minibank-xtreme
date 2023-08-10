@@ -6,13 +6,18 @@ export const FakturaSpill = () => {
   const NUM_ROUNDS = 2
   const [ kid, setKid ] = useState<string>()
   const [ konto, setKonto ] = useState<string>()
+  const [ sum, setSum ] = useState<string>()
   const [kontoInput, setKontoInput] = useState<string>("")
   const [kidInput, setKidInput] = useState<string>("")
+  const [sumInput, setSumInput] = useState<string>("")
+
   const [kidSuccess, setKidSuccess] = useState<boolean>(false)
   const [kontoSuccess, setKontoSuccess] = useState<boolean>(false)
+  const [sumSuccess, setSumSuccess] = useState<boolean>(false)
 
   const kidInputRef = useRef<HTMLInputElement>(null)
   const kontoInputRef = useRef<HTMLInputElement>(null)
+  const sumInputRef = useRef<HTMLInputElement>(null)
 
   const [numSuccess, setNumSuccess] = useState<number>(0)
   const [done, setDone] = useState<boolean>(false)
@@ -23,6 +28,7 @@ export const FakturaSpill = () => {
   useEffect(() => {
     generateKonto(setKonto)
     generateKid(setKid)
+    generateSum(setSum)
     if(kidInputRef.current) kidInputRef.current.focus()
     setStartTime(Date.now())
   }, [])
@@ -30,17 +36,22 @@ export const FakturaSpill = () => {
   const reset = () => {
     generateKonto(setKonto)
     generateKid(setKid)
+    generateSum(setSum)
     setKidSuccess(false)
     setKontoSuccess(false)
+    setSumSuccess(false)
     if(kidInputRef.current) {
       kidInputRef.current.value = ""
     }
     if(kontoInputRef.current) {
       kontoInputRef.current.value = ""
     }
+    if(sumInputRef.current) {
+      sumInputRef.current.value = ""
+    }
     if(numSuccess === NUM_ROUNDS - 1) {
       const time = Date.now() - startTime!
-      setTimeUsed(Math.round(time / 1000).toFixed(2))
+      setTimeUsed((time / 1000).toFixed(2))
       setDone(true)
     }
     console.log(`numSuccess: ${numSuccess}`)
@@ -57,16 +68,21 @@ export const FakturaSpill = () => {
     //Konto is success
     if (!kontoSuccess && validate(kontoInput, konto)) {
       setKontoSuccess(true)
+      if(sumInputRef.current) sumInputRef.current.focus()
     }
-  }, [kontoInput, kidInput, kid, konto])
+    //Sum is success
+    if(!sumSuccess && validate(sumInput, sum)) {
+      setSumSuccess(true)
+    }
+  }, [kontoInput, kidInput, sumInput, kid, konto, sum])
 
   //Check if successfully entered both numbers
   useEffect(() => {
-    if(kontoSuccess && kidSuccess) {
+    if(kontoSuccess && kidSuccess && sumSuccess) {
       console.log("Resetting: Great success!")
       reset()
     }
-  }, [kontoSuccess, kidSuccess])
+  }, [kontoSuccess, kidSuccess, sumSuccess])
 
   // Change focus to first field on initial and after reset
   useEffect(() => {
@@ -84,6 +100,7 @@ export const FakturaSpill = () => {
           <header>Betalingsinformasjon</header>
           <div className={"terminal-alert terminal-alert-primary faktura-spill-info-fields"}>Kid: {kid}</div>
           <div className={"terminal-alert terminal-alert-primary faktura-spill-info-fields"}>Kontonr: {konto}</div>
+          <div className={"terminal-alert terminal-alert-primary faktura-spill-info-fields"}>Å betale: {sum},-</div>
         </div>
         <div className={"form-group"}>
           <label htmlFor={"kid"}>KID:</label>
@@ -114,6 +131,20 @@ export const FakturaSpill = () => {
             onChange={(change) => {setKontoInput(change.currentTarget.value)}}
           />
         </div>
+          <div className={"form-group"}>
+              <label htmlFor={"Sum"}>Å betale:</label>
+              <input
+                  id={"sum"}
+                  ref={sumInputRef}
+                  name={"Sum"}
+                  type={"text"}
+                  className={"faktura-spill-input-field"}
+                  disabled={sumSuccess}
+                  maxLength={11}
+                  placeholder={"Sum"}
+                  onChange={(change) => {setSumInput(change.currentTarget.value)}}
+              />
+          </div>
       </fieldset>}
       {done &&
           <div className={'terminal-card'}>
@@ -135,6 +166,10 @@ const generateKid = (hook: Dispatch<React.SetStateAction<string | undefined>>) =
 }
 const generateKonto = (hook: Dispatch<React.SetStateAction<string | undefined>>) => {
   hook(Math.floor(Math.random()*99999999999).toString())
+}
+
+const generateSum = (hook: Dispatch<React.SetStateAction<string | undefined>>) => {
+  hook(Math.floor(Math.random()*99999).toString())
 }
 
 const validate = (brukerIn: string, konto: string | undefined) => {

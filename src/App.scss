@@ -9,6 +9,13 @@
 body {
   background-color: #001032;
   color: #33AF85;
+  font-family: Cantarell;
+}
+
+div {
+  &:focus {
+    outline: none;
+  }
 }
 
 .menu-grid {
@@ -116,3 +123,19 @@ fieldset {
   border: 1px solid #fff;
   width: 70%;
 }
+
+.intro-card {
+  background-color: white;
+  color: black;
+  &-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 1.2em;
+    min-width: 600px;
+    max-width: 600px;
+    min-height: 150px;
+    margin-top: 15px;
+  }
+}
+

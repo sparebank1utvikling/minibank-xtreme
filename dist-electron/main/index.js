@@ -69,6 +69,7 @@ async function createWindow() {
   win = new electron.BrowserWindow({
     title: "Main window",
     icon: node_path.join(process.env.PUBLIC, "favicon.ico"),
+    fullscreen: true,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
