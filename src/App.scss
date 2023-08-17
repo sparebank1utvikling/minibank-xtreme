@@ -99,6 +99,8 @@ div {
 .faktura-spill {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
 
   &-info-fields {
     display: flex;
@@ -142,3 +144,15 @@ fieldset {
   }
 }
 
+.pin-progress-bar {
+  background-color: white !important;
+  color: white !important;
+  &-filled {
+    background-color: greenyellow !important;
+  }
+}
+
+.score-container {
+  font-size: 2em;
+  margin: 25px;
+}
