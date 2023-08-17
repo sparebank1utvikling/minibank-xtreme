@@ -5,6 +5,7 @@ import Menu from './components/Menu/Menu'
 import { FakturaSpill } from './components/FakturaSpill/FakturaSpill'
 import HowToSequence from './components/HowToSequence/HowToSequence'
 import PinSpill from './components/PINSpill/PINSpill'
+import DinoGame from './components/DinoGame/DinoGame'
 
 console.log('[App.tsx]', `Hello world from Electron ${process.versions.electron}!`)
 
@@ -32,6 +33,7 @@ function App() {
         <Route path={"/faktura"} element={<FakturaSpill/>}/>
         <Route path={"/pin/intro"} element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"}/>}/>
         <Route path={"/pin"} element={<PinSpill/>}/>
+        <Route path={"/dino"} element={<DinoGame/>}/>
       </Routes>
     </Router>
   )
