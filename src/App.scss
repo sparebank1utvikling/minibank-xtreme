@@ -160,13 +160,24 @@ fieldset {
 .dino-container {
   position: relative;
   width: 100%;
+ // max-width: 1200px;
   height: 300px;
   //background-color: #f7f7f7;
   overflow: hidden;
 }
 
 .dino-background {
-  width: 100%;
+  //width: 100%;
+  height: 100%;
+  animation-name: moving;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-duration: 120s;
+  background-repeat: repeat-y;
+  &-2 {
+    position: relative;
+    left: 1000px;
+  }
 }
 
 .dinosaur {
@@ -201,13 +212,49 @@ fieldset {
   position: absolute;
   bottom: 0;
   width: 50px;
-  animation-name: floating;
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
+  animation-name: floating, moving;
+  animation-duration: 2s, 10s;
+  animation-iteration-count: infinite, infinite;
+  animation-timing-function: ease-in-out, linear;
 }
 @keyframes floating {
   0% { transform: translate(0,  0px); }
   50%  { transform: translate(0, 15px); }
   100%   { transform: translate(0, -0px); }
+}
+
+@keyframes moving {
+  0% {
+    transform: translate(0, 0)
+  }
+  50% {
+    transform: translate(-50vw, 0)
+  }
+  100% {
+    transform: translate(-100vw, 0)
+  }
+}
+
+.background-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 200%; /* Make the container twice as wide as the viewport */
+  animation: scrollBackground 10s linear infinite; /* Adjust duration as needed */
+}
+
+.background-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes scrollBackground {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Move the container by half its width */
+  }
 }
