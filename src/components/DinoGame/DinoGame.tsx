@@ -34,9 +34,8 @@ const DinoGame = () => {
   }
 
   const handleJump = () => {
-    // Handle jump logic here
     setIsJumping(true)
-    setTimeout(() => {setIsJumping(false)}, 200)
+    setTimeout(() => {setIsJumping(false)}, 1000)
   };
 
 

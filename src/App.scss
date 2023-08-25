@@ -186,10 +186,12 @@ fieldset {
   left: 50px;
   width: 50px;
   height: 50px;
-  transition: transform 0.2s ease-out;
+  transition: transform 0.4s ease-out;
 
   &-jumping {
-    transform: translateY(-100px);
+    animation-name: jumping;
+    animation-duration: 1s;
+    animation-timing-function: linear;
   }
   &-normal {
     animation-name: running;
@@ -197,6 +199,15 @@ fieldset {
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
   }
+}
+
+@keyframes jumping {
+  10% { transform: translateY(-20px) }
+  30% { transform: translate(15px, -180px) }
+  45% { transform: translate(30px, -200px) }
+  60% { transform: translate(45px, -180px) }
+  85% { transform: translate(60px, 0px)}
+  100% { transform: translate(0px, 0px)}
 }
 
 @keyframes running {
@@ -213,7 +224,7 @@ fieldset {
   bottom: 0;
   width: 50px;
   animation-name: floating, moving;
-  animation-duration: 2s, 10s;
+  animation-duration: 2s, 5s;
   animation-iteration-count: infinite, infinite;
   animation-timing-function: ease-in-out, linear;
 }
@@ -245,7 +256,7 @@ fieldset {
 }
 
 .background-container img {
-  width: 100%;
+  width: 50%;
   height: 100%;
   object-fit: cover;
 }
