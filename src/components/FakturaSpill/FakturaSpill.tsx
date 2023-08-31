@@ -1,6 +1,7 @@
 import 'terminal.css'
 import React, {Dispatch, useEffect, useRef, useState} from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { BOARD_PAY_PATH } from "@/App";
 
 export const FakturaSpill = () => {
   const NUM_ROUNDS = 2
@@ -159,6 +160,9 @@ export const FakturaSpill = () => {
               <div>
                   You completed the challenge in {timeUsed} seconds. Ranking you #x on the scoreboard
               </div>
+              <Link to={`${BOARD_PAY_PATH}/${timeUsed}`}>
+                  <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Register</button>
+              </Link>
               <Link to={'/'}>
                 <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Back to menu</button>
               </Link>

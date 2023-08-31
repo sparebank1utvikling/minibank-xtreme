@@ -1,112 +1,47 @@
 import './leaderboard.scss'
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  saveStateToFile,
-  ScoreData
-} from "@/components/Leaderboard/LeaderBoardUtils";
-import * as fs from "fs";
-import { parse } from "csv-parse";
+import React, { useCallback, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { readCSVPromise, ScoreData } from "@/components/Leaderboard/LeaderBoardUtils";
+import { LeaderboardForm } from "@/components/Leaderboard/LeaderboardForm";
 
 interface Props {
   gameTitle: string
   filePath: string
+  registerNew: boolean
+  sortAscending: boolean
 }
 
-export const Leaderboard = ({gameTitle, filePath}: Props) => {
+export const Leaderboard = ({gameTitle, filePath, registerNew, sortAscending}: Props) => {
+  let params = useParams();
+  const newScore = params.score ? parseFloat(params.score).toFixed(2) : 0.00
   const emptyScore: ScoreData[] = []
-  const headers = [ 'name', 'phone', 'score' ];
 
-  const [ showLeaderboard, setShowLeaderboard ] = useState(true)
-  const [ phone, setPhone ] = useState('')
-  const [ name, setName ] = useState('')
-  const [ score, setScore ] = useState(0)
   const [ scoreBoard, setScoreBoard ] = useState(emptyScore)
 
   useEffect(() => {
-    //check if file exist
-    if (fs.existsSync(filePath)) {
-      //do process?
-    } else {
-      console.log("File doesn\'t exist.Creating new file")
-      fs.writeFile(filePath, '', (err) => {
-        if (err)
-          console.log(err);
-      })
-    }
+    fetchData()
+      .catch(console.error)
   })
 
-  const readCSV = (filePath: string) => {
-    const fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'});
-    parse(fileContent, {
-      delimiter: ',',
-      columns: headers,
-    }, (error, result: ScoreData[]) => {
-      if (error) {
-        console.error(error);
-      }
-      //sort results
-      result = result.sort((a,b) => b.score - a.score)
-      setScoreBoard(result)
-    });
-    setScoreBoard([])
-  }
-
-  const saveValues = () => {
-    const copy = scoreBoard
-
-    copy.push(
-      {
-        name: name,
-        phone: phone,
-        score: score
-      }
-    )
-
-    const sorted = copy.sort((a,b) => b.score - a.score)
-    setScore(0)
-    setName('')
-    setPhone('')
-
-    saveStateToFile(filePath, sorted)
-    setShowLeaderboard(true)
-  }
+  const fetchData = useCallback(async () => {
+    const data = await readCSVPromise(filePath, sortAscending);
+    // @ts-ignore
+    setScoreBoard(data);
+  }, [])
 
   return (
     <div className="leaderboard">
 
-      {showLeaderboard ?
+      {registerNew && params.score ?
+        <LeaderboardForm gameTitle={gameTitle} filePath={filePath} scoreBoard={scoreBoard} score={newScore} sortAscending={sortAscending}/> :
         <>
           <p>{`Leaderboard for game: ${gameTitle}`}</p>
-
           {scoreBoard.map((it) => {
-            return (<p key={it.phone}>{`Navn: ${it.name}, Telefon: ${it.phone}, Score: ${it.score}`}</p>)
+            return (<p key={it.phone}>{`Name: ${it.name}, Phone: ${it.phone}, Score: ${it.score}`}</p>)
           })}
-
-          <button onClick={()=> readCSV(filePath)}>Load</button>
-        </>
-        :
-        <>
-          <p>Register player:</p>
-          <form onSubmit={() => saveValues()}>
-            <label>
-              Name:
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-            </label>
-            <label>
-              Phone:
-              <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
-            </label>
-            <label>
-              Score:
-              <input type="text" value={score} onChange={(e) => setScore(parseInt(e.target.value))}/>
-            </label>
-            <input type="submit" value="Register"/>
-          </form>
+          <br/>
         </>
       }
-      <br/>
-      <button onClick={() => setShowLeaderboard(!showLeaderboard)}>Toggle view</button>
       <br/>
       <Link to={"/"}>Back home</Link>
     </div>

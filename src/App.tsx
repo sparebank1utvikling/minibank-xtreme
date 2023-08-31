@@ -6,8 +6,12 @@ import { FakturaSpill } from './components/FakturaSpill/FakturaSpill'
 import HowToSequence from './components/HowToSequence/HowToSequence'
 import PinSpill from './components/PINSpill/PINSpill'
 import { Leaderboard } from "@/components/Leaderboard/Leaderboard";
+import { createFileForLeaderBoard } from "@/components/Leaderboard/LeaderBoardUtils";
 
 console.log('[App.tsx]', `Hello world from Electron ${process.versions.electron}!`)
+
+export const BOARD_PIN_PATH = "/leaderboardPin"
+export const BOARD_PAY_PATH = "/leaderboardPay"
 
 function App() {
   const howToFaktura = [
@@ -25,6 +29,15 @@ function App() {
     "Reenter the PINs after they disappear as many times as possible. Are you attentive enough?"
   ]
 
+  const fakturaFilePath = "./betalFaktura.scv"
+  const fakturaSort = false
+  const pinFilePath = "./pin.csv"
+  const pinSort = true
+
+  //create files
+  createFileForLeaderBoard(fakturaFilePath)
+  createFileForLeaderBoard(pinFilePath)
+
   return (
     <Router>
       <Routes>
@@ -33,8 +46,10 @@ function App() {
         <Route path={"/faktura"} element={<FakturaSpill/>}/>
         <Route path={"/pin/intro"} element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"}/>}/>
         <Route path={"/pin"} element={<PinSpill/>}/>
-        <Route path={"/leaderboard"} element={<Leaderboard gameTitle="Betal faktura" filePath="./betalFaktura.scv" />}/>
-        <Route path={"/leaderboard2"} element={<Leaderboard gameTitle="PIN" filePath="./pin.csv" />}/>
+        <Route path={BOARD_PAY_PATH} element={<Leaderboard gameTitle="Betal faktura" filePath={fakturaFilePath} registerNew={false} sortAscending={fakturaSort}/>}/>
+        <Route path={`${BOARD_PAY_PATH}/:score`} element={<Leaderboard gameTitle="Betal faktura" filePath={fakturaFilePath} registerNew={true} sortAscending={fakturaSort}/>}/>
+        <Route path={BOARD_PIN_PATH} element={<Leaderboard gameTitle="PIN" filePath={pinFilePath} registerNew={false} sortAscending={pinSort}/>}/>
+        <Route path={`${BOARD_PIN_PATH}/:score`} element={<Leaderboard gameTitle="PIN" filePath={pinFilePath} registerNew={true} sortAscending={pinSort}/>}/>
       </Routes>
     </Router>
   )

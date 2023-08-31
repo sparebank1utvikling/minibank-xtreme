@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import {useRef, useEffect} from "react";
+import { BOARD_PAY_PATH, BOARD_PIN_PATH } from "@/App";
 
 const Menu = () => {
     const mainMenu = useRef<HTMLDivElement>(null);
@@ -44,8 +45,8 @@ const Menu = () => {
       <div className={'menu-item--left'} style={{gridArea: 'f'}}> <h3>{'>'} Jeg er også et spill</h3></div>
       <div className={'menu-item--right'} style={{gridArea: 'g'}}><h3>Jeg er også et spill {'<'}</h3></div>
     </div>
-     <p> <Link to={"/leaderboard"}>Leaderboard her!</Link></p>
-      <p><Link to={"/leaderboard2"}>Leaderboard-2 her!</Link></p>
+     <p><Link to={BOARD_PAY_PATH}>Leaderboard pay</Link></p>
+      <p><Link to={BOARD_PIN_PATH}>Leaderboard pin</Link></p>
     </>
   )
 }
