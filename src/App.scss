@@ -4,12 +4,14 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  overflow-y: hidden;
 }
 
 body {
   background-color: #001032;
   color: #33AF85;
   font-family: Cantarell;
+  overflow-y: hidden;
 }
 
 div {
@@ -223,10 +225,10 @@ fieldset {
   position: absolute;
   bottom: 0;
   width: 50px;
-  animation-name: floating, moving;
-  animation-duration: 2s, 5s;
-  animation-iteration-count: infinite, infinite;
-  animation-timing-function: ease-in-out, linear;
+  animation-name: floating;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
 @keyframes floating {
   0% { transform: translate(0,  0px); }

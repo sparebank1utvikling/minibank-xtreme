@@ -1,4 +1,5 @@
 
 export type Obstacle = {
-  position: number
+  position: number,
+  setPosition: React.Dispatch<React.SetStateAction<number>>
 }

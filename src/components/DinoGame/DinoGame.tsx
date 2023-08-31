@@ -8,12 +8,15 @@ import { useNavigate } from 'react-router-dom';
 
 const DinoGame = () => {
   const [isJumping, setIsJumping] = useState<boolean>(false)
-  const [obstacles, setObstacles] = useState<ObstacleType[]>([{position: 700}])
+  const obstacles = createObstacles(10);
   const [score, setScore] = useState<number>(0)
   const navigate = useNavigate()
   const gameContainerRef = useRef<HTMLDivElement>(null)
+  const [isHit, setIsHit] = useState<boolean>(false)
   const updateGame = () => {
-    // Update game logic here
+    // Update obstacle position
+    //obstacles.positions.forEach((pos) => if())
+
   };
 
   useEffect(() => {
@@ -46,13 +49,42 @@ const DinoGame = () => {
         <img src={background}/>
       </div>
       <Dinosaur isJumping={isJumping} characterUrl={characters[0]}/>
-      {obstacles.map((obstacle, index) => (
-        <Obstacle key={index} obstacle={obstacle} />
+      {obstacles.objects.map((obstacle, index) => (
+        obstacle
       ))}
       <div className="score">{score}</div>
     </div>
   );
 
+}
+
+const createObstacle = (initial: number): ObstacleType => {
+  const [position, setPosition] = useState<number>(initial)
+  return {
+    position,
+    setPosition
+  }
+}
+
+const createObstacles = (n: number) => {
+  const hooks: React.Dispatch<React.SetStateAction<number>>[] = []
+  const positions: number[] = []
+  const objects: JSX.Element[] = []
+  let i = 0
+  let pos = 700
+  while(i++ < n) {
+    let object = createObstacle(pos)
+    pos += 700
+    hooks.push(object.setPosition)
+    positions.push(object.position)
+    let cur = <Obstacle obstacle={object}/>
+    objects.push(cur)
+  }
+  return {
+    positions,
+    hooks,
+    objects
+  }
 }
 
 export default DinoGame;
