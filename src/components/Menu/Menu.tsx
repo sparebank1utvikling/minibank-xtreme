@@ -47,6 +47,8 @@ const Menu = () => {
     </div>
      <p><Link to={BOARD_PAY_PATH}>Leaderboard pay</Link></p>
       <p><Link to={BOARD_PIN_PATH}>Leaderboard pin</Link></p>
+    {/* <p><Link to={`${BOARD_PAY_PATH}/9`}>Leaderboard pay new</Link></p> <p><Link to={`${BOARD_PIN_PATH}/9`}>Leaderboard pin new</Link></p> */}
+      {/* kommenter inn det over for å legge til ting i scoreboard uten spille spillene */}
     </>
   )
 }

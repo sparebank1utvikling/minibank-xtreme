@@ -1,3 +1,4 @@
+import './leaderboardForm.scss';
 import React, { useState } from "react";
 import { saveStateToFile, ScoreData, sort } from "@/components/Leaderboard/LeaderBoardUtils";
 import { useNavigate } from "react-router-dom";
@@ -35,19 +36,19 @@ export const LeaderboardForm = ({gameTitle, filePath, score, scoreBoard, sortAsc
   }
 
   return (
-    <>
-      <p>{`Register player for game ${gameTitle}:`}</p>
-      <form onSubmit={() => saveValues()}>
-        <label>
-          Name:
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-        </label>
-        <label>
-          Phone:
-          <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
-        </label>
-        <input type="submit" value="Register"/>
+      <fieldset className="leaderboard-form">
+        <legend>Register player for <strong>{`${gameTitle}`}</strong></legend>
+      <form className="form" onSubmit={() => saveValues()}>
+        <div className="form-group">
+        <label htmlFor="name">Name</label>
+        <input id="name" className="leaderboard-input faktura-spill-input-field" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+      </div>
+        <div className="form-group">
+        <label htmlFor="phone">Phone</label>
+        <input id="phone" className="leaderboard-input faktura-spill-input-field"  type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
+        </div>
+        <input className={'btn btn-primary'} type="submit" value="Register"/>
       </form>
-    </>
+      </fieldset>
   )
 }
