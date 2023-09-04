@@ -2,7 +2,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem;
   text-align: center;
 }
 
@@ -10,7 +10,7 @@ body, label {
   background-color: #001032;
   color: #33AF85;
   font-family: Cantarell;
-  padding-top: 3rem;
+  font-size: 20px;
 }
 
 div {
@@ -38,6 +38,7 @@ div {
 .menu-title {
   display: flex;
   justify-content: center;
+  padding-top: 3rem;
 }
 
 .menu-description {
@@ -114,7 +115,7 @@ div {
   &-info-fields {
      display: flex;
      color: var(--primary-color);
-     font-size: 1.5rem;
+     font-size: 2rem;
      font-weight: bold;
      justify-content: center;
   }
@@ -132,8 +133,8 @@ div {
     justify-content: center;
     margin: 15px 10px 10px 10px;
     font-weight: bolder;
-    font-size: 20px;
-    height: 50px;
+    font-size: 1.5rem;
+    height: 60px;
     color: white;
   }
 

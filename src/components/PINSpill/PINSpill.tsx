@@ -96,7 +96,7 @@ const PINSpill = () => {
             <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Register</button>
           </Link>
           <Link to={'/'}>
-            <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Back to menu</button>
+            <button className={'btn btn-default'} style={{marginBottom: '15px'}}>Back to menu</button>
           </Link>
         </div>
       }

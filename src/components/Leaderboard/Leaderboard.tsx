@@ -27,7 +27,7 @@ export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, s
   const fetchData = useCallback(async () => {
     const data = await readCSVPromise(filePath, sortAscending);
     // @ts-ignore
-    setScoreBoard(data.splice(0,20));
+    setScoreBoard(data.splice(0,50));
   }, [])
 
   return (
@@ -36,7 +36,7 @@ export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, s
       {registerNew && params.score ?
         <LeaderboardForm gameTitle={gameTitle} filePath={filePath} scoreBoard={scoreBoard} score={newScore} sortAscending={sortAscending} /> :
         <>
-          <h1 className="leaderboard_title">{`Top 20 - "${gameTitle}"`}</h1>
+          <h1 className="leaderboard_title">{`Top 50 - "${gameTitle}"`}</h1>
           <table className="leaderboard_table">
             <thead>
               <tr>
