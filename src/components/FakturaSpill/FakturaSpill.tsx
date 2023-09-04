@@ -19,6 +19,7 @@ export const FakturaSpill = () => {
   const kidInputRef = useRef<HTMLInputElement>(null)
   const kontoInputRef = useRef<HTMLInputElement>(null)
   const sumInputRef = useRef<HTMLInputElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
 
   const [numSuccess, setNumSuccess] = useState<number>(0)
   const [done, setDone] = useState<boolean>(false)
@@ -114,15 +115,23 @@ export const FakturaSpill = () => {
     }
   }, [kidSuccess])
 
+  useEffect(() => {
+    if(ref.current)
+      ref.current.focus();
+  },[done])
+
     const navigate = useNavigate()
     const handleInput = (event: React.KeyboardEvent) => {
-        if(event.key === 'Home') {
-          navigate("/")
+        if(event.key === '/') {
+          navigate("/#")
+        }
+        if(event.key === '-') {
+          navigate(`${BOARD_PAY_PATH}/${timeUsed}`)
         }
     }
 
   return(
-    <div className={'faktura-spill'} tabIndex={0} onKeyUp={(event) => handleInput(event)}>
+    <div className={'faktura-spill'} tabIndex={0} ref={ref} onKeyUp={(event) => handleInput(event)}>
       {!done &&
       <fieldset>
         <legend>Pay invoice</legend>
@@ -180,18 +189,16 @@ export const FakturaSpill = () => {
           <div className={'terminal-card'}>
               <header>Well done!</header>
               <div>
-                  You completed the challenge in {timeUsed} seconds. Ranking you #x on the scoreboard
+                  You completed the challenge in {timeUsed} seconds! <br/> Do you want to add your name to the scoreboard?
               </div>
               <Link to={`${BOARD_PAY_PATH}/${timeUsed}`}>
-                  <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Register</button>
+                  <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>✓ Add to scoreboard</button>
               </Link>
               <Link to={'/'}>
-                <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Back to menu</button>
+                <button className={'btn btn-default'} style={{marginBottom: '15px'}}>⌂ Back to menu</button>
               </Link>
           </div>
       }
-      <br />
-      <Link className="back_link" to={"/"}>Back home</Link>
     </div>
   )
 }

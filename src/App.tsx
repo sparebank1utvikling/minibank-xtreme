@@ -14,6 +14,7 @@ export const BOARD_PIN_PATH = "/leaderboardPin"
 export const BOARD_PAY_PATH = "/leaderboardPay"
 export const GAME_TITLE_PIN = "PIN"
 export const GAME_TITLE_PAY_INVOICE = "Pay invoice"
+export const NUMPAD_HOME = "/";
 
 function App() {
   const howToFaktura = [

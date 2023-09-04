@@ -14,24 +14,17 @@ const Menu = () => {
   const handleInput = (event: React.KeyboardEvent) => {
     switch (event.key) {
       case '7':
-        console.log(event)
         navigate("/faktura/intro")
-        break
-      case '4':
-        console.log(event)
-        break
-      case '1':
-        console.log(event)
-        break
+        break;
       case '9':
-        console.log(event)
-        break
-      case '6':
-        console.log(event)
-        break
+        navigate("/pin/intro")
+        break;
+      case '1':
+        navigate(BOARD_PAY_PATH);
+        break;
       case '3':
-        console.log(event)
-        break
+        navigate(BOARD_PIN_PATH);
+        break;
     }
   }
   return (
@@ -40,10 +33,10 @@ const Menu = () => {
         <div className={'menu-title'}><h1>MINIBANK XTREME</h1></div>
         <p className="menu-description">Select by pressing the corresponding number on the numpad</p>
         <div className="menu-grid">
-          <div className={'menu-item--left'}> <h3><Link to={"/faktura/intro"}>1) Pay invoice</Link></h3></div>
-          <div className={'menu-item--right'}><h3><Link to={"/pin/intro"}>2) New PIN code</Link></h3></div>
-          <div className={'menu-item--left'}> <h3><Link to={BOARD_PAY_PATH}>3) Top 50 - Pay invoice</Link></h3></div>
-          <div className={'menu-item--right'}><h3><Link to={BOARD_PIN_PATH}>4) Top 50 - New PIN code</Link></h3></div>
+          <div className={'menu-item--left'}> <h3><Link to={"/faktura/intro"}>7) Pay invoice</Link></h3></div>
+          <div className={'menu-item--right'}><h3><Link to={"/pin/intro"}>9) New PIN code</Link></h3></div>
+          <div className={'menu-item--left'}> <h3><Link to={BOARD_PAY_PATH}>1) Top 50 - Pay invoice</Link></h3></div>
+          <div className={'menu-item--right'}><h3><Link to={BOARD_PIN_PATH}>3) Top 50 - New PIN code</Link></h3></div>
         </div>
       </div>
       {/* <p><Link to={`${BOARD_PAY_PATH}/9`}>Leaderboard pay new</Link></p> <p><Link to={`${BOARD_PIN_PATH}/9`}>Leaderboard pin new</Link></p> */}

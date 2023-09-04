@@ -40,6 +40,7 @@ export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, s
           <table className="leaderboard_table">
             <thead>
               <tr>
+                <th>#</th>
                 <th>Name</th>
                 <th>Score <i>({scoreMetric})</i></th>
               </tr>
@@ -48,6 +49,7 @@ export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, s
               {scoreBoard.map((it, index) => {
                 return (
                   <tr key={index}>
+                    <td>{index+1}</td>
                     <td className="leaderboard_table--td">{it.name}</td>
                     <td>{it.score}</td>
                   </tr>)
