@@ -2,6 +2,7 @@ import './leaderboardForm.scss';
 import React, { useState } from "react";
 import { saveStateToFile, ScoreData, sort } from "@/components/Leaderboard/LeaderBoardUtils";
 import { useNavigate } from "react-router-dom";
+import InputCarousel from "@/components/Leaderboard/InputCarousel";
 
 interface Props {
   gameTitle: string
@@ -39,10 +40,7 @@ export const LeaderboardForm = ({gameTitle, filePath, score, scoreBoard, sortAsc
       <fieldset className="leaderboard-form">
         <legend>Register player for <strong>{`${gameTitle}`}</strong></legend>
       <form className="form" onSubmit={() => saveValues()}>
-        <div className="form-group">
-        <label htmlFor="name">Name</label>
-        <input id="name" className="leaderboard-input faktura-spill-input-field" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-      </div>
+        <InputCarousel/>
         <div className="form-group">
         <label htmlFor="phone">Phone</label>
         <input id="phone" className="leaderboard-input faktura-spill-input-field"  type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
