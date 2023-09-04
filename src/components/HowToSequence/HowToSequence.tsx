@@ -14,7 +14,12 @@ const HowToSequence = ({howToPlayList, gamePath}: HowToSequenceProps) => {
   const divRef = useRef<HTMLDivElement>(null)
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    onButtonClick()
+    if(e.key !== '/'){
+      onButtonClick();
+    }
+    else {
+      navigate("/#");
+    }
   }
   const isLastStep = () => {
     return step === howToPlayList.length - 1

@@ -19,7 +19,7 @@ export const InputField = ({data, dataHook, id, name, placeholder, answer, valid
   }, [data, answer])
   return(
     <div className={"form-group"}>
-      <label htmlFor={"kid"}>KID:</label>
+      <label htmlFor={id}>PIN:</label>
       <input
         ref={inputRef}
         id={id}

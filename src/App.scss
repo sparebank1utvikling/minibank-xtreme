@@ -2,7 +2,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 5rem;
   text-align: center;
 }
 
@@ -10,6 +10,7 @@ body, label {
   background-color: #001032;
   color: #33AF85;
   font-family: Cantarell;
+  font-size: 20px;
 }
 
 div {
@@ -18,36 +19,45 @@ div {
   }
 }
 
-.menu-grid {
-  display: grid;
+.menu {
   width: 100%;
   height: 100vh;
-  grid-template-areas:
-  "a a a"
-  "b . c"
-  "d . e"
-  "f . g";
+}
+
+.menu-grid {
+  display: grid;
+  margin-top: 3rem;
+  height: 70vh;
+  align-items: center;
+  grid-template-columns: repeat(2, auto);
   &:focus{
     outline: none
   }
 }
 
 .menu-title {
-  grid-area: a;
   display: flex;
   justify-content: center;
+  padding-top: 3rem;
+}
+
+.menu-description {
+  color: white;
+  font-size: 1.3rem;
 }
 
 .menu-item--left {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
+  font-size: 1.5rem;
 }
 
 .menu-item--right {
   display: flex;
   flex-flow: row-reverse nowrap;
   justify-content: flex-start;
+  font-size: 1.5rem;
 }
 
 .logo-box {
@@ -95,24 +105,43 @@ div {
   align-items: center;
   justify-content: center;
 }
+.pin-game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
+  margin-top: 25rem;
 
+  &-info-fields {
+     display: flex;
+     color: var(--primary-color);
+     font-size: 2rem;
+     font-weight: bold;
+     justify-content: center;
+  }
+}
 .faktura-spill {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-flow: column nowrap;
+  margin-top: 15rem;
 
   &-info-fields {
-    display: flex;
+    display: grid;
     align-items: center;
     justify-content: center;
     margin: 15px 10px 10px 10px;
     font-weight: bolder;
-    font-size: 20px;
-    background-color: white;
-    height: 50px;
+    font-size: 1.5rem;
+    height: 60px;
+    color: white;
   }
 
+  &-info-fields-label {
+    color: #A0A3AC;
+    font-size: 1rem;
+  }
   &-input-field {
     &:focus {
       border: solid 3px #1a95e0 !important;

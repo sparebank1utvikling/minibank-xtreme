@@ -1,11 +1,14 @@
 
+.leaderboard {
+    margin-top: 4rem;
+}
 .leaderboard_title {
     display: inline-flex;
 }
 
 .leaderboard_table {
     max-width: 600px;
-    margin: 0 auto;
+    margin: auto;
     color: white;
 }
 

@@ -19,6 +19,7 @@ export const FakturaSpill = () => {
   const kidInputRef = useRef<HTMLInputElement>(null)
   const kontoInputRef = useRef<HTMLInputElement>(null)
   const sumInputRef = useRef<HTMLInputElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
 
   const [numSuccess, setNumSuccess] = useState<number>(0)
   const [done, setDone] = useState<boolean>(false)
@@ -59,6 +60,28 @@ export const FakturaSpill = () => {
     setNumSuccess((old) => old + 1)
   }
 
+  const formatAccountnumber = (accountNumber: string | undefined) => {
+    if(!accountNumber)
+      return;
+    let formattedAccountNumber = '';
+
+    if (accountNumber.length > 0) {
+        formattedAccountNumber += accountNumber.substring(0, 4);
+    }
+
+    if (accountNumber.length > 4) {
+        formattedAccountNumber +=
+        '\u00A0' + accountNumber.substring(4, 6);
+    }
+
+    if (accountNumber.length > 6) {
+        formattedAccountNumber +=
+          '\u00A0' + accountNumber.substring(6);
+    }
+
+    return formattedAccountNumber;
+}
+
   // Validate input fields and switch focus to konto if kid is success
   useEffect(() => {
     //KID is success
@@ -92,64 +115,72 @@ export const FakturaSpill = () => {
     }
   }, [kidSuccess])
 
+  useEffect(() => {
+    if(ref.current)
+      ref.current.focus();
+  },[done])
+
     const navigate = useNavigate()
     const handleInput = (event: React.KeyboardEvent) => {
-        if(event.key === 'Home') {
-          navigate("/")
+        if(event.key === '/') {
+          navigate("/#")
+        }
+        if(event.key === '-') {
+          navigate(`${BOARD_PAY_PATH}/${timeUsed}`)
         }
     }
 
   return(
-    <div className={'faktura-spill'} tabIndex={0} onKeyUp={(event) => handleInput(event)}>
+    <div className={'faktura-spill'} tabIndex={0} ref={ref} onKeyUp={(event) => handleInput(event)}>
       {!done &&
       <fieldset>
-        <legend>Betale faktura!</legend>
+        <legend>Pay invoice</legend>
         <div className={"terminal-card"}>
-          <header>Betalingsinformasjon</header>
-          <div className={"terminal-alert terminal-alert-primary faktura-spill-info-fields"}>Kid: {kid}</div>
-          <div className={"terminal-alert terminal-alert-primary faktura-spill-info-fields"}>Kontonr: {konto}</div>
-          <div className={"terminal-alert terminal-alert-primary faktura-spill-info-fields"}>Å betale: {sum},-</div>
+          <header>Invoice details</header>
+          <span className="faktura-spill-info-fields"><div className="faktura-spill-info-fields-label">Kid:</div> {kid}</span>
+          <span className="faktura-spill-info-fields"><div className="faktura-spill-info-fields-label">Account number:</div> {formatAccountnumber(konto)}</span>
+          <span className="faktura-spill-info-fields"><div className="faktura-spill-info-fields-label">Total amount:</div> {sum},-</span>
         </div>
         <div className={"form-group"}>
           <label htmlFor={"kid"}>KID:</label>
           <input
             ref={kidInputRef}
             id={"kid"}
-            name={"KID (9 sifferet)"}
+            name={"KID (9 digits)"}
             className={"faktura-spill-input-field"}
             type={"text"}
             disabled={kidSuccess}
             maxLength={9}
-            placeholder={"KID (9 sifferet)"}
+            placeholder={"KID (9 digits)"}
             onChange={(change) => {setKidInput(change.currentTarget.value)}}
           />
 
         </div>
         <div className={"form-group"}>
-          <label htmlFor={"kontonr"}>Konto nummer:</label>
+          <label htmlFor={"accountnumber"}>Account number:</label>
           <input
-            id={"kontonr"}
+            id={"accountnumber"}
             ref={kontoInputRef}
-            name={"Konto nummer (11 sifferet)"}
+            name={"Account number (11 digits)"}
             type={"text"}
             className={"faktura-spill-input-field"}
             disabled={kontoSuccess}
             maxLength={11}
-            placeholder={"Konto nummer (11 sifferet)"}
+            placeholder={"Account number (11 digits)"}
             onChange={(change) => {setKontoInput(change.currentTarget.value)}}
           />
         </div>
           <div className={"form-group"}>
-              <label htmlFor={"Sum"}>Å betale:</label>
+              <label htmlFor={"total"}>Total amount:</label>
               <input
-                  id={"sum"}
+                  id={"total"}
                   ref={sumInputRef}
-                  name={"Sum"}
+                  name={"Total amount"}
                   type={"text"}
                   className={"faktura-spill-input-field"}
                   disabled={sumSuccess}
                   maxLength={11}
-                  placeholder={"Sum"}
+                  placeholder={"Total amount"}
                   onChange={(change) => {setSumInput(change.currentTarget.value)}}
               />
           </div>
@@ -158,13 +189,13 @@ export const FakturaSpill = () => {
           <div className={'terminal-card'}>
               <header>Well done!</header>
               <div>
-                  You completed the challenge in {timeUsed} seconds. Ranking you #x on the scoreboard
+                  You completed the challenge in {timeUsed} seconds! <br/> Do you want to add your name to the scoreboard?
               </div>
               <Link to={`${BOARD_PAY_PATH}/${timeUsed}`}>
-                  <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Register</button>
+                  <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>✓ Add to scoreboard</button>
               </Link>
               <Link to={'/'}>
-                <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Back to menu</button>
+                <button className={'btn btn-default'} style={{marginBottom: '15px'}}>⌂ Back to menu</button>
               </Link>
           </div>
       }
