@@ -13,12 +13,12 @@ console.log('[App.tsx]', `Hello world from Electron ${process.versions.electron}
 export const BOARD_PIN_PATH = "/leaderboardPin"
 export const BOARD_PAY_PATH = "/leaderboardPay"
 export const GAME_TITLE_PIN = "PIN"
-export const GAME_TITLE_PAY_INVOICE = "Betal faktura"
+export const GAME_TITLE_PAY_INVOICE = "Pay invoice"
 
 function App() {
   const howToFaktura = [
     "Help! The bills just keeps piling up! In this game - as in real life, it's important to pay your invoices as fast as possible",
-    "Use the numpad to enter the kid- and accountnumber, along with the total from the invoice that appear on the screen",
+    "Use the numpad to enter the kid- and accountnumber, along with the total from the invoice that will appear on the screen",
     "Once the correct value has been filled in, it'll automatically jump to the next field so you can continue.",
     "Goal: Fill out 5 invoices as fast as possible. The timer will start when this screen disappears."
   ]

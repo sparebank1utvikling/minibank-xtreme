@@ -49,7 +49,7 @@ const PINSpill = () => {
   }, [showPin])
 
   return(
-    <div className={'faktura-spill'}>
+    <div className={'pin-game'}>
       {!done ?
         <>
         <fieldset>
@@ -57,7 +57,7 @@ const PINSpill = () => {
           {showPin ?
             <div className={"terminal-card"} style={{backgroundColor: "white"}}>
                 <header>Your new PIN</header>
-                <div className={"terminal-alert terminal-alert-primary faktura-spill-info-fields"}>PIN: {pin}</div>
+                <div className={"pin-game-info-fields"}>{pin}</div>
                 <Counter timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length-1)]} setDone={setCounterDone}/>
             </div>
             :
