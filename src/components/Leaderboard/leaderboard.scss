@@ -1,0 +1,19 @@
+
+.leaderboard_title {
+    display: inline-flex;
+}
+
+.leaderboard_table {
+    max-width: 600px;
+    margin: 0 auto;
+    color: white;
+}
+
+.leaderboard_table th, .leaderboard_table td {
+    border: 1px dashed #666;
+}
+
+.leaderboard_table--td td {
+    color: white;
+    font-weight: 400;
+}

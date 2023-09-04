@@ -2,6 +2,7 @@ import { Dispatch, useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { InputField } from "../common/InputField"
 import { Counter } from "./Counter"
+import { BOARD_PIN_PATH } from "@/App";
 
 const PINSpill = () => {
   const TIMES_GIVEN = [10, 5, 2.5, 2, 1.5, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25, 0.2, 0.15, 0.1]
@@ -91,6 +92,9 @@ const PINSpill = () => {
           <div>
             You managed to remember {nSuccesses} pins, putting you as #x on the scoreboard.
           </div>
+          <Link to={`${BOARD_PIN_PATH}/${nSuccesses}`}>
+            <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Register</button>
+          </Link>
           <Link to={'/'}>
             <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>Back to menu</button>
           </Link>

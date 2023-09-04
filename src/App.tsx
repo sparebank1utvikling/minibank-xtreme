@@ -5,24 +5,39 @@ import Menu from './components/Menu/Menu'
 import { FakturaSpill } from './components/FakturaSpill/FakturaSpill'
 import HowToSequence from './components/HowToSequence/HowToSequence'
 import PinSpill from './components/PINSpill/PINSpill'
+import { Leaderboard } from "@/components/Leaderboard/Leaderboard";
+import { createFileForLeaderBoard } from "@/components/Leaderboard/LeaderBoardUtils";
 
 console.log('[App.tsx]', `Hello world from Electron ${process.versions.electron}!`)
 
+export const BOARD_PIN_PATH = "/leaderboardPin"
+export const BOARD_PAY_PATH = "/leaderboardPay"
+export const GAME_TITLE_PIN = "PIN"
+export const GAME_TITLE_PAY_INVOICE = "Betal faktura"
+
 function App() {
   const howToFaktura = [
-    "These bills just keeps piling up. In this game, as in real life, it is important to pay your invoices as fast as possible",
-    "This consists of entering a KID number, the account number of the recipient and the sum of the invoice. This will appear on the screen.",
-    "Use the numpad of the terminal to enter the numbers. Once the first field is filled out, the focus will be shifted to next field. So you can just keep typing.",
-    "Fill out 5 invoices as fast as possible. The timer will start when this screen disappears."
+    "Help! The bills just keeps piling up! In this game - as in real life, it's important to pay your invoices as fast as possible",
+    "Use the numpad to enter the kid- and accountnumber, along with the total from the invoice that appear on the screen",
+    "Once the correct value has been filled in, it'll automatically jump to the next field so you can continue.",
+    "Goal: Fill out 5 invoices as fast as possible. The timer will start when this screen disappears."
   ]
 
   const howToPIN = [
-    "You hit your head and now you can't seem to remember your cards PIN-code anymore. We know the feeling",
-    "Luckily we are able to generate a new one for you. The important thing is that you remember it.",
-    "In this game you will be prompted with new PIN codes for your card. These will be displayed on the screen for a limited time.",
-    "Once they disappear you need to show that you remember them by entering them in the input field.",
-    "Reenter the PINs after they disappear as many times as possible. Are you attentive enough?"
+    "Oh no! You seem to have forgotten the PIN-code to your cards!",
+    "In this game you will be prompted with new PIN codes for your card. These will only be displayed on the screen for a limited time.",
+    "Once they disappear, enter the PIN code you were given in the input field.",
+    "Goal: Correctly remember and enter as many PINs as you can! The catch?  The time to remember get shorter each time! Are you attentive enough?"
   ]
+
+  const fakturaFilePath = "./betalFaktura.scv"
+  const fakturaSort = false
+  const pinFilePath = "./pin.csv"
+  const pinSort = true
+
+  //create files
+  createFileForLeaderBoard(fakturaFilePath)
+  createFileForLeaderBoard(pinFilePath)
 
   return (
     <Router>
@@ -32,6 +47,10 @@ function App() {
         <Route path={"/faktura"} element={<FakturaSpill/>}/>
         <Route path={"/pin/intro"} element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"}/>}/>
         <Route path={"/pin"} element={<PinSpill/>}/>
+        <Route path={BOARD_PAY_PATH} element={<Leaderboard gameTitle={GAME_TITLE_PAY_INVOICE} filePath={fakturaFilePath} registerNew={false} sortAscending={fakturaSort} scoreMetric='sec'/>}/>
+        <Route path={`${BOARD_PAY_PATH}/:score`} element={<Leaderboard gameTitle={GAME_TITLE_PAY_INVOICE} filePath={fakturaFilePath} registerNew={true} sortAscending={fakturaSort} scoreMetric='sec'/>}/>
+        <Route path={BOARD_PIN_PATH} element={<Leaderboard gameTitle={GAME_TITLE_PIN} filePath={pinFilePath} registerNew={false} sortAscending={pinSort} scoreMetric='pins'/>}/>
+        <Route path={`${BOARD_PIN_PATH}/:score`} element={<Leaderboard gameTitle={GAME_TITLE_PIN} filePath={pinFilePath} registerNew={true} sortAscending={pinSort} scoreMetric='pins'/>}/>
       </Routes>
     </Router>
   )
