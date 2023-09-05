@@ -10,10 +10,11 @@ interface GameCompleteProps {
 export const GameComplete = ({gamePath, score}: GameCompleteProps)=> {
     const navigate = useNavigate();
     const ref = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         if(ref.current)
             ref.current.focus()
-    }, [])
+    }, []);
 
     const handleInput = (event: React.KeyboardEvent) => {
         if (event.key === '/') {
@@ -43,7 +44,7 @@ export const GameComplete = ({gamePath, score}: GameCompleteProps)=> {
         return winStatement;
     }
     return (
-        <div className={'terminal-card'} ref={ref} onKeyUp={(event) => handleInput(event)}>
+        <div className={'terminal-card'} tabIndex={0} ref={ref} onKeyUp={(event) => handleInput(event)}>
             <header>Well done!</header>
             <div>
                 {getWinStatement()} <br/>
