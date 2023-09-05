@@ -1,7 +1,8 @@
 import 'terminal.css'
 import React, {Dispatch, useEffect, useRef, useState} from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { BOARD_PAY_PATH } from "@/App";
+import { GameComplete } from '../common/GameComplete';
 
 export const FakturaSpill = () => {
   const NUM_ROUNDS = 2
@@ -115,11 +116,6 @@ export const FakturaSpill = () => {
     }
   }, [kidSuccess])
 
-  useEffect(() => {
-    if(ref.current)
-      ref.current.focus();
-  },[done])
-
     const navigate = useNavigate()
     const handleInput = (event: React.KeyboardEvent) => {
         if(event.key === '/') {
@@ -185,21 +181,7 @@ export const FakturaSpill = () => {
               />
           </div>
       </fieldset>}
-      {done &&
-          <div className={'terminal-card'}>
-              <header>Well done!</header>
-              <div>
-                  You completed the challenge in {timeUsed} seconds! <br/> Do you want to add your name to the scoreboard?
-              </div>
-              <div className="buttons">
-                <Link to={`${BOARD_PAY_PATH}/${timeUsed}`}>
-                    <button className={'btn btn-primary'}>✓ Add to scoreboard</button>
-                </Link>
-                <Link to={'/'}>
-                  <button className={'btn btn-default'}>⌂ Back to menu</button>
-                </Link>
-              </div>
-          </div>
+      {done && <GameComplete gamePath={BOARD_PAY_PATH} score={timeUsed} />
       }
     </div>
   )

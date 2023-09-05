@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { InputField } from "../common/InputField"
 import { Counter } from "./Counter"
 import { BOARD_PIN_PATH } from "@/App";
+import { GameComplete } from "../common/GameComplete";
 
 const PINSpill = () => {
   const TIMES_GIVEN = [10, 5, 2.5, 2, 1.5, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25, 0.2, 0.15, 0.1]
@@ -110,20 +111,7 @@ const PINSpill = () => {
           <div className={"score-container"}>Score: {nSuccesses}</div>
         </>
         :
-        <div className={'terminal-card'}>
-          <header>Game over!</header>
-          <div>
-            You managed to remember <b>{nSuccesses}</b> pins!<br /> Do you want to add your name to our scoreboard?
-          </div>
-          <div className="buttons">
-            <Link to={`${BOARD_PIN_PATH}/${nSuccesses}`}>
-              <button className={'btn btn-primary'}>✓ Add to scoreboard</button>
-            </Link>
-            <Link to={'/'}>
-              <button className={'btn btn-default'}>⌂ Go back to menu</button>
-            </Link>
-          </div>
-        </div>
+          <GameComplete gamePath={BOARD_PIN_PATH} score={nSuccesses} />
       }
     </div>
   )
