@@ -1,5 +1,5 @@
 import './leaderboardForm.scss';
-import React, { useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { saveStateToFile, ScoreData, sort } from "@/components/Leaderboard/LeaderBoardUtils";
 import { useNavigate } from "react-router-dom";
 import InputCarousel from "@/components/Leaderboard/InputCarousel";
@@ -16,6 +16,8 @@ export const LeaderboardForm = ({gameTitle, filePath, score, scoreBoard, sortAsc
   const [ phone, setPhone ] = useState('')
   const [ name, setName ] = useState('')
   const navigate = useNavigate()
+
+  const phoneRef = useRef<HTMLInputElement>(null)
 
   const saveValues = () => {
     const copy = scoreBoard
@@ -36,17 +38,29 @@ export const LeaderboardForm = ({gameTitle, filePath, score, scoreBoard, sortAsc
     navigate("..", {relative: "path"})
   }
 
+  useEffect(() => {
+    if(name != '' && phoneRef.current) {
+      phoneRef.current.focus()
+    }
+  }, [name])
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      saveValues()
+    }
+  }
+
   return (
       <fieldset className="leaderboard-form">
         <legend>Register player for <strong>{`${gameTitle}`}</strong></legend>
-      <form className="form" onSubmit={() => saveValues()}>
-        <InputCarousel/>
+        <form className="form">
+        <InputCarousel setNameHook={setName}/>
         <div className="form-group">
         <label htmlFor="phone">Phone</label>
-        <input id="phone" className="leaderboard-input faktura-spill-input-field"  type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
+        <input onKeyUp={handleKeyPress} id="phone" ref={phoneRef} className="leaderboard-input faktura-spill-input-field"  type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
         </div>
-        <input className={'btn btn-primary'} type="submit" value="Register"/>
-      </form>
+        <input className={'btn btn-primary'} onClick={saveValues} value="Register"/>
+        </form>
       </fieldset>
   )
 }
