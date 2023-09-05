@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import './inputCarousel.scss'
+import { useNavigate } from "react-router-dom";
 
 interface InputCarouselProps {
   setNameHook: React.Dispatch<React.SetStateAction<string>>
@@ -14,6 +15,7 @@ const InputCarousel = ({setNameHook}: InputCarouselProps) => {
   const [indices, setIndices] = useState([0,0,0])
   const [curFocus, setCurFocus] = useState<number>(0)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
 
   useEffect(() => {
@@ -41,6 +43,9 @@ const InputCarousel = ({setNameHook}: InputCarouselProps) => {
       case '6': if (curFocus != 2) {
         setCurFocus(old => old + 1)
       }
+        break
+      case '/':
+          navigate("/")
         break
       case 'Enter': setNameHook(`${alphabet[indices[0]]}${alphabet[indices[1]]}${alphabet[indices[2]]}`)
       default: console.log("Ingen treff")

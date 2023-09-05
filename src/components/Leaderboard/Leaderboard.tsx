@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { readCSVPromise, ScoreData } from "@/components/Leaderboard/LeaderBoardUtils";
 import { LeaderboardForm } from "@/components/Leaderboard/LeaderboardForm";
+import { LeaderBoardRender } from "@/components/Leaderboard/LeaderBoardRender";
 
 interface Props {
   gameTitle: string
@@ -14,7 +15,7 @@ interface Props {
 
 export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, scoreMetric }: Props) => {
   let params = useParams();
-  const newScore = params.score ? parseFloat(params.score).toFixed(2) : 0.00
+  const newScore = params.score ? parseFloat(params.score) : 0.00
   const emptyScore: ScoreData[] = []
 
   const [scoreBoard, setScoreBoard] = useState(emptyScore)
@@ -26,38 +27,14 @@ export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, s
 
   const fetchData = useCallback(async () => {
     const data = await readCSVPromise(filePath, sortAscending);
-    // @ts-ignore
     setScoreBoard(data.splice(0,50));
   }, [])
 
   return (
-    <div className="leaderboard">
-
+    <div className="leaderboard" >
       {registerNew && params.score ?
-        //@ts-ignore
         <LeaderboardForm gameTitle={gameTitle} filePath={filePath} scoreBoard={scoreBoard} score={newScore} sortAscending={sortAscending} /> :
-        <>
-          <h1 className="leaderboard_title">{`Top 50 - "${gameTitle}"`}</h1>
-          <table className="leaderboard_table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Score <i>({scoreMetric})</i></th>
-              </tr>
-            </thead>
-            <tbody>
-              {scoreBoard.map((it, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{index+1}</td>
-                    <td className="leaderboard_table--td">{it.name}</td>
-                    <td>{it.score}</td>
-                  </tr>)
-              })}
-            </tbody>
-          </table>
-        </>
+        <LeaderBoardRender gameTitle={gameTitle} scoreBoard={scoreBoard} scoreMetric={scoreMetric} />
       }
       <br />
       <Link className="back_link" to={"/"}>Back home</Link>
