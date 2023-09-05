@@ -25,20 +25,20 @@ const InputCarousel = ({setNameHook}: InputCarouselProps) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     let i = indices
     switch(e.key) {
-      case 'ArrowUp':
+      case '8':
         if(i[curFocus] === 0) {
           i[curFocus] = ARRAY_LENGTH - 1
         } else {
           i[curFocus] = i[curFocus] - 1
         }
         break
-      case 'ArrowDown': i[curFocus] = (i[curFocus] + 1) % ARRAY_LENGTH
+      case '2': i[curFocus] = (i[curFocus] + 1) % ARRAY_LENGTH
         break
-      case 'ArrowLeft': if (curFocus != 0) {
+      case '4': if (curFocus != 0) {
         setCurFocus(old => old - 1)
       }
         break
-      case 'ArrowRight': if (curFocus != 2) {
+      case '6': if (curFocus != 2) {
         setCurFocus(old => old + 1)
       }
         break
