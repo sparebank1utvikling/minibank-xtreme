@@ -1,6 +1,6 @@
 import { ScoreData } from "@/components/Leaderboard/LeaderBoardUtils";
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Props {
   gameTitle: string
@@ -46,6 +46,10 @@ export const LeaderBoardRender =({ gameTitle, scoreBoard, scoreMetric }: Props) 
         })}
         </tbody>
       </table>
+      <br/>
+      <Link to={'/'}>
+        <button className={'btn btn-default'}>⌂ Go back to menu</button>
+      </Link>
     </div>
   )
 }

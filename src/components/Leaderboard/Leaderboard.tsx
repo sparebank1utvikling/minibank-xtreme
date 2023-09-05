@@ -1,6 +1,6 @@
 import './leaderboard.scss'
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { readCSVPromise, ScoreData } from "@/components/Leaderboard/LeaderBoardUtils";
 import { LeaderboardForm } from "@/components/Leaderboard/LeaderboardForm";
 import { LeaderBoardRender } from "@/components/Leaderboard/LeaderBoardRender";
@@ -36,8 +36,6 @@ export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, s
         <LeaderboardForm gameTitle={gameTitle} filePath={filePath} scoreBoard={scoreBoard} score={newScore} sortAscending={sortAscending} /> :
         <LeaderBoardRender gameTitle={gameTitle} scoreBoard={scoreBoard} scoreMetric={scoreMetric} />
       }
-      <br />
-      <Link className="back_link" to={"/"}>Back home</Link>
     </div>
   )
 }

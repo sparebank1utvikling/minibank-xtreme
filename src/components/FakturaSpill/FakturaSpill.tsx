@@ -191,12 +191,14 @@ export const FakturaSpill = () => {
               <div>
                   You completed the challenge in {timeUsed} seconds! <br/> Do you want to add your name to the scoreboard?
               </div>
-              <Link to={`${BOARD_PAY_PATH}/${timeUsed}`}>
-                  <button className={'btn btn-primary'} style={{marginBottom: '15px'}}>✓ Add to scoreboard</button>
-              </Link>
-              <Link to={'/'}>
-                <button className={'btn btn-default'} style={{marginBottom: '15px'}}>⌂ Back to menu</button>
-              </Link>
+              <div className="buttons">
+                <Link to={`${BOARD_PAY_PATH}/${timeUsed}`}>
+                    <button className={'btn btn-primary'}>✓ Add to scoreboard</button>
+                </Link>
+                <Link to={'/'}>
+                  <button className={'btn btn-default'}>⌂ Back to menu</button>
+                </Link>
+              </div>
           </div>
       }
     </div>
