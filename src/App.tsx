@@ -21,7 +21,7 @@ function App() {
     "Help! The bills just keeps piling up! In this game - as in real life, it's important to pay your invoices as fast as possible",
     "Use the numpad to enter the kid- and accountnumber, along with the total from the invoice that will appear on the screen",
     "Once the correct value has been filled in, it'll automatically jump to the next field so you can continue.",
-    "Goal: Fill out 5 invoices as fast as possible. The timer will start when this screen disappears."
+    "Goal: Fill out 2 invoices as fast as possible. The timer will start when this screen disappears."
   ]
 
   const howToPIN = [

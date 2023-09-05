@@ -34,6 +34,7 @@ export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, s
     <div className="leaderboard">
 
       {registerNew && params.score ?
+        //@ts-ignore
         <LeaderboardForm gameTitle={gameTitle} filePath={filePath} scoreBoard={scoreBoard} score={newScore} sortAscending={sortAscending} /> :
         <>
           <h1 className="leaderboard_title">{`Top 50 - "${gameTitle}"`}</h1>
