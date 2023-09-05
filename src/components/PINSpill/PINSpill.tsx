@@ -100,7 +100,6 @@ const PINSpill = () => {
                 />
                 <button
                   className={'btn btn-error'}
-                  style={{ marginBottom: '15px' }}
                   onClick={() => setDone(true)}
                 >
                   Press x to give up
@@ -116,12 +115,14 @@ const PINSpill = () => {
           <div>
             You managed to remember <b>{nSuccesses}</b> pins!<br /> Do you want to add your name to our scoreboard?
           </div>
-          <Link to={`${BOARD_PIN_PATH}/${nSuccesses}`}>
-            <button className={'btn btn-primary'} style={{ marginBottom: '15px' }}>✓ Add to scoreboard</button>
-          </Link>
-          <Link to={'/'}>
-            <button className={'btn btn-default'} style={{ marginBottom: '15px' }}>⌂ Go back to menu</button>
-          </Link>
+          <div className="buttons">
+            <Link to={`${BOARD_PIN_PATH}/${nSuccesses}`}>
+              <button className={'btn btn-primary'}>✓ Add to scoreboard</button>
+            </Link>
+            <Link to={'/'}>
+              <button className={'btn btn-default'}>⌂ Go back to menu</button>
+            </Link>
+          </div>
         </div>
       }
     </div>

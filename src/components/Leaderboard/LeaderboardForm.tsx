@@ -1,7 +1,7 @@
 import './leaderboardForm.scss';
 import React, {useEffect, useRef, useState} from "react";
 import { saveStateToFile, ScoreData, sort } from "@/components/Leaderboard/LeaderBoardUtils";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputCarousel from "@/components/Leaderboard/InputCarousel";
 
 interface Props {
@@ -60,7 +60,12 @@ export const LeaderboardForm = ({gameTitle, filePath, score, scoreBoard, sortAsc
             <label htmlFor="phone">Phone</label>
             <input onKeyUp={handleKeyPress} id="phone" ref={phoneRef} className="leaderboard-input faktura-spill-input-field"  type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
           </div>
-          <button type="submit" className={'btn btn-primary'} onClick={saveValues} value="Register">✓ Register</button>
+          <div className="buttons">
+            <button type="submit" className={'btn btn-primary'} onClick={saveValues} value="Register">✓ Register</button>
+            <Link to={'/'}>
+              <button className={'btn btn-default'}>⌂ Go back to menu</button>
+            </Link>
+          </div>
         </form>
       </fieldset>
   )

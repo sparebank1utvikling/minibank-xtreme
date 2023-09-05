@@ -44,7 +44,7 @@ const HowToSequence = ({howToPlayList, gamePath}: HowToSequenceProps) => {
         <header>How to play</header>
         <div className={'intro-card-content'}>
           <p>{stepText}</p>
-          <button onClick={onButtonClick} className={'btn btn-primary'} style={{marginBottom: '15px'}}>{isLastStep() ? 'Start game' : 'Next step'}</button>
+          <button onClick={onButtonClick} className={'btn btn-primary'}>{isLastStep() ? 'Start game' : 'Next step'}</button>
         </div>
       </div>
     </div>

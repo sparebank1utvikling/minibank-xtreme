@@ -38,7 +38,7 @@ export const createFileForLeaderBoard = (filePath: string) => {
   }
 }
 
-export const readCSVPromise = (filePath: string, sortAscending: boolean) => new Promise(function(myResolve, myReject) {
+export const readCSVPromise = (filePath: string, sortAscending: boolean):Promise<ScoreData[]> => new Promise(function(myResolve, myReject) {
   const fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'});
   parse(fileContent, {
     delimiter: ',',
