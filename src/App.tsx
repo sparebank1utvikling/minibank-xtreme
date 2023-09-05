@@ -31,7 +31,7 @@ function App() {
     "Goal: Correctly remember and enter as many PINs as you can! The catch?  The time to remember get shorter each time! Are you attentive enough?"
   ]
 
-  const fakturaFilePath = "./betalFaktura.scv"
+  const fakturaFilePath = "./faktura.csv"
   const fakturaSort = false
   const pinFilePath = "./pin.csv"
   const pinSort = true
