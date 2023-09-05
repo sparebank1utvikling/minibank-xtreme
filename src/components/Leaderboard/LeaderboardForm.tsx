@@ -45,7 +45,7 @@ export const LeaderboardForm = ({gameTitle, filePath, score, scoreBoard, sortAsc
   }, [name])
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === "-") {
       saveValues()
     }
   }
@@ -53,13 +53,14 @@ export const LeaderboardForm = ({gameTitle, filePath, score, scoreBoard, sortAsc
   return (
       <fieldset className="leaderboard-form">
         <legend>Register player for <strong>{`${gameTitle}`}</strong></legend>
+        <p>Use the ↑/↓ keys to select letter, and ←/→ to move between fields, once you're happy with your name, press enter to move on to enter your phone.</p>
         <form className="form">
-        <InputCarousel setNameHook={setName}/>
-        <div className="form-group">
-        <label htmlFor="phone">Phone</label>
-        <input onKeyUp={handleKeyPress} id="phone" ref={phoneRef} className="leaderboard-input faktura-spill-input-field"  type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
-        </div>
-        <input className={'btn btn-primary'} onClick={saveValues} value="Register"/>
+          <InputCarousel setNameHook={setName}/>
+          <div className="form-group">
+            <label htmlFor="phone">Phone</label>
+            <input onKeyUp={handleKeyPress} id="phone" ref={phoneRef} className="leaderboard-input faktura-spill-input-field"  type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
+          </div>
+          <button type="submit" className={'btn btn-primary'} onClick={saveValues} value="Register">✓ Register</button>
         </form>
       </fieldset>
   )
