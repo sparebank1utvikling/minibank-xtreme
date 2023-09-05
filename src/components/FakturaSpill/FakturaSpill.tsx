@@ -27,6 +27,11 @@ export const FakturaSpill = () => {
   const [startTime, setStartTime] = useState<number>()
   const [timeUsed, setTimeUsed] = useState<string>("")
 
+  const [curTime, setCurTime] = useState<number>(0)
+  const incrementTime = () => {
+    setCurTime(old => old + 0.1)
+  }
+
   //Initialization
   useEffect(() => {
     generateKonto(setKonto)
@@ -34,6 +39,8 @@ export const FakturaSpill = () => {
     generateSum(setSum)
     if(kidInputRef.current) kidInputRef.current.focus()
     setStartTime(Date.now())
+    const interval = setInterval(incrementTime, 100)
+    return(() => clearInterval(interval))
   }, [])
 
   const reset = () => {
@@ -129,6 +136,7 @@ export const FakturaSpill = () => {
   return(
     <div className={'faktura-spill'} tabIndex={0} ref={ref} onKeyUp={(event) => handleInput(event)}>
       {!done &&
+      <>
       <fieldset>
         <legend>Pay invoice</legend>
         <div className={"terminal-card"}>
@@ -180,7 +188,10 @@ export const FakturaSpill = () => {
                   onChange={(change) => {setSumInput(change.currentTarget.value)}}
               />
           </div>
-      </fieldset>}
+      </fieldset>
+          <div className={'faktura-timer'}>Elapsed time: {curTime.toFixed(1)}</div>
+        </>
+      }
       {done && <GameComplete gamePath={BOARD_PAY_PATH} score={timeUsed} />
       }
     </div>
