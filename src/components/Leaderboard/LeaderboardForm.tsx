@@ -59,7 +59,7 @@ export const LeaderboardForm = ({gameTitle, filePath, score, scoreBoard, sortAsc
         <label htmlFor="phone">Phone</label>
         <input onKeyUp={handleKeyPress} id="phone" ref={phoneRef} className="leaderboard-input faktura-spill-input-field"  type="text" value={phone} onChange={(e) => setPhone(e.target.value)}/>
         </div>
-        <input className={'btn btn-primary'} onClick={saveValues} value="Register"/>
+        <input type="button" className={'btn btn-primary'} onClick={saveValues} value="Register"/>
         </form>
       </fieldset>
   )
