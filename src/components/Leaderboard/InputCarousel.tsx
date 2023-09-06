@@ -25,6 +25,8 @@ const InputCarousel = ({setNameHook}: InputCarouselProps) => {
   }, [carouselRef.current])
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
+    console.log("InputCarousel - input: " + e.key)
+
     let i = indices
     switch(e.key) {
       case '8':
@@ -47,16 +49,20 @@ const InputCarousel = ({setNameHook}: InputCarouselProps) => {
       case '/':
           navigate("/")
         break
-      case 'Enter': setNameHook(`${alphabet[indices[0]]}${alphabet[indices[1]]}${alphabet[indices[2]]}`)
+      case 'Enter':
+        setNameHook(`${alphabet[indices[0]]}${alphabet[indices[1]]}${alphabet[indices[2]]}`)
+        break
       default: console.log("Ingen treff")
     }
     setIndices(i)
   }
-
+  const handleFocusOut = () => {
+    setNameHook(`${alphabet[indices[0]]}${alphabet[indices[1]]}${alphabet[indices[2]]}`)
+  }
   // {String.fromCharCode(0x25B2)} opp
   // {String.fromCharCode(0x25BC)} ned
   return(
-    <div tabIndex={0} ref={carouselRef} onKeyUp={handleKeyPress} className={'carousel-container'}>
+    <div tabIndex={0} ref={carouselRef} onKeyUp={handleKeyPress} className={'carousel-container'} onBlur={handleFocusOut}>
       <div key={0} className={'with-arrows'}>
         <span className={'arrow'}>{String.fromCharCode(0x25B2)}</span>
         <div className={`selection ${curFocus === 0 ? 'focused' : ''}`}>
