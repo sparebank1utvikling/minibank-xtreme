@@ -25,7 +25,6 @@ const InputCarousel = ({setNameHook}: InputCarouselProps) => {
   }, [carouselRef.current])
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    console.log("InputCarousel - input: " + e.key)
 
     let i = indices
     switch(e.key) {
@@ -50,7 +49,11 @@ const InputCarousel = ({setNameHook}: InputCarouselProps) => {
           navigate("/")
         break
       case 'Enter':
-        setNameHook(`${alphabet[indices[0]]}${alphabet[indices[1]]}${alphabet[indices[2]]}`)
+        if(curFocus === 2){
+          setNameHook(`${alphabet[indices[0]]}${alphabet[indices[1]]}${alphabet[indices[2]]}`)
+        } else {
+          setCurFocus(old => old + 1)
+        }
         break
       default: console.log("Ingen treff")
     }
