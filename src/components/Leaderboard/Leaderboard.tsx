@@ -27,7 +27,7 @@ export const Leaderboard = ({ gameTitle, filePath, registerNew, sortAscending, s
 
   const fetchData = useCallback(async () => {
     const data = await readCSVPromise(filePath, sortAscending);
-    setScoreBoard(data.splice(0,50));
+    setScoreBoard(data.splice(0,30));
   }, [])
 
   return (

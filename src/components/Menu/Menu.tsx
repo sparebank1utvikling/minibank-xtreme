@@ -35,8 +35,8 @@ const Menu = () => {
         <div className="menu-grid">
           <div className={'menu-item--left'}> <h3><Link to={"/faktura/intro"}>7) Pay invoice</Link></h3></div>
           <div className={'menu-item--right'}><h3><Link to={"/pin/intro"}>9) New PIN code</Link></h3></div>
-          <div className={'menu-item--left'}> <h3><Link to={BOARD_PAY_PATH}>1) Top 50 - Pay invoice</Link></h3></div>
-          <div className={'menu-item--right'}><h3><Link to={BOARD_PIN_PATH}>3) Top 50 - New PIN code</Link></h3></div>
+          <div className={'menu-item--left'}> <h3><Link to={BOARD_PAY_PATH}>1) Top 30 - Pay invoice</Link></h3></div>
+          <div className={'menu-item--right'}><h3><Link to={BOARD_PIN_PATH}>3) Top 30 - New PIN code</Link></h3></div>
         </div>
       </div>
       {/* <p><Link to={`${BOARD_PAY_PATH}/9`}>Leaderboard pay new</Link></p> <p><Link to={`${BOARD_PIN_PATH}/9`}>Leaderboard pin new</Link></p> */}

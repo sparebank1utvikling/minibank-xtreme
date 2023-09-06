@@ -26,7 +26,7 @@ export const LeaderBoardRender =({ gameTitle, scoreBoard, scoreMetric }: Props) 
 
   return(
     <div tabIndex={0} ref={ref} onKeyUp={(event) => handleInput(event)}>
-      <h1 className="leaderboard_title">{`Top 50 - "${gameTitle}"`}</h1>
+      <h1 className="leaderboard_title">{`Top 30 - "${gameTitle}"`}</h1>
       <table className="leaderboard_table">
         <thead>
         <tr>
