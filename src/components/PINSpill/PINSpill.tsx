@@ -117,19 +117,25 @@ const PINSpill = () => {
   )
 }
 
+function generateRandomNumber(digits:number) {
+  const min = Math.pow(10, digits - 1);
+  const max = Math.pow(10, digits) - 1;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 const generatePin = (hook: Dispatch<React.SetStateAction<string>>, nSuccesses: number) => {
   let pin = '1234'
 
   if (nSuccesses >= 50 && nSuccesses < 100) {
-    pin = Math.floor(Math.random() * 99999).toString()
+    pin = generateRandomNumber(5).toString();
   }
 
   else if (nSuccesses >= 100) {
-    pin = Math.floor(Math.random() * 999999).toString()
+    pin = generateRandomNumber(6).toString();
   }
 
   else {
-    pin = Math.floor(Math.random() * 9999).toString()
+    pin = generateRandomNumber(4).toString();
     while (pin.length < 4) {
       pin = `0${pin}`
     }
