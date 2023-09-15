@@ -31,7 +31,7 @@ const PINSpill = () => {
   const reset = () => {
     setShowPin(true)
     setSuccess(false)
-    generatePin(setPin)
+    generatePin(setPin, nSuccesses)
     setCounterDone(false)
     setNSuccesses((old) => old + 1)
   }
@@ -63,7 +63,7 @@ const PINSpill = () => {
     }
     if (event.key === '+') {
       if (!showPin && !done) {
-          setDone(true)
+        setDone(true)
       }
     }
     if (event.key === '-') {
@@ -111,16 +111,28 @@ const PINSpill = () => {
           <div className={"score-container"}>Score: {nSuccesses}</div>
         </>
         :
-          <GameComplete gamePath={BOARD_PIN_PATH} score={nSuccesses} />
+        <GameComplete gamePath={BOARD_PIN_PATH} score={nSuccesses} />
       }
     </div>
   )
 }
 
-const generatePin = (hook: Dispatch<React.SetStateAction<string>>) => {
-  let pin = Math.floor(Math.random() * 9999).toString()
-  while (pin.length < 4) {
-    pin = `0${pin}`
+const generatePin = (hook: Dispatch<React.SetStateAction<string>>, nSuccesses: number) => {
+  let pin = '1234'
+
+  if (nSuccesses >= 50 && nSuccesses < 100) {
+    pin = Math.floor(Math.random() * 99999).toString()
+  }
+
+  else if (nSuccesses >= 100) {
+    pin = Math.floor(Math.random() * 999999).toString()
+  }
+
+  else {
+    pin = Math.floor(Math.random() * 9999).toString()
+    while (pin.length < 4) {
+      pin = `0${pin}`
+    }
   }
   hook(pin)
 }
