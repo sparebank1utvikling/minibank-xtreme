@@ -23,7 +23,7 @@ const Menu = () => {
         navigate(BOARD_PIN_PATH);
         break;
       case '3':
-        navigate(BOARD_PIN_PATH);
+        navigate(BOARD_PAY_PATH);
         break;
     }
   }
