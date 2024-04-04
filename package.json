@@ -19,6 +19,8 @@
     "pree2e": "vite build --mode=test"
   },
   "dependencies": {
+    "@sb1/ffe-core": "^27.3.5",
+    "@sb1/ffe-webfonts": "^4.0.1",
     "@types/react-router-dom": "^5.3.3",
     "csv-parse": "^5.4.0",
     "csv-stringify": "^6.4.0",
@@ -35,6 +37,8 @@
     "electron": "^23.2.0",
     "electron-builder": "^23.6.0",
     "electron-packager": "^17.1.1",
+    "less": "^4.2.0",
+    "less-plugin-npm-import": "^2.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.60.0",
