@@ -1,8 +1,8 @@
-import {Dispatch, useEffect, useRef, useState } from "react"
+import { Dispatch, useEffect } from "react"
 
 interface InputFieldProps {
   data: string
-  dataHook: Dispatch<React.SetStateAction<string>>
+  setData: (s: string) => void
   id: string
   name: string
   placeholder: string
@@ -13,15 +13,28 @@ interface InputFieldProps {
   inputRef: React.RefObject<HTMLInputElement>
 }
 
-export const InputField = ({data, dataHook, id, name, placeholder, answer, validator, success, successHook, inputRef}: InputFieldProps) => {
+export const InputField = ({data, setData, id, name, placeholder, answer, validator, success, successHook, inputRef}: InputFieldProps) => {
+
+  
   useEffect(() => {
-    if(!success && validator(data, answer)) successHook(true)
-  }, [data, answer])
+    const correctAnswer = validator(data, answer)
+    if(!success && correctAnswer) {
+      successHook(true)
+      setData("")
+    }
+    
+  }, [data, answer, success])
+
+  const handleChange = (value: string) => {
+    setData(value)
+  }
+
   return(
     <div className={"form-group"}>
       <label htmlFor={id}>PIN:</label>
       <input
         ref={inputRef}
+        value={data}
         id={id}
         name={name}
         className={"faktura-spill-input-field"}
@@ -29,7 +42,8 @@ export const InputField = ({data, dataHook, id, name, placeholder, answer, valid
         disabled={success}
         maxLength={9}
         placeholder={placeholder}
-        onChange={(change) => {dataHook(change.currentTarget.value)}}
+        //onChange={(change) => {dataHook(change.currentTarget.value)}}
+        onChange={(e) => handleChange(e.currentTarget.value)}
       />
     </div>
   )

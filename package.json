@@ -20,8 +20,11 @@
   },
   "dependencies": {
     "@sb1/ffe-core": "^27.3.5",
+    "@sb1/ffe-icons": "^14.0.1",
+    "@sb1/ffe-icons-react": "^11.0.2",
     "@sb1/ffe-webfonts": "^4.0.1",
     "@types/react-router-dom": "^5.3.3",
+    "classnames": "^2.5.1",
     "csv-parse": "^5.4.0",
     "csv-stringify": "^6.4.0",
     "electron-updater": "^5.3.0",
