@@ -1,5 +1,23 @@
 ## LES MEG
 
+### Kom i gang
+```
+npm install
+npm run dev
+```
+
+Du kan oppleve å få følgende feil første gangen du kjører `npm run dev`
+```
+Electron failed to install correctly, please delete node_modules/electron and try installing again
+```
+
+Det mangler mest sannsynlig `path.txt` fra ELectron, det kan du fikse ved å kjøre følgende:
+```
+node node_modules/electron/install.js
+```
+
+[Lenke til GitHub-issue for fix](https://github.com/electron/electron/issues/20731#issuecomment-546616376)
+
 ### Script
 Lokal utvikling med hot reloading `npm run dev` 
 
