@@ -20,6 +20,9 @@ const Menu = () => {
       case "9":
         navigate("/faktura/intro");
         break;
+      case "2":
+        navigate("/labyrint");
+        break;
       case "1":
         navigate(BOARD_PIN_PATH);
         break;
@@ -70,6 +73,12 @@ const Menu = () => {
               <Link to={BOARD_PAY_PATH}>3) Top 30 - Pay invoice</Link>
             </h3>
           </div>
+        </div>
+        <div className={"menu-item--left menu-button"}>
+          {" "}
+          <h3>
+            <Link to={"/labyrint"}>2) Labyrint</Link>
+          </h3>
         </div>
       </div>
       {/* <p><Link to={`${BOARD_PAY_PATH}/9`}>Leaderboard pay new</Link></p> <p><Link to={`${BOARD_PIN_PATH}/9`}>Leaderboard pin new</Link></p> */}
