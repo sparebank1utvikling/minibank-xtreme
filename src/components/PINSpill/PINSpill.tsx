@@ -99,9 +99,9 @@ const PINSpill = () => {
           <fieldset>
             <legend>Can you remember your new PIN?</legend>
             {showPin ?
-              <div className={"terminal-card"} style={{ backgroundColor: "white" }}>
-                <header>Your new PIN</header>
-                <div className={"pin-game-info-fields"}>{pin}</div>
+              <div className={"pin-game-container"} style={{ backgroundColor: "white" }}>
+                <header className="pin-game-container-header">Your new PIN</header>
+                <p className="pin-game-container-new-pin">{pin}</p>
                 <Counter timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length - 1)]} setDone={setCounterDone} />
               </div>
               :
@@ -133,7 +133,7 @@ const PINSpill = () => {
               </>
             }
           </fieldset>
-          <div className={"score-container"}>Score: {nSuccesses}</div>
+          <p className={"pin-game-score"}>Score: {nSuccesses}</p>
         </>
         :
         <GameComplete gamePath={BOARD_PIN_PATH} score={nSuccesses} />

@@ -42,7 +42,6 @@ export const InputField = ({data, setData, id, name, placeholder, answer, valida
         disabled={success}
         maxLength={9}
         placeholder={placeholder}
-        //onChange={(change) => {dataHook(change.currentTarget.value)}}
         onChange={(e) => handleChange(e.currentTarget.value)}
       />
     </div>
