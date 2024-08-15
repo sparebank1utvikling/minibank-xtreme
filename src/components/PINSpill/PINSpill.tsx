@@ -1,18 +1,31 @@
 import { Dispatch, useState, useEffect, useRef } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { InputField } from "../common/InputField"
+import { useNavigate } from "react-router-dom"
+import { InputField } from "./InputField"
 import { Counter } from "./Counter"
 import { BOARD_PIN_PATH } from "@/App";
 import { GameComplete } from "../common/GameComplete";
+import { Icon } from "@sb1/ffe-icons-react";
+import FavoriteIcon from '@sb1/ffe-icons/icons/filled/xl/favorite.svg';
+
+const LifeBar = ({ numberOfLives } : { numberOfLives: number }) => {
+  return (
+      <div className="pin-game-life-bar">
+        {Array.from({ length: numberOfLives }, (_, i) => i).map((_, index) => {
+          return <Icon key={index} className="pin-game-life-bar__heart" size="xl" fileUrl={FavoriteIcon} />
+        }
+            )}
+      </div>
+  )
+}
 
 const PINSpill = () => {
   const TIMES_GIVEN = [10, 5, 2.5, 2, 1.5, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25, 0.2, 0.15, 0.1]
   const [pin, setPin] = useState("")
   const [done, setDone] = useState<boolean>(false)
   const [showPin, setShowPin] = useState<boolean>(false)
+  const [numberOfLives, setNumberOfLives] = useState<number>(3)
 
   const [counterDone, setCounterDone] = useState<boolean>(false)
-  const [countdownActive, setCountdownActive] = useState<boolean>(true)
 
   const [input, setInput] = useState<string>("")
   const [success, setSuccess] = useState<boolean>(false)
@@ -52,6 +65,11 @@ const PINSpill = () => {
   }, [showPin])
 
   useEffect(() => {
+    setInput("")
+    if (numberOfLives < 1) setDone(true)
+  }, [numberOfLives])
+
+  useEffect(() => {
     if (ref.current)
       ref.current.focus();
   }, [done])
@@ -77,6 +95,7 @@ const PINSpill = () => {
     <div className={'pin-game'} ref={ref} tabIndex={0} onKeyUp={(event) => handleInput(event)}>
       {!done ?
         <>
+        <LifeBar numberOfLives={numberOfLives} />
           <fieldset>
             <legend>Can you remember your new PIN?</legend>
             {showPin ?
@@ -89,18 +108,24 @@ const PINSpill = () => {
               <>
                 <InputField
                   data={input}
-                  dataHook={setInput}
+                  setData={setInput}
                   id={"pin-input"}
                   name={"PIN Input"}
                   placeholder={"Enter your PIN"}
                   answer={pin}
-                  validator={(inp: string, answer: string) => { return inp === answer }}
+                  validator={(inp: string, answer: string) => { 
+                    if (inp === answer) return true
+                    if (inp.length === answer.length && inp !== answer) {
+                      setNumberOfLives(numberOfLives - 1)                 
+                    }
+                    return false
+                   }}
                   success={success}
                   successHook={setSuccess}
                   inputRef={pinFieldRef}
                 />
                 <button
-                  className={'btn btn-error'}
+                  className={'pin-game-give-up-button'}
                   onClick={() => setDone(true)}
                 >
                   Press x to give up
