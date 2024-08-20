@@ -2,6 +2,8 @@ import styles from './LabyrintSpill.module.less';
 import { useEffect, useState } from "react";
 
 const LOCAL_STORAGE_KEY = 'Labyrint-disk'
+const BEGYNT_PTR = 'vR6g$';
+const VUNNET_PTR = 'C6dXu';
 
 export const LabyrintSpill = () => {
   const [gameState, setGameState] = useState('Laster spillet...');
@@ -10,16 +12,18 @@ export const LabyrintSpill = () => {
     // Load the todos on mount
     const gameStateString = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (gameStateString) {
-      if (gameStateString === 'xjkT*') {
-        setGameState('Prøv å finne veien ut!')
+      if (gameStateString === BEGYNT_PTR) {
+        setGameState('Prøv å finne veien ut!');
       }
-      console.log("gameState: ", gameStateString)
+      console.log("gameState: ", gameStateString);
     }
     // Respond to the `storage` event
     function storageEventHandler(event: StorageEvent) {
       if (event.key === LOCAL_STORAGE_KEY && event.newValue) {
-        if (event.newValue === 'yJ:o8') {
-          setGameState('Du klarte det!')
+        if (event.newValue === BEGYNT_PTR) {
+          setGameState('Prøv å finne veien ut!');
+        } else if (event.newValue === VUNNET_PTR) {
+          setGameState('Du klarte det!');
         }
         console.log("gameState: ", event.newValue)
       }
@@ -44,7 +48,7 @@ export const LabyrintSpill = () => {
         </iframe>
       </div>
       <p>{gameState}</p>
-      <p>Bruk piltastene for å bevege deg. Space for å hoppe.</p>
+      <p>Bruk piltastene for å bevege deg. Mellomrom for å hoppe.</p>
     </>
   );
 }
