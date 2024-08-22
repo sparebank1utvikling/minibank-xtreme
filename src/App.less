@@ -1,4 +1,4 @@
-@import "../node_modules/@sb1/ffe-core/less/colors";
+@import "../node_modules/@sb1/ffe-core/less/ffe";
 @import "../node_modules/@sb1/ffe-icons/less/ffe-icons";
 
 #root {
@@ -12,8 +12,15 @@ body,
 label {
   background-color: @ffe-farge-fjell;
   color: @ffe-farge-sand;
-  font-family: Cantarell;
   font-size: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+legend {
+  color: @ffe-farge-hvit;
 }
 
 div {
@@ -137,19 +144,37 @@ div {
   flex-flow: column nowrap;
   margin-top: 25rem;
 
-  &-info-fields {
-    display: flex;
-    color: var(--primary-color);
-    font-size: 2rem;
-    font-weight: bold;
-    justify-content: center;
+
+  &-container {
+    padding-bottom: 16px;
+
+    &-header {
+      padding: 16px 0;
+      background-color: @ffe-farge-fjell-30;
+      
+    }
+
+    &-new-pin {
+      display: flex;
+      margin-top: 2rem;
+      color: @ffe-farge-svart;
+      font-size: 3rem;
+      font-weight: bold;
+      justify-content: center;
+    }
   }
+
+  
 
   &-life-bar {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: @ffe-farge-baer;
+
+    &__heart {
+      color: @ffe-farge-baer;
+    }
+    
   }
 
   &-give-up-button {
@@ -163,6 +188,12 @@ div {
       background-color: @ffe-farge-lyng;
       cursor: pointer;
     }
+  }
+
+  &-score {
+    font-size: 2em;
+    margin: 25px;
+    color: @ffe-farge-hvit;
   }
 
 }
@@ -223,13 +254,8 @@ fieldset {
   background-color: white !important;
   color: white !important;
   &-filled {
-    background-color: greenyellow !important;
+    background-color: @ffe-farge-nordlys !important;
   }
-}
-
-.score-container {
-  font-size: 2em;
-  margin: 25px;
 }
 
 .back_link {

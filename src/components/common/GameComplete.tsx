@@ -47,7 +47,7 @@ export const GameComplete = ({gamePath, score}: GameCompleteProps)=> {
         <div className={'terminal-card'} tabIndex={0} ref={ref} onKeyUp={(event) => handleInput(event)}>
             <header>Well done!</header>
             <div>
-                {getWinStatement()} <br/>
+                <p style={{ color: "white" }}>{getWinStatement()}</p> <br/>
                 <p style={{color: "white"}}>Do you want to add your name to the scoreboard?</p>
             </div>
             <div className="buttons">
