@@ -8,6 +8,7 @@ import PinSpill from "./components/PINSpill/PINSpill";
 import { Leaderboard } from "@/components/Leaderboard/Leaderboard";
 import { createFileForLeaderBoard } from "@/components/Leaderboard/LeaderBoardUtils";
 import "./configure-styles";
+import { LabyrintSpill } from "./components/LabyrintSpill/LabyrintSpill";
 
 console.log(
   "[App.tsx]",
@@ -59,6 +60,7 @@ function App() {
           path={"/pin/intro"}
           element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"} />}
         />
+        <Route path={"/labyrint"} element={<LabyrintSpill />} />
         <Route path={"/pin"} element={<PinSpill />} />
         <Route
           path={BOARD_PAY_PATH}

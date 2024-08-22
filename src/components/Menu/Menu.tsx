@@ -20,6 +20,9 @@ const Menu = () => {
       case "9":
         navigate("/faktura/intro");
         break;
+      case "2":
+        navigate("/labyrint");
+        break;
       case "1":
         navigate(BOARD_PIN_PATH);
         break;
@@ -59,6 +62,13 @@ const Menu = () => {
               <Link to={"/faktura/intro"}>9) Pay invoice</Link>
             </h3>
           </div>
+          <div className={"menu-item--left menu-button"}>
+            {" "}
+            <h3>
+              <Link to={"/labyrint"}>4) Labyrint</Link>
+            </h3>
+          </div>
+          <div className={"menu-item--right"} /> {/* Empty div for grid */}
           <div className={"menu-item--left menu-button"}>
             <h3>
               <Link to={BOARD_PIN_PATH}>1) Top 30 - New PIN code</Link>
