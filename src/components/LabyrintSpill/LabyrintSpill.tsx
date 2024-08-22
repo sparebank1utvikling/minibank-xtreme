@@ -2,6 +2,8 @@ import styles from './LabyrintSpill.module.less';
 import { useEffect, useRef, useState } from "react";
 import { useKeypad } from "@/components/LabyrintSpill/useKeypad";
 import { CountdownBar, CountdownBarHandle } from "@/components/LabyrintSpill/CountdownBar";
+import { GameComplete } from '../common/GameComplete';
+import { BOARD_LABYRINT_PATH } from "@/App";
 
 const LOCAL_STORAGE_KEY = 'Labyrint-disk'
 const BEGYNT_PTR = 'vR6g$';
@@ -11,7 +13,8 @@ enum GameState {
   LOADING = 'Laster spillet...',
   PLAYING = 'Prøv å finne veien ut!',
   WON = 'Du klarte det!',
-  GAME_OVER = 'Tiden er ute!'
+  GAME_OVER = 'Tiden er ute!',
+  COMPLETED = 'Spillet er ferdig!'
 }
 
 export const LabyrintSpill = () => {
@@ -39,6 +42,17 @@ export const LabyrintSpill = () => {
         clearTimeout(timeout);
       };
     }
+
+    if (gameState === GameState.GAME_OVER) {
+      const timeout = setTimeout(() => {
+        setGameState(GameState.COMPLETED);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+
   }, [gameState]);
 
   useEffect(() => {
@@ -81,35 +95,40 @@ export const LabyrintSpill = () => {
     <>
       <div className={styles.wrapper}>
         { gameState === GameState.LOADING
-          ? <div className={styles.countdown}>
+          ? <div className={styles.blackBox}>
               <div className={styles.count}>{count}</div>
             </div>
-          : gameState !== GameState.GAME_OVER
+          : gameState === GameState.PLAYING || gameState === GameState.WON
             ? <iframe
                 className={styles.gameEmbed}
                 src="/labyrint.html"
                 allow="fullscreen; gamepad; autoplay"
                 frameBorder="0"
               />
-            : <div className={styles.gameOver}>
+            : <div className={styles.blackBox}>
                 <h1>Game Over!</h1>
               </div>
         }
       </div>
-      <CountdownBar
-        startTime={30}
-        ref={countdownRef}
-        onZero={() => {
-          const delay = setTimeout(() => {
-            setGameState(GameState.GAME_OVER);
-          }, 1000);
+      { gameState === GameState.COMPLETED
+        ? <GameComplete gamePath={BOARD_LABYRINT_PATH} score={level - 1} />
+        : <>
+            <CountdownBar
+              startTime={30}
+              ref={countdownRef}
+              onZero={() => {
+                const delay = setTimeout(() => {
+                  setGameState(GameState.GAME_OVER);
+                }, 1000);
 
-          return () => clearTimeout(delay);
-        }}
-      />
-      <h1 style={{ display: 'inline-block' }}>Level {level}</h1>
-      <p style={{ color: 'white' }}>{gameState}</p>
-      <p style={{ color: 'white' }}>Bruk piltastene for å bevege deg. Mellomrom eller 0 for å hoppe.</p>
+                return () => clearTimeout(delay);
+              }}
+            />
+            <h1 style={{ display: 'inline-block' }}>Level {level}</h1>
+            <p style={{ color: 'white' }}>{gameState}</p>
+            <p style={{ color: 'white' }}>Bruk piltastene for å bevege deg. Mellomrom eller 0 for å hoppe.</p>
+          </>
+      }
     </>
   );
 }

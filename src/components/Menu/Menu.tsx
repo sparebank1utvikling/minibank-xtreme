@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useEffect } from "react";
-import { BOARD_PAY_PATH, BOARD_PIN_PATH } from "@/App";
+import { BOARD_LABYRINT_PATH, BOARD_PAY_PATH, BOARD_PIN_PATH } from "@/App";
 import SpareBankLogo from "../../assets/rgb_SpareBank1_neg.png";
 
 const Menu = () => {
@@ -68,7 +68,12 @@ const Menu = () => {
               <Link to={"/labyrint"}>4) Labyrint</Link>
             </h3>
           </div>
-          <div className={"menu-item--right"} /> {/* Empty div for grid */}
+          <div className={"menu-item--right menu-button"}>
+            {" "}
+            <h3>
+              <Link to={BOARD_LABYRINT_PATH}>6) Top 30 - Labyrint</Link>
+            </h3>
+          </div>
           <div className={"menu-item--left menu-button"}>
             <h3>
               <Link to={BOARD_PIN_PATH}>1) Top 30 - New PIN code</Link>
