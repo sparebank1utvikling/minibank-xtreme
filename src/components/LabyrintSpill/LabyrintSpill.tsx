@@ -7,24 +7,30 @@ const LOCAL_STORAGE_KEY = 'Labyrint-disk'
 const BEGYNT_PTR = 'vR6g$';
 const VUNNET_PTR = 'C6dXu';
 
+enum GameState {
+  LOADING = 'Laster spillet...',
+  PLAYING = 'Prøv å finne veien ut!',
+  WON = 'Du klarte det!',
+  GAME_OVER = 'Tiden er ute!'
+}
+
 export const LabyrintSpill = () => {
-  const [gameState, setGameState] = useState('Laster spillet...');
-  const [loading, setLoading] = useState(true);
+  const [gameState, setGameState] = useState(GameState.LOADING);
   const [count, setCount] = useState(3);
   const [level, setLevel] = useState(1);
-  const [gameOver, setGameOver] = useState(false);
   const countdownRef = useRef<CountdownBarHandle>(null);
 
   useKeypad();
 
   useEffect(() => {
-    if (loading) {
+    if (gameState === GameState.LOADING) {
       const timer = setInterval(() => {
         setCount(prevCount => prevCount - 1);
       }, 1000);
 
       const timeout = setTimeout(() => {
-        setLoading(false);
+        setGameState(GameState.PLAYING);
+        countdownRef.current?.start();
         clearInterval(timer);
       }, 3000);
 
@@ -33,16 +39,15 @@ export const LabyrintSpill = () => {
         clearTimeout(timeout);
       };
     }
-  }, [loading]);
+  }, [gameState]);
 
   useEffect(() => {
-    if (gameState === 'Du klarte det!') {
+    if (gameState === GameState.WON) {
       countdownRef.current?.pause();
       const delay = setTimeout(() => {
         setLevel(level + 1);
-        setLoading(true);
+        setGameState(GameState.LOADING);
         setCount(3);
-        setGameState('Laster spillet...');
         countdownRef.current?.reset();
       }, 2000);
 
@@ -51,22 +56,13 @@ export const LabyrintSpill = () => {
   }, [gameState]);
 
   useEffect(() => {
-    // Load the todos on mount
-    const gameStateString = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (gameStateString) {
-      if (gameStateString === BEGYNT_PTR) {
-        setGameState('Prøv å finne veien ut!');
-      }
-      console.log("gameState: ", gameStateString);
-    }
-
     // Respond to the `storage` event
     function storageEventHandler(event: StorageEvent) {
       if (event.key === LOCAL_STORAGE_KEY && event.newValue) {
         if (event.newValue === BEGYNT_PTR) {
-          setGameState('Prøv å finne veien ut!');
+          setGameState(GameState.PLAYING);
         } else if (event.newValue === VUNNET_PTR) {
-          setGameState('Du klarte det!');
+          setGameState(GameState.WON);
         }
         console.log("gameState: ", event.newValue)
       }
@@ -78,12 +74,12 @@ export const LabyrintSpill = () => {
       // Remove the handler when the component unmounts
       window.removeEventListener("storage", storageEventHandler);
     };
-  }, []);
+  }, [count]);
 
   return (
     <>
       <div className={styles.wrapper}>
-        { loading
+        { gameState === GameState.LOADING
           ? <div className={styles.countdown}>
               <div className={styles.count}>{count}</div>
             </div>
@@ -99,10 +95,7 @@ export const LabyrintSpill = () => {
       <CountdownBar
         startTime={30}
         ref={countdownRef}
-        onZero={() => {
-          setGameOver(true)
-          setGameState('Tiden er ute!')
-        }}
+        onZero={() => setGameState(GameState.GAME_OVER)}
       />
       <h1 style={{ display: 'inline-block' }}>Level {level}</h1>
       <p style={{ color: 'white' }}>{gameState}</p>

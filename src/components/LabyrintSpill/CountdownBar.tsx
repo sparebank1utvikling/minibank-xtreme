@@ -7,6 +7,7 @@ interface CountdownBarProps {
 }
 
 export interface CountdownBarHandle {
+  start: () => void;
   reset: () => void;
   pause: () => void;
   resume: () => void;
@@ -15,10 +16,14 @@ export interface CountdownBarHandle {
 export const CountdownBar = forwardRef<CountdownBarHandle, CountdownBarProps>(({ startTime, onZero }, ref) => {
   const [count, setCount] = useState(startTime);
   const [gameOver, setGameOver] = useState(false);
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(true);
   const [resetting, setResetting] = useState(false);
 
   useImperativeHandle(ref, () => ({
+    start() {
+      setCount(startTime);
+      setPaused(false);
+    },
     reset() {
       setResetting(true);
       setTimeout(() => {
