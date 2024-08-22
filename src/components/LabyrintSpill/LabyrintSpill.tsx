@@ -8,6 +8,56 @@ const VUNNET_PTR = 'C6dXu';
 export const LabyrintSpill = () => {
   const [gameState, setGameState] = useState('Laster spillet...');
 
+  function handleKeyDown (event) {
+    switch (event.key) {
+      case '8':
+        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }))
+        break;
+      case '2':
+        event.stopImmediatePropagation(); // unngå å lagre tilstand
+        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }))
+        break;
+      case '4':
+        event.stopImmediatePropagation(); // unngå å laste tilstand
+        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowLeft' }))
+        break;
+      case '6':
+        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight' }))
+        break;
+      case '0':
+        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }))
+        break;
+    }
+  }
+  function handleKeyUp (event) {
+    switch (event.key) {
+      case '8':
+        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'ArrowUp' }))
+        break;
+      case '2':
+        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'ArrowDown' }))
+        break;
+      case '4':
+        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'ArrowLeft' }))
+        break;
+      case '6':
+        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'ArrowRight' }))
+        break;
+      case '0':
+        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'Space' }))
+        break;
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [])
+
   useEffect(() => {
     // Load the todos on mount
     const gameStateString = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -47,8 +97,8 @@ export const LabyrintSpill = () => {
         >
         </iframe>
       </div>
-      <p>{gameState}</p>
-      <p>Bruk piltastene for å bevege deg. Mellomrom for å hoppe.</p>
+      <p style={{color: 'white'}}>{gameState}</p>
+      <p style={{color: 'white'}}>Bruk piltastene for å bevege deg. Mellomrom eller 0 for å hoppe.</p>
     </>
   );
 }
