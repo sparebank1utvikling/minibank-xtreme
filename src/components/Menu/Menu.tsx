@@ -63,6 +63,13 @@ const Menu = () => {
             </h3>
           </div>
           <div className={"menu-item--left menu-button"}>
+            {" "}
+            <h3>
+              <Link to={"/labyrint"}>4) Labyrint</Link>
+            </h3>
+          </div>
+          <div className={"menu-item--right"} /> {/* Empty div for grid */}
+          <div className={"menu-item--left menu-button"}>
             <h3>
               <Link to={BOARD_PIN_PATH}>1) Top 30 - New PIN code</Link>
             </h3>
@@ -73,12 +80,6 @@ const Menu = () => {
               <Link to={BOARD_PAY_PATH}>3) Top 30 - Pay invoice</Link>
             </h3>
           </div>
-        </div>
-        <div className={"menu-item--left menu-button"}>
-          {" "}
-          <h3>
-            <Link to={"/labyrint"}>2) Labyrint</Link>
-          </h3>
         </div>
       </div>
       {/* <p><Link to={`${BOARD_PAY_PATH}/9`}>Leaderboard pay new</Link></p> <p><Link to={`${BOARD_PIN_PATH}/9`}>Leaderboard pin new</Link></p> */}
