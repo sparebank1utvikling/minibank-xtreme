@@ -43,7 +43,10 @@ export const LabyrintSpill = () => {
         setLoading(true);
         setCount(3);
         setGameState('Laster spillet...');
+        countdownRef.current?.reset();
       }, 2000);
+
+      return () => clearTimeout(delay);
     }
   }, [gameState]);
 
@@ -84,20 +87,23 @@ export const LabyrintSpill = () => {
           ? <div className={styles.countdown}>
               <div className={styles.count}>{count}</div>
             </div>
-          : <>
-              <iframe
-                className={styles.gameEmbed}
-                src="/labyrint.html"
-                allow="fullscreen; gamepad; autoplay"
-                frameBorder="0"
-              />
-              <CountdownBar startTime={30} ref={countdownRef} onZero={() => {
-                setGameOver(true)
-                setGameState('Tiden er ute!')
-              }} />
-          </>
+          :
+            <iframe
+              className={styles.gameEmbed}
+              src="/labyrint.html"
+              allow="fullscreen; gamepad; autoplay"
+              frameBorder="0"
+            />
         }
       </div>
+      <CountdownBar
+        startTime={30}
+        ref={countdownRef}
+        onZero={() => {
+          setGameOver(true)
+          setGameState('Tiden er ute!')
+        }}
+      />
       <h1 style={{ display: 'inline-block' }}>Level {level}</h1>
       <p style={{ color: 'white' }}>{gameState}</p>
       <p style={{ color: 'white' }}>Bruk piltastene for å bevege deg. Mellomrom eller 0 for å hoppe.</p>

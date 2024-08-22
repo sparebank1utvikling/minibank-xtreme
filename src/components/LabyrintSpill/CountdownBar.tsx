@@ -16,12 +16,17 @@ export const CountdownBar = forwardRef<CountdownBarHandle, CountdownBarProps>(({
   const [count, setCount] = useState(startTime);
   const [gameOver, setGameOver] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   useImperativeHandle(ref, () => ({
     reset() {
-      setCount(startTime);
-      setGameOver(false);
-      setPaused(false);
+      setResetting(true);
+      setTimeout(() => {
+        setCount(startTime);
+        setGameOver(false);
+        setPaused(false);
+        setResetting(false);
+      }, 3000);
     },
     pause() {
       setPaused(true);
@@ -32,7 +37,7 @@ export const CountdownBar = forwardRef<CountdownBarHandle, CountdownBarProps>(({
   }));
 
   useEffect(() => {
-    if (count > 0 && !paused) {
+    if (count > 0 && !paused && !resetting) {
       const timer = setInterval(() => {
         setCount(prevCount => prevCount - 1);
       }, 1000);
@@ -44,7 +49,7 @@ export const CountdownBar = forwardRef<CountdownBarHandle, CountdownBarProps>(({
         onZero();
       }
     }
-  }, [count, paused, onZero]);
+  }, [count, paused, resetting, onZero]);
 
   useEffect(() => {
     if (gameOver) {
@@ -63,7 +68,14 @@ export const CountdownBar = forwardRef<CountdownBarHandle, CountdownBarProps>(({
 
   return (
     <div className={styles.countdownContainer}>
-      <div className={styles.countdownBar} style={{ width: `${(count / startTime) * 100}%`, backgroundColor: getColor() }}></div>
+      <div
+        className={styles.countdownBar}
+        style={{
+          width: resetting ? '100%' : `${(count / startTime) * 100}%`,
+          backgroundColor: getColor(),
+          transition: resetting ? 'width 3s linear, background-color 3s linear' : 'width 1s linear, background-color 5s linear'
+        }}
+      ></div>
       <div className={styles.countdownText}>{count > 0 ? count : "Game Over"}</div>
     </div>
   );
