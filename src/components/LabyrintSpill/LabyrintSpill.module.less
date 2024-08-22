@@ -7,3 +7,26 @@
   height: 480px;
   padding: 0;
 }
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 480px;
+  height: 480px;
+  padding: 0;
+  background-color: black;
+  color: white;
+  font-size: 5rem;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 20px auto;
+}
+
+.count {
+  animation: fade 1s infinite;
+}
+
+@keyframes fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
