@@ -53,6 +53,7 @@ export const LabyrintSpill = () => {
 
       return () => clearTimeout(delay);
     }
+
   }, [gameState]);
 
   useEffect(() => {
@@ -83,19 +84,28 @@ export const LabyrintSpill = () => {
           ? <div className={styles.countdown}>
               <div className={styles.count}>{count}</div>
             </div>
-          :
-            <iframe
-              className={styles.gameEmbed}
-              src="/labyrint.html"
-              allow="fullscreen; gamepad; autoplay"
-              frameBorder="0"
-            />
+          : gameState !== GameState.GAME_OVER
+            ? <iframe
+                className={styles.gameEmbed}
+                src="/labyrint.html"
+                allow="fullscreen; gamepad; autoplay"
+                frameBorder="0"
+              />
+            : <div className={styles.gameOver}>
+                <h1>Game Over!</h1>
+              </div>
         }
       </div>
       <CountdownBar
         startTime={30}
         ref={countdownRef}
-        onZero={() => setGameState(GameState.GAME_OVER)}
+        onZero={() => {
+          const delay = setTimeout(() => {
+            setGameState(GameState.GAME_OVER);
+          }, 1000);
+
+          return () => clearTimeout(delay);
+        }}
       />
       <h1 style={{ display: 'inline-block' }}>Level {level}</h1>
       <p style={{ color: 'white' }}>{gameState}</p>
