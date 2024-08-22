@@ -1,5 +1,6 @@
 import styles from './LabyrintSpill.module.less';
 import { useEffect, useState } from "react";
+import { useKeypad } from "@/components/LabyrintSpill/useKeypad";
 
 const LOCAL_STORAGE_KEY = 'Labyrint-disk'
 const BEGYNT_PTR = 'vR6g$';
@@ -7,56 +8,7 @@ const VUNNET_PTR = 'C6dXu';
 
 export const LabyrintSpill = () => {
   const [gameState, setGameState] = useState('Laster spillet...');
-
-  function handleKeyDown (event) {
-    switch (event.key) {
-      case '8':
-        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }))
-        break;
-      case '2':
-        event.stopImmediatePropagation(); // unngå å lagre tilstand
-        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }))
-        break;
-      case '4':
-        event.stopImmediatePropagation(); // unngå å laste tilstand
-        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowLeft' }))
-        break;
-      case '6':
-        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight' }))
-        break;
-      case '0':
-        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }))
-        break;
-    }
-  }
-  function handleKeyUp (event) {
-    switch (event.key) {
-      case '8':
-        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'ArrowUp' }))
-        break;
-      case '2':
-        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'ArrowDown' }))
-        break;
-      case '4':
-        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'ArrowLeft' }))
-        break;
-      case '6':
-        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'ArrowRight' }))
-        break;
-      case '0':
-        window.dispatchEvent(new KeyboardEvent('keyup', { code: 'Space' }))
-        break;
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown)
-    window.addEventListener('keyup', handleKeyUp)
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('keyup', handleKeyUp)
-    }
-  }, [])
+  useKeypad();
 
   useEffect(() => {
     // Load the todos on mount
