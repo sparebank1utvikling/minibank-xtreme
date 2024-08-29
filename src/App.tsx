@@ -31,8 +31,10 @@ function App() {
 
   const howToPIN = [
     "Oh no! You seem to have forgotten the PIN-code to your cards!",
+    "Our great operations team have informed us that there may be delays if you have entered more than 20 PIN codes, so be careful!",
     "In this game you will be prompted with new PIN codes for your card. These will only be displayed on the screen for a limited time.",
     "Once they disappear, enter the PIN code you were given in the input field.",
+    "You have a total of three lives, and if you fail to enter the correct PIN code, you will lose one of them. If you lose them all the game will end.",
     "Goal: Correctly remember and enter as many PINs as you can! The catch?  The time to remember get shorter each time! Are you attentive enough?",
   ];
 
