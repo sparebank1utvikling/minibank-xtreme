@@ -20,7 +20,7 @@ export const BOARD_PAY_PATH = "/leaderboardPay";
 export const BOARD_LABYRINT_PATH = "/leaderboardLabyrint";
 export const GAME_TITLE_PIN = "PIN";
 export const GAME_TITLE_PAY_INVOICE = "Pay invoice";
-export const GAME_TITLE_LABYRINT = "Labyrint";
+export const GAME_TITLE_LABYRINT = "Maze";
 export const NUMPAD_HOME = "/";
 
 function App() {

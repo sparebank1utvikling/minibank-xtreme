@@ -65,13 +65,13 @@ const Menu = () => {
           <div className={"menu-item--left menu-button"}>
             {" "}
             <h3>
-              <Link to={"/labyrint"}>4) Labyrint</Link>
+              <Link to={"/labyrint"}>4) Maze</Link>
             </h3>
           </div>
           <div className={"menu-item--right menu-button"}>
             {" "}
             <h3>
-              <Link to={BOARD_LABYRINT_PATH}>6) Top 30 - Labyrint</Link>
+              <Link to={BOARD_LABYRINT_PATH}>6) Top 30 - Maze</Link>
             </h3>
           </div>
           <div className={"menu-item--left menu-button"}>

@@ -10,11 +10,11 @@ const BEGYNT_PTR = 'vR6g$';
 const VUNNET_PTR = 'C6dXu';
 
 enum GameState {
-  LOADING = 'Laster spillet...',
-  PLAYING = 'Prøv å finne veien ut!',
-  WON = 'Du klarte det!',
-  GAME_OVER = 'Tiden er ute!',
-  COMPLETED = 'Spillet er ferdig!'
+  LOADING = 'Loading game...',
+  PLAYING = 'Try to find the way out of the maze!',
+  WON = 'You made it!',
+  GAME_OVER = 'Time is up!',
+  COMPLETED = 'Finished playing!'
 }
 
 export const LabyrintSpill = () => {
@@ -126,7 +126,7 @@ export const LabyrintSpill = () => {
             />
             <h1 style={{ display: 'inline-block' }}>Level {level}</h1>
             <p style={{ color: 'white' }}>{gameState}</p>
-            <p style={{ color: 'white' }}>Bruk piltastene for å bevege deg. Mellomrom eller 0 for å hoppe.</p>
+            <p style={{ color: 'white' }}>Use the arrow keys to move. Space or 0 to jump.</p>
           </>
       }
     </>
