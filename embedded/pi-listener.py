@@ -3,12 +3,12 @@ from pynput.keyboard import Key, Controller
 
 keyboard = Controller()
 keyboard_mapping = {
-    0: 'a',
-    1: 'b',
-    2: 'c',
-    3: 'd',
-    4: 'e',
-    5: 'f'
+    1: "7", #PIN-spill
+    2: "9", #Efaktura-spill
+    3: "4", #Labyrint
+    4: "6", #Tom slot
+    5: "1", #Leaderboard PIN
+    6: "3" #Leaderboard efaktura
 }
 
 port = "/dev/ttyACM0"
