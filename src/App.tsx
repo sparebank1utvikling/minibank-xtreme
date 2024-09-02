@@ -17,8 +17,10 @@ console.log(
 
 export const BOARD_PIN_PATH = "/leaderboardPin";
 export const BOARD_PAY_PATH = "/leaderboardPay";
+export const BOARD_LABYRINT_PATH = "/leaderboardLabyrint";
 export const GAME_TITLE_PIN = "PIN";
 export const GAME_TITLE_PAY_INVOICE = "Pay invoice";
+export const GAME_TITLE_LABYRINT = "Maze";
 export const NUMPAD_HOME = "/";
 
 function App() {
@@ -40,6 +42,7 @@ function App() {
 
   const fakturaFilePath = "./faktura.csv";
   const fakturaSort = false;
+  const labyrintFilePath = "./labyrint.csv";
   const pinFilePath = "./pin.csv";
   const pinSort = true;
 
@@ -63,6 +66,30 @@ function App() {
           element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"} />}
         />
         <Route path={"/labyrint"} element={<LabyrintSpill />} />
+        <Route
+          path={BOARD_LABYRINT_PATH}
+          element={
+            <Leaderboard
+              gameTitle={GAME_TITLE_LABYRINT}
+              filePath={labyrintFilePath}
+              registerNew={false}
+              sortAscending={false}
+              scoreMetric="level completed"
+            />
+          }
+        />
+        <Route
+          path={`${BOARD_LABYRINT_PATH}/:score`}
+          element={
+            <Leaderboard
+              gameTitle={GAME_TITLE_LABYRINT}
+              filePath={labyrintFilePath}
+              registerNew={true}
+              sortAscending={false}
+              scoreMetric="sec"
+            />
+          }
+        />
         <Route path={"/pin"} element={<PinSpill />} />
         <Route
           path={BOARD_PAY_PATH}
