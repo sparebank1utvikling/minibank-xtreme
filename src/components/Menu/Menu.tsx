@@ -20,8 +20,11 @@ const Menu = () => {
       case "9":
         navigate("/faktura/intro");
         break;
-      case "2":
+      case "4":
         navigate("/labyrint");
+        break;
+      case "6":
+        navigate(BOARD_LABYRINT_PATH);
         break;
       case "1":
         navigate(BOARD_PIN_PATH);
