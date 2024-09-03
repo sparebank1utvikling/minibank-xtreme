@@ -10,7 +10,8 @@ import CatPicture from "../../assets/cat_delay.png";
 
 function shouldGiveADelay(score: number) {
   const SCORE_BEFORE_DELAYS = 20
-  return Math.random() < 0.5 && score > SCORE_BEFORE_DELAYS
+  const TWENTY_PERCENT = 0.2
+  return Math.random() < TWENTY_PERCENT && score > SCORE_BEFORE_DELAYS
 }
 
 const LifeBar = ({ numberOfLives } : { numberOfLives: number }) => {
