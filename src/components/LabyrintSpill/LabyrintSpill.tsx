@@ -4,6 +4,7 @@ import { useKeypad } from "@/components/LabyrintSpill/useKeypad";
 import { CountdownBar, CountdownBarHandle } from "@/components/LabyrintSpill/CountdownBar";
 import { GameComplete } from '../common/GameComplete';
 import { BOARD_LABYRINT_PATH } from "@/App";
+import {getGameLevel} from "@/components/LabyrintSpill/levels/getGameLevels";
 
 const LOCAL_STORAGE_KEY = 'Labyrint-disk'
 const BEGYNT_PTR = 'vR6g$';
@@ -16,8 +17,6 @@ enum GameState {
   GAME_OVER = 'Time is up!',
   COMPLETED = 'Finished playing!'
 }
-
-const LEVEL_ORDER = [0, 1, 2, 3, 4, 5, 6, 7, 8, 1, 3, 5, 7, 0, 2, 4, 6, 8, 1, 4, 7, 0, 3, 6, 2, 5, 8, 7, 6, 5, 4, 3, 2, 1, 0];
 
 export const LabyrintSpill = () => {
   const [gameState, setGameState] = useState(GameState.LOADING);
@@ -103,7 +102,7 @@ export const LabyrintSpill = () => {
           : gameState === GameState.PLAYING || gameState === GameState.WON
             ? <iframe
                 className={styles.gameEmbed}
-                src={`/labyrint_${LEVEL_ORDER[level - 1]}.html`}
+                src={getGameLevel(level)}
                 allow="fullscreen; gamepad; autoplay"
                 frameBorder="0"
               />
