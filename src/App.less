@@ -32,20 +32,22 @@ div {
 .menu {
   width: 100%;
   height: 100vh;
+  padding-top: 100px;
+  overflow: hidden;
 }
 
 .header-logo {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 200px;
+  right: 25px;
   height: 50px;
   width: auto;
 }
 
 .menu-grid {
   display: grid;
-  margin-top: -3rem;
-  height: 87vh;
+  margin-top: -6rem; // 50px
+  height: 87vh; // 67vh
   align-items: center;
   grid-template-columns: repeat(2, auto);
   &:focus {
@@ -75,6 +77,13 @@ div {
   }
   a {
     color: @ffe-farge-koksgraa !important;
+  }
+  &--first {
+    margin-top: 20px;
+  }
+
+  &--last {
+    align-self: end;
   }
 }
 
