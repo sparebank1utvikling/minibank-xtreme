@@ -22,7 +22,7 @@ const PINSpill = () => {
   const [showPin, setShowPin] = useState<boolean>(false)
   const [numberOfLives, setNumberOfLives] = useState<number>(3)
 
-  const [counterDone, setCounterDone] = useState<boolean>(false)
+  const [countdownDone, setCountdownDone] = useState<boolean>(false)
 
   const [input, setInput] = useState<string>("")
   const [success, setSuccess] = useState<boolean>(false)
@@ -33,10 +33,10 @@ const PINSpill = () => {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (counterDone) {
+    if (countdownDone) {
       setShowPin(false)
     }
-  }, [counterDone])
+  }, [countdownDone])
 
   const reset = () => {
     // Have to compansate for the score being -1 to start with
@@ -44,7 +44,7 @@ const PINSpill = () => {
     setShowPin(true)
     setSuccess(false)
     setPin(generatePin(nSuccesses));
-    setCounterDone(false)
+    setCountdownDone(false)
     setNSuccesses((old) => old + 1)
   }
 
@@ -100,7 +100,7 @@ const PINSpill = () => {
             {showDelay ?
              <Delay setDelay={setShowDelay} /> :
               showPin ?
-              <ShowPIN pin={pin} timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length - 1)]} setCounterDone={setCounterDone} />
+              <ShowPIN pin={pin} timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length - 1)]} setCountdownDone={setCountdownDone} />
               :
              <EnterPIN pin={pin} pinFieldRef={pinFieldRef} setDone={setDone} setNumberOfLives={setNumberOfLives} numberOfLives={numberOfLives} input={input} setInput={setInput} success={success} setSuccess={setSuccess} />
             }
