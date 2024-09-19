@@ -108,7 +108,10 @@ const PINSpill = () => {
           <p className={"pin-game-score"}>Score: {nSuccesses}</p>
         </>
         :
-        <GameComplete gamePath={BOARD_PIN_PATH} score={nSuccesses} />
+          <>
+            <p className={"pin-game-last-pin"}>The last PIN was: {pin}</p>
+            <GameComplete gamePath={BOARD_PIN_PATH} score={nSuccesses} />
+          </>
       }
     </div>
   )
