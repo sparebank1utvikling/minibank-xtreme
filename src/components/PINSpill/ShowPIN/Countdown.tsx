@@ -5,7 +5,7 @@ interface CounterProps {
   setDone: Dispatch<React.SetStateAction<boolean>>
 }
 
-export const Counter = ({timeGiven, setDone}: CounterProps) => {
+export const Countdown = ({timeGiven, setDone}: CounterProps) => {
   const [currentTime, setCurrentTime] = useState<number>(timeGiven)
 
 

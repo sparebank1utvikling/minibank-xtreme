@@ -5,10 +5,10 @@ import { GameComplete } from "../common/GameComplete";
 import { LifeBar } from "./LifeBar";
 import { Delay } from "./Delay";
 import { generatePin } from "./generatePin";
-import { PIN } from "./PIN/PIN";
+import { ShowPIN } from "@/components/PINSpill/ShowPIN/ShowPIN";
 import { EnterPIN } from "./EnterPIN/EnterPIN";
 
-function shouldGiveADelay(score: number) {
+function shouldShowADelay(score: number): boolean {
   const SCORE_BEFORE_DELAYS = 20
   const TWENTY_PERCENT = 0.2
   return Math.random() < TWENTY_PERCENT && score > SCORE_BEFORE_DELAYS
@@ -40,7 +40,7 @@ const PINSpill = () => {
 
   const reset = () => {
     // Have to compansate for the score being -1 to start with
-    shouldGiveADelay(nSuccesses + 1) ? setShowDelay(true) : setShowDelay(false)
+    shouldShowADelay(nSuccesses + 1) ? setShowDelay(true) : setShowDelay(false)
     setShowPin(true)
     setSuccess(false)
     setPin(generatePin(nSuccesses));
@@ -89,7 +89,6 @@ const PINSpill = () => {
       }
     }
   }
-  console.log(pin)
 
   return (
     <div className={'pin-game'} ref={ref} tabIndex={0} onKeyUp={(event) => handleInput(event)}>
@@ -101,7 +100,7 @@ const PINSpill = () => {
             {showDelay ?
              <Delay setDelay={setShowDelay} /> :
               showPin ?
-              <PIN pin={pin} timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length - 1)]} setCounterDone={setCounterDone} />
+              <ShowPIN pin={pin} timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length - 1)]} setCounterDone={setCounterDone} />
               :
              <EnterPIN pin={pin} pinFieldRef={pinFieldRef} setDone={setDone} setNumberOfLives={setNumberOfLives} numberOfLives={numberOfLives} input={input} setInput={setInput} success={success} setSuccess={setSuccess} />
             }
