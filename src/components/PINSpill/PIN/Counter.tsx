@@ -1,4 +1,4 @@
-import {Dispatch, useEffect, useState } from "react"
+import { Dispatch, useEffect, useState } from "react"
 
 interface CounterProps {
   timeGiven: number
