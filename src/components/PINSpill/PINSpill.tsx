@@ -6,7 +6,7 @@ import { BOARD_PIN_PATH } from "@/App";
 import { GameComplete } from "../common/GameComplete";
 import { Icon } from "@sb1/ffe-icons-react";
 import FavoriteIcon from '@sb1/ffe-icons/icons/filled/xl/favorite.svg';
-import CatPicture from "../../assets/cat_delay.png";
+import { Delay } from "./Delay";
 
 function shouldGiveADelay(score: number) {
   const SCORE_BEFORE_DELAYS = 20
@@ -22,20 +22,6 @@ const LifeBar = ({ numberOfLives } : { numberOfLives: number }) => {
         }
             )}
       </div>
-  )
-}
-
-const DelayScreen = ({ setDelay } : { setDelay: (delay: boolean) => void }) => {
-  const DELAY_SHOW_PIN_TIMER = [3, 2.75, 2.5, 2.25, 2, 1.75, 1.5]
-  setTimeout(() => {
-    setDelay(false)
-  }, DELAY_SHOW_PIN_TIMER[Math.floor(Math.random() * DELAY_SHOW_PIN_TIMER.length)] * 1000)
-
-  return (
-    <div className={"pin-game-delay-screen"}>
-      <p style={{ color: 'white'}}>Please wait a bit, the PIN is coming soon, our best employee is working on it...</p>
-      <img style={{ width: "300px"}} src={CatPicture} alt={""}/>
-    </div>
   )
 }
 
@@ -124,7 +110,7 @@ const PINSpill = () => {
           <fieldset>
             <legend>Can you remember your new PIN?</legend>
             {showDelay ?
-             <DelayScreen setDelay={setShowDelay} /> :
+             <Delay setDelay={setShowDelay} /> :
               showPin ?
               <div className={"pin-game-container"} style={{ backgroundColor: "white" }}>
                 <header className="pin-game-container-header">Your new PIN</header>
