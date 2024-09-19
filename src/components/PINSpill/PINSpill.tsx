@@ -4,25 +4,13 @@ import { InputField } from "./InputField"
 import { Counter } from "./Counter"
 import { BOARD_PIN_PATH } from "@/App";
 import { GameComplete } from "../common/GameComplete";
-import { Icon } from "@sb1/ffe-icons-react";
-import FavoriteIcon from '@sb1/ffe-icons/icons/filled/xl/favorite.svg';
+import { LifeBar } from "./LifeBar";
 import { Delay } from "./Delay";
 
 function shouldGiveADelay(score: number) {
   const SCORE_BEFORE_DELAYS = 20
   const TWENTY_PERCENT = 0.2
   return Math.random() < TWENTY_PERCENT && score > SCORE_BEFORE_DELAYS
-}
-
-const LifeBar = ({ numberOfLives } : { numberOfLives: number }) => {
-  return (
-      <div className="pin-game-life-bar">
-        {Array.from({ length: numberOfLives }, (_, i) => i).map((_, index) => {
-          return <Icon key={index} className="pin-game-life-bar__heart" size="xl" fileUrl={FavoriteIcon} />
-        }
-            )}
-      </div>
-  )
 }
 
 const PINSpill = () => {
@@ -52,7 +40,6 @@ const PINSpill = () => {
   const reset = () => {
     // Have to compansate for the score being -1 to start with
     shouldGiveADelay(nSuccesses + 1) ? setShowDelay(true) : setShowDelay(false)
-    console.log("This should not happen before the delay is over")
     setShowPin(true)
     setSuccess(false)
     generatePin(setPin, nSuccesses)
