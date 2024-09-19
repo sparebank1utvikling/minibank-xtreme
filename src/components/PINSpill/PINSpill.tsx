@@ -1,4 +1,4 @@
-import { Dispatch, useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { InputField } from "./InputField"
 import { Counter } from "./Counter"
@@ -6,6 +6,7 @@ import { BOARD_PIN_PATH } from "@/App";
 import { GameComplete } from "../common/GameComplete";
 import { LifeBar } from "./LifeBar";
 import { Delay } from "./Delay";
+import { generatePin } from "./generatePin";
 
 function shouldGiveADelay(score: number) {
   const SCORE_BEFORE_DELAYS = 20
@@ -42,7 +43,7 @@ const PINSpill = () => {
     shouldGiveADelay(nSuccesses + 1) ? setShowDelay(true) : setShowDelay(false)
     setShowPin(true)
     setSuccess(false)
-    generatePin(setPin, nSuccesses)
+    setPin(generatePin(nSuccesses));
     setCounterDone(false)
     setNSuccesses((old) => old + 1)
   }
@@ -142,32 +143,6 @@ const PINSpill = () => {
       }
     </div>
   )
-}
-
-function generateRandomNumber(digits:number) {
-  const min = Math.pow(10, digits - 1);
-  const max = Math.pow(10, digits) - 1;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-const generatePin = (hook: Dispatch<React.SetStateAction<string>>, nSuccesses: number) => {
-  let pin = '1234'
-
-  if (nSuccesses >= 50 && nSuccesses < 100) {
-    pin = generateRandomNumber(5).toString();
-  }
-
-  else if (nSuccesses >= 100) {
-    pin = generateRandomNumber(6).toString();
-  }
-
-  else {
-    pin = generateRandomNumber(4).toString();
-    while (pin.length < 4) {
-      pin = `0${pin}`
-    }
-  }
-  hook(pin)
 }
 
 export default PINSpill
