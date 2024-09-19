@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { InputField } from "./InputField"
 import { BOARD_PIN_PATH } from "@/App";
 import { GameComplete } from "../common/GameComplete";
 import { LifeBar } from "./LifeBar";
 import { Delay } from "./Delay";
 import { generatePin } from "./generatePin";
 import { PIN } from "./PIN/PIN";
+import { EnterPIN } from "./EnterPIN/EnterPIN";
 
 function shouldGiveADelay(score: number) {
   const SCORE_BEFORE_DELAYS = 20
@@ -89,6 +89,7 @@ const PINSpill = () => {
       }
     }
   }
+  console.log(pin)
 
   return (
     <div className={'pin-game'} ref={ref} tabIndex={0} onKeyUp={(event) => handleInput(event)}>
@@ -102,34 +103,7 @@ const PINSpill = () => {
               showPin ?
               <PIN pin={pin} timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length - 1)]} setCounterDone={setCounterDone} />
               :
-              <>
-                  <>
-                <InputField
-                  data={input}
-                  setData={setInput}
-                  id={"pin-input"}
-                  name={"PIN Input"}
-                  placeholder={"Enter your PIN"}
-                  answer={pin}
-                  validator={(inp: string, answer: string) => { 
-                    if (inp === answer) return true
-                    if (inp.length === answer.length && inp !== answer) {
-                      setNumberOfLives(numberOfLives - 1)                 
-                    }
-                    return false
-                   }}
-                  success={success}
-                  successHook={setSuccess}
-                  inputRef={pinFieldRef}
-                />
-                <button
-                  className={'pin-game-give-up-button'}
-                  onClick={() => setDone(true)}
-                >
-                  Press x to give up
-                </button>
-                    </>
-              </>
+             <EnterPIN pin={pin} pinFieldRef={pinFieldRef} setDone={setDone} setNumberOfLives={setNumberOfLives} numberOfLives={numberOfLives} input={input} setInput={setInput} success={success} setSuccess={setSuccess} />
             }
           </fieldset>
           <p className={"pin-game-score"}>Score: {nSuccesses}</p>
