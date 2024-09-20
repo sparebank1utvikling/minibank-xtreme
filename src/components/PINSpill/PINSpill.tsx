@@ -1,42 +1,17 @@
-import { Dispatch, useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { InputField } from "./InputField"
-import { Counter } from "./Counter"
 import { BOARD_PIN_PATH } from "@/App";
 import { GameComplete } from "../common/GameComplete";
-import { Icon } from "@sb1/ffe-icons-react";
-import FavoriteIcon from '@sb1/ffe-icons/icons/filled/xl/favorite.svg';
-import CatPicture from "../../assets/cat_delay.png";
+import { LifeBar } from "./LifeBar";
+import { Delay } from "./Delay";
+import { generatePin } from "./generatePin";
+import { ShowPIN } from "@/components/PINSpill/ShowPIN/ShowPIN";
+import { EnterPIN } from "./EnterPIN/EnterPIN";
 
-function shouldGiveADelay(score: number) {
+function shouldShowADelay(score: number): boolean {
   const SCORE_BEFORE_DELAYS = 20
   const TWENTY_PERCENT = 0.2
   return Math.random() < TWENTY_PERCENT && score > SCORE_BEFORE_DELAYS
-}
-
-const LifeBar = ({ numberOfLives } : { numberOfLives: number }) => {
-  return (
-      <div className="pin-game-life-bar">
-        {Array.from({ length: numberOfLives }, (_, i) => i).map((_, index) => {
-          return <Icon key={index} className="pin-game-life-bar__heart" size="xl" fileUrl={FavoriteIcon} />
-        }
-            )}
-      </div>
-  )
-}
-
-const DelayScreen = ({ setDelay } : { setDelay: (delay: boolean) => void }) => {
-  const DELAY_SHOW_PIN_TIMER = [3, 2.75, 2.5, 2.25, 2, 1.75, 1.5]
-  setTimeout(() => {
-    setDelay(false)
-  }, DELAY_SHOW_PIN_TIMER[Math.floor(Math.random() * DELAY_SHOW_PIN_TIMER.length)] * 1000)
-
-  return (
-    <div className={"pin-game-delay-screen"}>
-      <p style={{ color: 'white'}}>Please wait a bit, the PIN is coming soon, our best employee is working on it...</p>
-      <img style={{ width: "300px"}} src={CatPicture} alt={""}/>
-    </div>
-  )
 }
 
 const PINSpill = () => {
@@ -47,7 +22,7 @@ const PINSpill = () => {
   const [showPin, setShowPin] = useState<boolean>(false)
   const [numberOfLives, setNumberOfLives] = useState<number>(3)
 
-  const [counterDone, setCounterDone] = useState<boolean>(false)
+  const [countdownDone, setCountdownDone] = useState<boolean>(false)
 
   const [input, setInput] = useState<string>("")
   const [success, setSuccess] = useState<boolean>(false)
@@ -58,19 +33,18 @@ const PINSpill = () => {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (counterDone) {
+    if (countdownDone) {
       setShowPin(false)
     }
-  }, [counterDone])
+  }, [countdownDone])
 
   const reset = () => {
     // Have to compansate for the score being -1 to start with
-    shouldGiveADelay(nSuccesses + 1) ? setShowDelay(true) : setShowDelay(false)
-    console.log("This should not happen before the delay is over")
+    shouldShowADelay(nSuccesses + 1) ? setShowDelay(true) : setShowDelay(false)
     setShowPin(true)
     setSuccess(false)
-    generatePin(setPin, nSuccesses)
-    setCounterDone(false)
+    setPin(generatePin(nSuccesses));
+    setCountdownDone(false)
     setNSuccesses((old) => old + 1)
   }
 
@@ -124,77 +98,23 @@ const PINSpill = () => {
           <fieldset>
             <legend>Can you remember your new PIN?</legend>
             {showDelay ?
-             <DelayScreen setDelay={setShowDelay} /> :
+             <Delay setDelay={setShowDelay} /> :
               showPin ?
-              <div className={"pin-game-container"} style={{ backgroundColor: "white" }}>
-                <header className="pin-game-container-header">Your new PIN</header>
-                <p className="pin-game-container-new-pin">{pin}</p>
-                <Counter timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length - 1)]} setDone={setCounterDone} />
-              </div>
+              <ShowPIN pin={pin} timeGiven={TIMES_GIVEN[Math.min(nSuccesses, TIMES_GIVEN.length - 1)]} setCountdownDone={setCountdownDone} />
               :
-              <>
-                  <>
-                <InputField
-                  data={input}
-                  setData={setInput}
-                  id={"pin-input"}
-                  name={"PIN Input"}
-                  placeholder={"Enter your PIN"}
-                  answer={pin}
-                  validator={(inp: string, answer: string) => { 
-                    if (inp === answer) return true
-                    if (inp.length === answer.length && inp !== answer) {
-                      setNumberOfLives(numberOfLives - 1)                 
-                    }
-                    return false
-                   }}
-                  success={success}
-                  successHook={setSuccess}
-                  inputRef={pinFieldRef}
-                />
-                <button
-                  className={'pin-game-give-up-button'}
-                  onClick={() => setDone(true)}
-                >
-                  Press x to give up
-                </button>
-                    </>
-              </>
+             <EnterPIN pin={pin} pinFieldRef={pinFieldRef} setDone={setDone} setNumberOfLives={setNumberOfLives} numberOfLives={numberOfLives} input={input} setInput={setInput} success={success} setSuccess={setSuccess} />
             }
           </fieldset>
           <p className={"pin-game-score"}>Score: {nSuccesses}</p>
         </>
         :
-        <GameComplete gamePath={BOARD_PIN_PATH} score={nSuccesses} />
+          <>
+            <p className={"pin-game-last-pin"}>The last PIN was: {pin}</p>
+            <GameComplete gamePath={BOARD_PIN_PATH} score={nSuccesses} />
+          </>
       }
     </div>
   )
-}
-
-function generateRandomNumber(digits:number) {
-  const min = Math.pow(10, digits - 1);
-  const max = Math.pow(10, digits) - 1;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-const generatePin = (hook: Dispatch<React.SetStateAction<string>>, nSuccesses: number) => {
-  let pin = '1234'
-
-  if (nSuccesses >= 50 && nSuccesses < 100) {
-    pin = generateRandomNumber(5).toString();
-  }
-
-  else if (nSuccesses >= 100) {
-    pin = generateRandomNumber(6).toString();
-  }
-
-  else {
-    pin = generateRandomNumber(4).toString();
-    while (pin.length < 4) {
-      pin = `0${pin}`
-    }
-  }
-  hook(pin)
 }
 
 export default PINSpill
