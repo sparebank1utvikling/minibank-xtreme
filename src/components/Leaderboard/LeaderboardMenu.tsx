@@ -1,39 +1,35 @@
-import { Link, useNavigate } from "react-router-dom";
-import React, { useRef, useEffect } from "react";
-import SpareBankLogo from "../../assets/rgb_SpareBank1_neg.png";
-import { BOARD_MENU } from "@/utils/constants";
+import SpareBankLogo from "@/assets/rgb_SpareBank1_neg.png";
+import {Link, useNavigate} from "react-router-dom";
+import {BOARD_LABYRINT_PATH, BOARD_MENU, BOARD_PAY_PATH, BOARD_PIN_PATH} from "@/utils/constants";
+import React, {useEffect, useRef} from "react";
 
-const Menu = () => {
-  const mainMenu = useRef<HTMLDivElement>(null);
+
+// Skammelige mengder copy-paste her 🤷🤷🤷
+const LeaderboardMenu = () => {
+  const leaderBoardMenu = useRef<HTMLDivElement>(null);
   //Initialization
   useEffect(() => {
-    if (mainMenu.current != null) {
-      mainMenu.current.focus();
+    if (leaderBoardMenu.current != null) {
+      leaderBoardMenu.current.focus();
     }
   }, []);
   const navigate = useNavigate();
-  const handleInput = (event: React.KeyboardEvent) => {
+  const handleInput = (event: React.KeyboardEvent) =>{
     switch (event.key) {
       case "7":
-        navigate("/pin/intro");
+        navigate(BOARD_PIN_PATH);
         break;
       case "9":
-        navigate("/faktura/intro");
+        navigate(BOARD_PAY_PATH);
         break;
       case "4":
-        navigate("/labyrint");
+        navigate(BOARD_LABYRINT_PATH);
         break;
-      //case "6": // TODO Kommenter inn lenken til ditt eget spill
-      //  navigate(BOARD_PIN_PATH);
-      //  break;
-      //case "1":
-      //  navigate(BOARD_LABYRINT_PATH);
-      //  break;
       case "3":
-        navigate(BOARD_MENU);
+        navigate('/');
         break;
     }
-  };
+  }
   return (
     <>
       <img
@@ -45,11 +41,12 @@ const Menu = () => {
         className="menu"
         tabIndex={0}
         onKeyUp={(event) => handleInput(event)}
-        ref={mainMenu}
+        ref={leaderBoardMenu}
       >
         <div className={"menu-title"}>
           <h1>MINIBANK XTREME</h1>
         </div>
+        <h2>LEADERBOARDS</h2>
         <p className="menu-description">
           Select by pressing the corresponding number on the numpad
         </p>
@@ -57,45 +54,42 @@ const Menu = () => {
           <div className={"menu-item--left menu-button"}>
             {" "}
             <h3>
-              <Link to={"/pin/intro"}>7) New PIN code</Link>
+              <Link to={BOARD_PIN_PATH}>7) Top 30 - New PIN code</Link>
             </h3>
           </div>
           <div className={"menu-item--right menu-button"}>
             <h3>
-              <Link to={"/faktura/intro"}>9) Pay invoice</Link>
+              <Link to={BOARD_PAY_PATH}>9) Top 30 - Pay invoice</Link>
             </h3>
           </div>
           <div className={"menu-item--left menu-button"}>
             {" "}
             <h3>
-              <Link to={"/labyrint"}>4) Maze</Link>
+              <Link to={BOARD_LABYRINT_PATH}>4) Top 30 - Maze</Link>
             </h3>
           </div>
           <div className={"menu-item--right menu-button"}>
             {" "}
             <h3>
               <Link to={
-                '/' // TODO bytt ut lenken og teksten med det som passer ditt eget spill
-              }>6) DITT NYE SPILL</Link>
+                BOARD_MENU // TODO bytt ut lenken og teksten med det som passer ditt eget spill
+              }>6) Top 30 - DITT NYE SPILL</Link>
             </h3>
           </div>
           <div className={"menu-item--left menu-button"}>
             <h3>
-              <Link to={'/'}>1) DITT NYE SPILL</Link>
+              <Link to={BOARD_MENU}>1) Top 30 - Nytt spill 2</Link>
             </h3>
           </div>
           <div className={"menu-item--right menu-button"}>
             {" "}
             <h3>
-              <Link to={BOARD_MENU}>3) Leaderboards </Link>
+              <Link to={'/'}>3) Main Menu</Link>
             </h3>
           </div>
         </div>
       </div>
-      {/* <p><Link to={`${BOARD_PAY_PATH}/9`}>Leaderboard pay new</Link></p> <p><Link to={`${BOARD_PIN_PATH}/9`}>Leaderboard pin new</Link></p> */}
-      {/* kommenter inn det over for å legge til ting i scoreboard uten spille spillene */}
     </>
-  );
-};
-
-export default Menu;
+  )
+}
+export default LeaderboardMenu

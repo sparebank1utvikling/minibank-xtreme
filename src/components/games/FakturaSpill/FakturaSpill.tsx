@@ -1,8 +1,8 @@
 import 'terminal.css'
 import React, {Dispatch, useEffect, useRef, useState} from "react";
 import { useNavigate } from 'react-router-dom';
-import { BOARD_PAY_PATH } from "@/App";
-import { GameComplete } from '../common/GameComplete';
+import { GameComplete } from '../../common/GameComplete';
+import {BOARD_PAY_PATH} from "@/utils/constants";
 
 export const FakturaSpill = () => {
   const NUM_ROUNDS = 2

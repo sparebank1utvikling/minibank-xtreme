@@ -1,10 +1,10 @@
 import styles from './LabyrintSpill.module.less';
 import { useEffect, useRef, useState } from "react";
-import { useKeypad } from "@/components/LabyrintSpill/useKeypad";
-import { CountdownBar, CountdownBarHandle } from "@/components/LabyrintSpill/CountdownBar";
-import { GameComplete } from '../common/GameComplete';
-import { BOARD_LABYRINT_PATH } from "@/App";
-import {getGameLevel} from "@/components/LabyrintSpill/levels/getGameLevels";
+import { useKeypad } from "@/components/games/LabyrintSpill/useKeypad";
+import { CountdownBar, CountdownBarHandle } from "@/components/games/LabyrintSpill/CountdownBar";
+import { GameComplete } from '../../common/GameComplete';
+import {getGameLevel} from "@/components/games/LabyrintSpill/levels/getGameLevels";
+import {BOARD_LABYRINT_PATH} from "@/utils/constants";
 
 const LOCAL_STORAGE_KEY = 'Labyrint-disk'
 const BEGYNT_PTR = 'vR6g$';
