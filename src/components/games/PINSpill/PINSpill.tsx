@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { BOARD_PIN_PATH } from "@/App";
-import { GameComplete } from "../common/GameComplete";
+import { GameComplete } from "../../common/GameComplete";
 import { LifeBar } from "./LifeBar";
 import { Delay } from "./Delay";
 import { generatePin } from "./generatePin";
-import { ShowPIN } from "@/components/PINSpill/ShowPIN/ShowPIN";
+import { ShowPIN } from "@/components/games/PINSpill/ShowPIN/ShowPIN";
 import { EnterPIN } from "./EnterPIN/EnterPIN";
+import {BOARD_PIN_PATH} from "@/utils/constants";
 
 function shouldShowADelay(score: number): boolean {
   const SCORE_BEFORE_DELAYS = 20

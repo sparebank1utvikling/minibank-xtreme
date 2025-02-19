@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { BOARD_PAY_PATH, BOARD_PIN_PATH } from "@/App";
 import { Link, useNavigate } from "react-router-dom";
+import {BOARD_PAY_PATH, BOARD_PIN_PATH} from "@/utils/constants";
 
 interface GameCompleteProps {
     gamePath: string,
@@ -36,7 +36,7 @@ export const GameComplete = ({gamePath, score}: GameCompleteProps)=> {
             break;
             case BOARD_PIN_PATH:
                 winStatement = `You managed to remember ${score} pins!`
-            break; 
+            break; // TODO: Case for ditt eget spill her
             default:
                 winStatement = ""
             break;
