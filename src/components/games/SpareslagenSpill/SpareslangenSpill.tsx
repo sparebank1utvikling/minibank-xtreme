@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./SpareslangenSpill.module.less";
 import Mynt from "./mynt.svg?url";
+import Dnb from "./dnb.svg?url";
 import { BOARD_SPARESLANGEN_PATH } from "@/utils/constants";
 import { GameComplete } from "@/components/common/GameComplete";
 
@@ -79,6 +80,8 @@ export const SpareslangenSpill = () => {
   const [snakePositions, setSnakePositions] = useState<Position[]>(createSnake());
   const [snakeDirection, setSnakeDirection] = useState<Direction>("u");
   const [coinPosition, setCoinPosition] = useState<Position>(getNewCoinPosition());
+  const [poisonPosition, setPoisonPosition] = useState<Position | null>(null);
+  const [isPoisoned, setIsPoisoned] = useState<boolean>(false);
   const [nokSaved, setNokSaved] = useState(0);
   const [gameOver, setGameOver] = useState(false);
 
@@ -98,11 +101,21 @@ export const SpareslangenSpill = () => {
   function handleAteCoin() {
     setNokSaved(nokSaved + 1);
     setCoinPosition(getNewCoinPosition());
+    if (!poisonPosition && Math.random() < 0.2) {
+      const poisonPosition = getNewCoinPosition();
+      setPoisonPosition(poisonPosition);
+    }
 
     setSnakePositions((prevSnake) => {
       const tail = prevSnake[prevSnake.length - 1];
       return [...createNewSnake(snakePositions, snakeDirection), tail];
     })
+  }
+
+  function handleAtePoison() {
+    setNokSaved(nokSaved - 5);
+    setIsPoisoned(true);
+    setPoisonPosition(null);
   }
 
   function handleGameOver() {
@@ -115,6 +128,15 @@ export const SpareslangenSpill = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (isPoisoned) {
+        setIsPoisoned(false);
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isPoisoned, setIsPoisoned]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
       const nextHeadPosition = getNextHeadPosition(snakePositions, snakeDirection);
       if (nextHeadPosition === null) {
         return;
@@ -124,6 +146,10 @@ export const SpareslangenSpill = () => {
       }
       else if (nextHeadPosition.x === coinPosition.x && nextHeadPosition.y === coinPosition.y) {
         handleAteCoin();
+      }
+      else if (poisonPosition && nextHeadPosition.x === poisonPosition.x && nextHeadPosition.y === poisonPosition.y) {
+        handleAtePoison();
+        moveSnake(snakeDirection);
       }
       else {
         moveSnake(snakeDirection);
@@ -188,15 +214,27 @@ export const SpareslangenSpill = () => {
             alt="Mynt"
           />
         </div>
+        {poisonPosition && (<div className={styles.coin} onClick={handleAtePoison}>
+          <img
+            style={{
+              position: "relative",
+              top: poisonPosition.y * CELL_SIZE - CELL_SIZE,
+              left: poisonPosition.x * CELL_SIZE,
+            }}
+            src={Dnb}
+            alt="Giftig merkevare"
+          />
+        </div>)}
         {snakePositions.map((snakePosition: Position) => (
           <div
+            className={styles.snake}
             style={{
               position: "absolute",
               top: `${snakePosition.y * 25}px`,
               left: `${snakePosition.x * 25}px`,
               width: "25px",
               height: "25px",
-              backgroundColor: "green",
+              backgroundColor: isPoisoned ? "purple" : "green",
             }}
           />
         ))}
