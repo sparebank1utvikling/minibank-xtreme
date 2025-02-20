@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { GameState, PlatformType } from "@/components/games/PlatformJumper/types";
-import { handleInput } from "@/components/games/PlatformJumper/handleInput";
+import {handleKeyDown, handleKeyUp} from "@/components/games/PlatformJumper/handleInput";
 import bunnySprite from "./assets/bunny_idle_1.png";
 import {
   createPlatforms,
@@ -15,6 +15,7 @@ const CANVAS_HEIGHT = VIEWPORT_HEIGHT;
 const PLAYER_WIDTH = 33;
 const PLAYER_HEIGHT = 54;
 const GRAVITY = 2000;
+const PLAYER_ACELERATION = 500;
 
 function loadPlayerSprite(): CanvasImageSource {
   const player = new Image();
@@ -32,11 +33,14 @@ const Platform: React.FC = () => {
     lastTime: 0,
     playerX: 100,
     playerY: 100,
+    direction: 'LEFT',
     speedX: 0, // pixels per second
     speedY: 0,
+    isMoving: false,
     isJumping: false,
     speed: 100, // pixels per second
   });
+
 
   const platformStates = useRef<PlatformType[]>([])
 
@@ -52,6 +56,17 @@ const Platform: React.FC = () => {
       state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
     } else {
       state.speedY += GRAVITY * deltaTime;
+    }
+    if (state.isMoving) {
+        if (state.direction === "LEFT") {
+            state.speedX -= PLAYER_ACELERATION * deltaTime;
+        } else {
+            state.speedX += PLAYER_ACELERATION * deltaTime;
+        }
+    } else {
+      if (!state.isJumping) {
+        state.speedX = 0;
+      }
     }
   };
 
@@ -99,7 +114,8 @@ const Platform: React.FC = () => {
     requestIdRef.current = requestAnimationFrame(gameLoop);
 
     // Add event listener for keypresses
-    window.addEventListener("keydown", (e) => handleInput(e, gameState));
+    window.addEventListener("keydown", (e) => handleKeyDown(e, gameState));
+    window.addEventListener("keyup", (e) => handleKeyUp(e, gameState));
 
     // Initialize platforms
     platformStates.current = createPlatforms(100, 100)
@@ -109,7 +125,7 @@ const Platform: React.FC = () => {
       if (requestIdRef.current) {
         cancelAnimationFrame(requestIdRef.current);
       }
-      window.removeEventListener("keydown", (e) => handleInput(e, gameState));
+      window.removeEventListener("keydown", (e) => handleKeyDown(e, gameState));
     };
   }, []);
 

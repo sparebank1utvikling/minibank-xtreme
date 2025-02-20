@@ -3,17 +3,19 @@ import { GameState } from "@/components/games/PlatformJumper/types";
 const JUMP_FORCE = -1000;
 const SPEED_X = 5;
 
-export const handleInput = (
+export const handleKeyDown = (
   event: KeyboardEvent,
   gameState: React.MutableRefObject<GameState>,
 ) => {
   const state = gameState.current;
   switch (event.key) {
     case "ArrowLeft":
-      state.playerX -= SPEED_X;
+      state.direction = "LEFT";
+      state.isMoving = true;
       break;
     case "ArrowRight":
-      state.playerX += SPEED_X;
+      state.direction = "RIGHT";
+      state.isMoving = true;
       break;
     case "ArrowUp":
       if (!state.isJumping) {
@@ -27,3 +29,17 @@ export const handleInput = (
   }
 };
 
+export const handleKeyUp = (
+    event: KeyboardEvent,
+    gameState: React.MutableRefObject<GameState>,
+) => {
+  const state = gameState.current;
+  switch (event.key) {
+    case "ArrowLeft":
+      state.isMoving = false;
+      break;
+    case "ArrowRight":
+      state.isMoving = false;
+      break;
+  }
+}
