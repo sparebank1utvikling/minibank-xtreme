@@ -1,10 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import { GameState, Player } from "@/components/games/PlatformJumper/types";
+import { GameState, PlatformType } from "@/components/games/PlatformJumper/types";
 import { handleInput } from "@/components/games/PlatformJumper/handleInput";
 import bunnySprite from "./assets/bunny_idle_1.png";
+import {
+  createPlatforms,
+  renderAllPlatforms,
+  renderPlatform,
+  updatePlatforms
+} from "@/components/games/PlatformJumper/PlatformObject";
+import {VIEWPORT_HEIGHT, VIEWPORT_WIDTH} from "@/components/games/PlatformJumper/constants";
 
-const CANVAS_WIDTH = 600;
-const CANVAS_HEIGHT = 1000;
+const CANVAS_WIDTH = VIEWPORT_WIDTH;
+const CANVAS_HEIGHT = VIEWPORT_HEIGHT;
 const PLAYER_WIDTH = 33;
 const PLAYER_HEIGHT = 54;
 const GRAVITY = 2000;
@@ -28,9 +35,13 @@ const Platform: React.FC = () => {
     speedX: 0, // pixels per second
     speedY: 0,
     isJumping: false,
+    speed: 100, // pixels per second
   });
 
+  const platformStates = useRef<PlatformType[]>([])
+
   const update = (deltaTime: number): void => {
+    platformStates.current = updatePlatforms(platformStates.current, gameState.current.speed * deltaTime)
     const state = gameState.current;
 
     state.playerX += gameState.current.speedX * deltaTime;
@@ -61,6 +72,10 @@ const Platform: React.FC = () => {
       PLAYER_HEIGHT,
     );
     // ctx.fillRect(state.playerX, state.playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+    // Draw platforms
+   // renderPlatform(ctx, {x: 150, y: 250, width: 50, color: "green"});
+    renderAllPlatforms(ctx, platformStates.current)
   };
 
   const gameLoop = (timestamp: number): void => {
@@ -85,6 +100,9 @@ const Platform: React.FC = () => {
 
     // Add event listener for keypresses
     window.addEventListener("keydown", (e) => handleInput(e, gameState));
+
+    // Initialize platforms
+    platformStates.current = createPlatforms(100, 100)
 
     // Cleanup function
     return () => {

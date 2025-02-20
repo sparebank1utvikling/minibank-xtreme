@@ -14,3 +14,10 @@ export interface Player {
   height: number;
   speed: number;
 }
+
+export interface PlatformType {
+  x: number;
+  y: number;
+  width: number;
+  color: string
+}
