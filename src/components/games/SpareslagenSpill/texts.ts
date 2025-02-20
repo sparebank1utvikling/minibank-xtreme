@@ -9,7 +9,10 @@ export const coinMessages: string[] = [
   "Another coin? I’m on a roll!",
   "Can’t stop, won’t stop—keep the cash coming!",
   "Snakes may shed skin, but I never shed wealth!",
-  "Hiss-terically rich!"
+  "Hiss-terically rich!",
+  "Slithering my way to financial freedom!",
+  "Every coin makes me slither faster!",
+  "If i grow wings i can be a real dragon with my hoard!"
 ];
 
 export const dnbMessages: string[] = [
@@ -23,7 +26,9 @@ export const dnbMessages: string[] = [
   "Theft! Fraud! I demand a refund!",
   "Why do bad things happen to rich snakes?!",
   "Grrr… time to earn it back the slithery way!",
-  "Oh no! My precious coins were eaten by interest rates!"
+  "Oh no! My precious coins were eaten by interest rates!",
+  "I hate banks! I hate money! I hate… oh, wait, no I don’t.",
+  "Are all banks this greedy?",
 ];
 
 export const whatDoesTheSnakeSay = (context: "coin" | "dnb") => {

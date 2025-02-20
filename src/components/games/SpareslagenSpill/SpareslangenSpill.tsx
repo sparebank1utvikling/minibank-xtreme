@@ -164,7 +164,7 @@ export const SpareslangenSpill = () => {
         snakeDirection
       );
       if (nextHeadPosition === null) {
-        //handleGameOver();
+        handleGameOver();
       } else if (snakePositions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
         handleGameOver();
       } else if (
