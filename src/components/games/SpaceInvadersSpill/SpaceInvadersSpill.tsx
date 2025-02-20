@@ -1,23 +1,8 @@
 import styles from "./SpaceInvadersSpill.module.css";
-import {Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {handleKeyDown, handleKeyUp} from "@/components/games/SpaceInvadersSpill/keyEvents";
-import {
-  BULLET_SPEED,
-  BULLET_START_HEIGHT,
-  PLAYER_SIZE,
-  WINDOW_HEIGHT
-} from "@/components/games/SpaceInvadersSpill/constants";
-
-type position = {
-  x: number;
-  y: number;
-}
-
-export interface IBullet {
-  element: HTMLDivElement;
-  position: position;
-}
+import {IBullet, moveBullets} from "@/components/games/SpaceInvadersSpill/bullets";
 
 export const SpaceInvadersSpill = () => {
   const [playing, setPlaying] = useState(false);
@@ -27,22 +12,7 @@ export const SpaceInvadersSpill = () => {
 
   const playerPlacement = useRef(275);
 
-  const moveBullets = () => {
-    bullets.map((bullet) => {
-      const newBullet = bullet;
-      newBullet.position.y += BULLET_SPEED;
-      newBullet.element.style.bottom = newBullet.position.y + "px";
-
-      if (newBullet.position.y >= WINDOW_HEIGHT) {
-        newBullet.element.remove();
-        return null;
-      }
-
-      return newBullet;
-    }).filter((bullet) => bullet !== null);
-  }
-
-  setInterval(() => moveBullets(), 250);
+  setInterval(() => moveBullets(bullets), 250);
 
   useEffect(() => {
     document.addEventListener("keydown", (e: KeyboardEvent) =>

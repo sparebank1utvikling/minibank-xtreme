@@ -1,7 +1,21 @@
 import {Dispatch, MutableRefObject, SetStateAction} from "react";
 import styles from "@/components/games/SpaceInvadersSpill/SpaceInvadersSpill.module.css";
-import {BULLET_START_HEIGHT, PLAYER_SIZE} from "@/components/games/SpaceInvadersSpill/constants";
-import {IBullet} from "@/components/games/SpaceInvadersSpill/SpaceInvadersSpill";
+import {
+  BULLET_SPEED,
+  BULLET_START_HEIGHT,
+  PLAYER_SIZE,
+  WINDOW_HEIGHT
+} from "@/components/games/SpaceInvadersSpill/constants";
+
+type position = {
+  x: number;
+  y: number;
+}
+
+export interface IBullet {
+  element: HTMLDivElement;
+  position: position;
+}
 
 export const createBullet = (playerPlacement: MutableRefObject<number>, bullets: IBullet[], setBullets: Dispatch<SetStateAction<IBullet[]>>) => {
   const id = Math.random().toString();
@@ -22,4 +36,19 @@ export const createBullet = (playerPlacement: MutableRefObject<number>, bullets:
   setBullets([...bullets, bulletElement]);
 
   document.querySelector("#canvas")?.appendChild(bullet);
+}
+
+export const moveBullets = (bullets: IBullet[]) => {
+  bullets.map((bullet) => {
+    const newBullet = bullet;
+    newBullet.position.y += BULLET_SPEED;
+    newBullet.element.style.bottom = newBullet.position.y + "px";
+
+    if (newBullet.position.y >= WINDOW_HEIGHT) {
+      newBullet.element.remove();
+      return null;
+    }
+
+    return newBullet;
+  }).filter((bullet) => bullet !== null);
 }

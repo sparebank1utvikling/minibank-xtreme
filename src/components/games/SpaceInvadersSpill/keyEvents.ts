@@ -2,10 +2,13 @@ import {NUMPAD_HOME} from "@/utils/constants";
 import {PLAYER_SIZE, PLAYER_SPEED, WINDOW_WIDTH} from "./constants";
 import {Dispatch, MutableRefObject, SetStateAction} from "react";
 import {type NavigateFunction} from "react-router";
-import {IBullet} from "@/components/games/SpaceInvadersSpill/SpaceInvadersSpill";
-import {createBullet} from "@/components/games/SpaceInvadersSpill/bullets";
+import {createBullet, IBullet} from "@/components/games/SpaceInvadersSpill/bullets";
 
-export const handleKeyDown = (event: KeyboardEvent, playerPlacement:  MutableRefObject<number>, setPlaying: Dispatch<SetStateAction<boolean>>, navigate: NavigateFunction) => {
+export const handleKeyDown = (
+  event: KeyboardEvent,
+  playerPlacement:  MutableRefObject<number>,
+  setPlaying: Dispatch<SetStateAction<boolean>>,
+  navigate: NavigateFunction) => {
   event.preventDefault();
 
   if (event.key === "6" || event.key === "ArrowRight") {
@@ -29,7 +32,6 @@ export const handleKeyUp = (event: KeyboardEvent, playerPlacement: MutableRefObj
   event.preventDefault();
 
   if (event.key === "8" || event.key === "ArrowUp") {
-    console.log("shoot");
     createBullet(playerPlacement, bullets, setBullets);
   }
 };
