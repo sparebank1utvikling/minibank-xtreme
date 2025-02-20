@@ -211,58 +211,59 @@ export const SpareslangenSpill = () => {
   }
 
   return (
-    <>
+    <div className={styles.spareslangenSpill}>
       <h1>Spareslangen</h1>
-      <span className={styles.savings}>
-        <h2>
-          {nokSaved >= 0 ? "Du har spart " : "Du har gjeld "}{" "}
-          <span style={{ color: "orange" }}>{nokSaved}</span>
-        </h2>
-        <img
-          style={{ width: CELL_SIZE, height: CELL_SIZE }}
-          src={Mynt}
-          alt="Mynt"
-        />
-      </span>
-      <div className={styles.board}>
-        <div className={styles.coin} onClick={handleAteCoin}>
+      <div>
+        <span className={styles.savings}>
+          <h2>
+            {nokSaved >= 0 ? "Du har spart " : "Du har gjeld "}{" "}
+            <span style={{ color: "orange" }}>{nokSaved}</span>
+          </h2>
           <img
-            style={{
-              position: "relative",
-              top: coinPosition.y * CELL_SIZE,
-              left: coinPosition.x * CELL_SIZE,
-            }}
+            style={{ width: CELL_SIZE, height: CELL_SIZE }}
             src={Mynt}
             alt="Mynt"
           />
+        </span>
+        <div className={styles.board}>
+          <div className={styles.coin} onClick={handleAteCoin}>
+            <img
+              style={{
+                position: "relative",
+                top: coinPosition.y * CELL_SIZE,
+                left: coinPosition.x * CELL_SIZE,
+              }}
+              src={Mynt}
+              alt="Mynt"
+            />
+          </div>
+          {poisonPosition && (<div className={styles.coin} onClick={handleAtePoison}>
+            <img
+              style={{
+                position: "relative",
+                top: poisonPosition.y * CELL_SIZE - CELL_SIZE,
+                left: poisonPosition.x * CELL_SIZE,
+              }}
+              src={Dnb}
+              alt="Giftig merkevare"
+            />
+          </div>)}
+          {snakePositions.map((snakePosition: Position) => (
+            <div
+              className={styles.snake}
+              key={`${snakePosition.x}-${snakePosition.y}`}
+              style={{
+                position: "absolute",
+                top: `${snakePosition.y * 25}px`,
+                left: `${snakePosition.x * 25}px`,
+                width: "25px",
+                height: "25px",
+                backgroundColor: isPoisoned ? "purple" : "green",
+              }}
+            />
+          ))}
         </div>
-        {poisonPosition && (<div className={styles.coin} onClick={handleAtePoison}>
-          <img
-            style={{
-              position: "relative",
-              top: poisonPosition.y * CELL_SIZE - CELL_SIZE,
-              left: poisonPosition.x * CELL_SIZE,
-            }}
-            src={Dnb}
-            alt="Giftig merkevare"
-          />
-        </div>)}
-        {snakePositions.map((snakePosition: Position) => (
-          <div
-            className={styles.snake}
-            key={`${snakePosition.x}-${snakePosition.y}`}
-            style={{
-              position: "absolute",
-              top: `${snakePosition.y * 25}px`,
-              left: `${snakePosition.x * 25}px`,
-              width: "25px",
-              height: "25px",
-              backgroundColor: isPoisoned ? "purple" : "green",
-            }}
-          />
-        ))}
       </div>
-      <button onClick={handleGameOver}>End game</button>
-    </>
+    </div>
   );
 };
