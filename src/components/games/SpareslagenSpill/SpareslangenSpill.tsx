@@ -81,6 +81,10 @@ const getNextHeadPosition = (
   }
 };
 
+const getSpeed = (base: number, nokSaved: number) =>
+    base - Math.floor(nokSaved / 2) * 10;
+
+
 export const SpareslangenSpill = () => {
   const [snakePositions, setSnakePositions] = useState<Position[]>(
     createSnake()
@@ -156,7 +160,7 @@ export const SpareslangenSpill = () => {
         snakeDirection
       );
       if (nextHeadPosition === null) {
-        handleGameOver();
+        //handleGameOver();
       } else if (snakePositions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
         handleGameOver();
       } else if (
@@ -170,7 +174,7 @@ export const SpareslangenSpill = () => {
       } else {
         moveSnake(snakeDirection);
       }
-    }, 300);
+    }, getSpeed(150, nokSaved));
     return () => clearInterval(interval);
   }, [snakePositions, snakeDirection]);
 
@@ -211,7 +215,7 @@ export const SpareslangenSpill = () => {
       <h1>Spareslangen</h1>
       <span className={styles.savings}>
         <h2>
-          Så mye har du spart{" "}
+          {nokSaved >= 0 ? "Du har spart " : "Du har gjeld "}{" "}
           <span style={{ color: "orange" }}>{nokSaved}</span>
         </h2>
         <img
