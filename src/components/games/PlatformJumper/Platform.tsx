@@ -4,7 +4,9 @@ import {handleInput} from "@/components/games/PlatformJumper/handleInput";
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 1000;
-const GRAVITY = 1000;
+const PLAYER_WIDTH = 50;
+const PLAYER_HEIGHT = 50;
+const GRAVITY = 2000;
 
 const Platform: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -17,13 +19,22 @@ const Platform: React.FC = () => {
     playerX: 100,
     playerY: 100,
     speedX: 0, // pixels per second
-    speedY: 0
+    speedY: 0,
+    isJumping: false,
   });
 
   const update = (deltaTime: number): void => {
-    gameState.current.speedY += GRAVITY * deltaTime;
-    gameState.current.playerX += gameState.current.speedX * deltaTime;
-    gameState.current.playerY += gameState.current.speedY * deltaTime;
+    const state = gameState.current;
+
+    state.playerX += gameState.current.speedX * deltaTime;
+    state.playerY += gameState.current.speedY * deltaTime;
+    if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) {
+      state.isJumping = false;
+      state.speedY = 0;
+      state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
+    } else {
+      state.speedY += GRAVITY * deltaTime;
+    }
   };
 
   const render = (ctx: CanvasRenderingContext2D): void => {
@@ -35,7 +46,7 @@ const Platform: React.FC = () => {
 
     // Draw player
     ctx.fillStyle = "yellow";
-    ctx.fillRect(state.playerX, state.playerY, 50, 50);
+    ctx.fillRect(state.playerX, state.playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
   };
 
   const gameLoop = (timestamp: number): void => {

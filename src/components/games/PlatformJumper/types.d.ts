@@ -4,6 +4,7 @@ export interface GameState {
   playerY: number;
   speedX: number;
   speedY: number;
+  isJumping: boolean;
 }
 
 export interface Player {
