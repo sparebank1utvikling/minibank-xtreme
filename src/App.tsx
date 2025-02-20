@@ -19,6 +19,7 @@ import {
   GAME_TITLE_PIN, GAME_TITLE_SPARESLANGEN,
   howToFaktura,
   howToPIN,
+  howToSlange,
 } from "@/utils/constants";
 import LeaderboardMenu from "@/components/Leaderboard/LeaderboardMenu";
 import { SpareslangenSpill } from "./components/games/SpareslagenSpill/SpareslangenSpill";
@@ -45,6 +46,12 @@ function App() {
           }
         />
         <Route path={"/faktura"} element={<FakturaSpill />} />
+        <Route
+          path={"/slange/intro"}
+          element={
+            <HowToSequence howToPlayList={howToSlange} gamePath={"/slange"} />
+          }
+        />
         <Route path={"/slange"} element={<SpareslangenSpill />} />
         <Route
           path={BOARD_SPARESLANGEN_PATH}
