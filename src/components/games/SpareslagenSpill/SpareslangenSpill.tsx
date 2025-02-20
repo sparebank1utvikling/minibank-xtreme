@@ -230,7 +230,7 @@ export const SpareslangenSpill = () => {
           />
         </span>
         <div className={styles.board}>
-          <div className={styles.coin} onClick={handleAteCoin}>
+          <div className={styles.food} onClick={handleAteCoin}>
             <img
               style={{
                 position: "relative",
@@ -241,7 +241,7 @@ export const SpareslangenSpill = () => {
               alt="Mynt"
             />
           </div>
-          {poisonPosition && (<div className={styles.coin} onClick={handleAtePoison}>
+          {poisonPosition && (<div className={styles.food} onClick={handleAtePoison}>
             <img
               style={{
                 position: "relative",
