@@ -58,6 +58,7 @@ const Platform: React.FC = () => {
       if (requestIdRef.current) {
         cancelAnimationFrame(requestIdRef.current);
       }
+      window.removeEventListener("keydown", e => handleInput(e, gameState))
     };
   }, []);
 
