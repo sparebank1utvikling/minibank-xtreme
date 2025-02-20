@@ -246,6 +246,7 @@ export const SpareslangenSpill = () => {
         {snakePositions.map((snakePosition: Position) => (
           <div
             className={styles.snake}
+            key={`${snakePosition.x}-${snakePosition.y}`}
             style={{
               position: "absolute",
               top: `${snakePosition.y * 25}px`,
