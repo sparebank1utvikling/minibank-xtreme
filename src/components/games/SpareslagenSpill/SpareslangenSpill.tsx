@@ -21,6 +21,24 @@ const createSnake = () => {
   ];
 };
 
+const createNewSnake = (oldSnake: Position[], direction: Direction) => {
+  return oldSnake.map((it, index) => {
+    if (index === 0) {
+      switch (direction) {
+        case "l":
+          return { x: it.x - 1, y: it.y };
+        case "r":
+          return { x: it.x + 1, y: it.y };
+        case "u":
+          return { x: it.x, y: it.y - 1 };
+        case "d":
+          return { x: it.x, y: it.y + 1 };
+      }
+    }
+    return oldSnake[index - 1];
+  });
+}
+
 const isNextValid = (snakePositions: Position[], direction: Direction) => {
   const head = snakePositions[0];
   switch (direction) {
@@ -44,25 +62,16 @@ export const SpareslangenSpill = () => {
   function handleAteCoin() {
     setNokSaved(nokSaved + 1);
     placeNewCoin();
+
+    setSnakePositions((prevSnake) => {
+      const tail = prevSnake[prevSnake.length - 1];
+      return [...createNewSnake(snakePositions, snakeDirection), tail];
+    })
   }
 
   const moveSnake = (direction: Direction) => {
     setSnakePositions((snakePositions) => {
-      return snakePositions.map((snakePosition, index) => {
-        if (index === 0) {
-          switch (direction) {
-            case "l":
-              return { x: snakePosition.x - 1, y: snakePosition.y };
-            case "r":
-              return { x: snakePosition.x + 1, y: snakePosition.y };
-            case "u":
-              return { x: snakePosition.x, y: snakePosition.y - 1 };
-            case "d":
-              return { x: snakePosition.x, y: snakePosition.y + 1 };
-          }
-        }
-        return snakePositions[index - 1];
-      });
+      return createNewSnake(snakePositions, direction);
     });
   };
 
