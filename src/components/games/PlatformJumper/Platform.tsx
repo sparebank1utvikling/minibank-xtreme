@@ -4,6 +4,7 @@ import {handleInput} from "@/components/games/PlatformJumper/handleInput";
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 1000;
+const GRAVITY = 1000;
 
 const Platform: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -15,10 +16,15 @@ const Platform: React.FC = () => {
     lastTime: 0,
     playerX: 100,
     playerY: 100,
-    speed: 15, // pixels per second
+    speedX: 0, // pixels per second
+    speedY: 0
   });
 
-  const update = (deltaTime: number): void => {};
+  const update = (deltaTime: number): void => {
+    gameState.current.speedY += GRAVITY * deltaTime;
+    gameState.current.playerX += gameState.current.speedX * deltaTime;
+    gameState.current.playerY += gameState.current.speedY * deltaTime;
+  };
 
   const render = (ctx: CanvasRenderingContext2D): void => {
     const state = gameState.current;

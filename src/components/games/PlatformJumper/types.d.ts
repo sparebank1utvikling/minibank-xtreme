@@ -2,7 +2,8 @@ export interface GameState {
   lastTime: number;
   playerX: number;
   playerY: number;
-  speed: number;
+  speedX: number;
+  speedY: number;
 }
 
 export interface Player {
