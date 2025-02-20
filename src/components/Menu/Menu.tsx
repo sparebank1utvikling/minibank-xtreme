@@ -74,7 +74,7 @@ const Menu = () => {
           <div className={"menu-item--right menu-button"}>
             {" "}
             <h3>
-              <Link to={"/slange"}>6) SLANGE</Link>
+              <Link to={"/slange"}>6) Spareslangen</Link>
             </h3>
           </div>
           <div className={"menu-item--left menu-button"}>
