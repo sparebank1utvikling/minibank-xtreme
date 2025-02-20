@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import styles from "./SpareslangenSpill.module.less";
+import Mynt from './mynt.svg?url';
+
+const BOARD_SIZE = 20;
+const CELL_SIZE = 25;
 
 type SnakePosition = {
   x: number;
@@ -33,8 +37,9 @@ const isNextValid = (snakePositions: SnakePosition[], direction: Direction) => {
 }
 
 export const SpareslangenSpill = () => {
-  const [snakePositions, setSnakePositions] = useState(createSnake());
-  
+    const [snakePositions, setSnakePositions] = useState(createSnake());
+    const [coinPosition, setCoinPosition] = useState({ x: 0, y: 0 });
+
   const moveSnake = (direction: Direction) => {
     setSnakePositions((snakePositions) => {
       return snakePositions.map((snakePosition, index) => {
@@ -55,6 +60,13 @@ export const SpareslangenSpill = () => {
     });
   };
 
+    function placeNewCoin() {
+        setCoinPosition({
+            x: Math.floor(Math.random() * BOARD_SIZE),
+            y: Math.floor(Math.random() * BOARD_SIZE),
+        });
+    }
+
   useEffect(() => {
     const interval = setInterval(() => {
         if (!isNextValid(snakePositions, 'r')) {
@@ -68,20 +80,28 @@ export const SpareslangenSpill = () => {
   return (
     <>
         <h1>Spareslangen</h1>
-        <div className={styles.board}> 
+        <div className={styles.board}>
+            <div className={styles.coin} onClick={placeNewCoin}>
+                <img style={{
+                    position: "relative",
+                    top: coinPosition.y * CELL_SIZE,
+                    left: coinPosition.x * CELL_SIZE,
+                    }} src={Mynt} alt="Mynt"
+                />
+            </div>
             {snakePositions.map((snakePosition: SnakePosition) => (
                 <div
-                style={{
-                    position: "absolute",
-                    top: `${snakePosition.y * 25}px`,
-                    left: `${snakePosition.x * 25}px`,
-                    width: "25px",
-                    height: "25px",
-                    backgroundColor: "green",
-                }}
+                    style={{
+                        position: "absolute",
+                        top: `${snakePosition.y * 25}px`,
+                        left: `${snakePosition.x * 25}px`,
+                        width: "25px",
+                        height: "25px",
+                        backgroundColor: "green",
+                    }}
                 />
             ))}
         </div>
     </>
-  );
+    );
 };
