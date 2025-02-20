@@ -1,22 +1,9 @@
 import React, { useEffect, useRef } from "react";
+import {GameState, Player} from "@/components/games/PlatformJumper/types";
+import {handleInput} from "@/components/games/PlatformJumper/handleInput";
 
-interface GameState {
-  lastTime: number;
-  playerX: number;
-  playerY: number;
-  speed: number;
-}
-
-interface Player {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  speed: number;
-}
-
-const CANVAS_WIDTH = 400;
-const CANVAS_HEIGHT = 600;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 1000;
 
 const Platform: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -26,7 +13,7 @@ const Platform: React.FC = () => {
     lastTime: 0,
     playerX: 100,
     playerY: 100,
-    speed: 100, // pixels per second
+    speed: 15, // pixels per second
   });
 
   const update = (deltaTime: number): void => {};
@@ -62,6 +49,9 @@ const Platform: React.FC = () => {
   useEffect(() => {
     // Start the game loop
     requestIdRef.current = requestAnimationFrame(gameLoop);
+
+    // Add event listener for keypresses
+    window.addEventListener("keydown", e => handleInput(e, gameState));
 
     // Cleanup function
     return () => {
