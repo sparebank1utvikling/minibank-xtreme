@@ -7,6 +7,7 @@ export const SpaceInvadersSpill = () => {
   const [playing, setPlaying] = useState(false);
   const navigate = useNavigate();
 
+  const [playerPlacement, setPlayerPlacement] = useState(0);
 
   // Press ESC to return to main menu
   document.addEventListener("keydown", (event) => {
