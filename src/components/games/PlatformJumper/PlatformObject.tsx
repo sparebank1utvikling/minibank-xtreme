@@ -1,7 +1,7 @@
 import {PlatformType} from "@/components/games/PlatformJumper/types";
 import {PLATFORM_HEIGHT, VIEWPORT_HEIGHT, VIEWPORT_WIDTH} from "@/components/games/PlatformJumper/constants";
 
-export const renderPlatform = (ctx: CanvasRenderingContext2D, platform: PlatformType) => {
+const renderPlatform = (ctx: CanvasRenderingContext2D, platform: PlatformType) => {
   ctx.fillStyle = platform.color;
   ctx.fillRect(platform.x, platform.y, platform.width, PLATFORM_HEIGHT);
 }
@@ -24,7 +24,6 @@ export const createPlatforms = (n: number, spacing: number, curY: number) => {
     platformArray.push({x, y, width, color})
     i++;
   }
-  console.log("Platformarray:", platformArray)
   return platformArray;
 }
 
