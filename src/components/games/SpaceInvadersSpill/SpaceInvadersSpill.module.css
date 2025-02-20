@@ -19,3 +19,10 @@
     aspect-ratio: 1;
     background: blue;
 }
+
+.bullet {
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    background: white;
+}
