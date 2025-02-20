@@ -1,3 +1,10 @@
+import styles from './SpareslangenSpill.module.less';
+
 export const SpareslangenSpill = () => {
-  return <>Spareslange coming soon</>;
-};
+  return (
+    <>
+      <h1>Spareslangen</h1>
+      <div className={styles.board} />
+    </>
+  )
+}
