@@ -5,13 +5,6 @@ export interface GameState {
   speedX: number;
   speedY: number;
   isJumping: boolean;
-}
-
-export interface Player {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
   speed: number;
 }
 
