@@ -41,22 +41,34 @@ const createNewSnake = (oldSnake: Position[], direction: Direction) => {
   });
 }
 
-const isNextValid = (snakePositions: Position[], direction: Direction) => {
+const getNextHeadPosition = (snakePositions: Position[], direction: Direction): Position | null =>  {
   const head = snakePositions[0];
   switch (direction) {
     case "l":
-      return head.x > 0;
+      if (head.x > 0) {
+        return { x: head.x - 1, y: head.y };
+      }
+      return null;
     case "r":
-      return head.x < 19;
+      if (head.x < 19) {
+        return { x: head.x + 1, y: head.y };
+      }
+      return null;
     case "u":
-      return head.y > 0;
+      if (head.y > 0) {
+        return { x: head.x, y: head.y - 1 };
+      }
+      return null;
     case "d":
-      return head.y < 19;
+      if (head.y < 19) {
+        return { x: head.x, y: head.y + 1 };
+      }
+      return null;
   }
 };
 
 export const SpareslangenSpill = () => {
-  const [snakePositions, setSnakePositions] = useState(createSnake());
+  const [snakePositions, setSnakePositions] = useState<Position[]>(createSnake());
   const [snakeDirection, setSnakeDirection] = useState<Direction>("r");
   const [coinPosition, setCoinPosition] = useState<Position>({ x: 0, y: 0 });
   const [nokSaved, setNokSaved] = useState(0);
@@ -77,9 +89,7 @@ export const SpareslangenSpill = () => {
   }
 
   const moveSnake = (direction: Direction) => {
-    setSnakePositions((snakePositions) => {
-      return createNewSnake(snakePositions, direction);
-    });
+    setSnakePositions(createNewSnake(snakePositions, direction));
   };
 
   function placeNewCoin() {
@@ -91,10 +101,16 @@ export const SpareslangenSpill = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!isNextValid(snakePositions, snakeDirection)) {
+      const nextHeadPosition = getNextHeadPosition(snakePositions, snakeDirection);
+      if (nextHeadPosition === null) {
         return;
       }
-      moveSnake(snakeDirection);
+      else if (nextHeadPosition.x === coinPosition.x && nextHeadPosition.y === coinPosition.y) {
+        handleAteCoin();
+      }
+      else {
+        moveSnake(snakeDirection);
+      }
     }, 300);
     return () => clearInterval(interval);
   }, [snakePositions, snakeDirection]);
