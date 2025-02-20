@@ -1,5 +1,21 @@
+:root {
+    --player-size: 50px;
+    --player-placement: 275px;
+    --player-movement-speed: 20px;
+}
 .canvas {
-    height: 500px;
-    width: 500px;
+    width: 600px;
+    height: 900px;
+    margin: auto;
     background-image: url("./space.png");
+    position: relative;
+}
+
+.player {
+    position: absolute;
+    bottom: 10px;
+    left: var(--player-placement);
+    width: var(--player-size);
+    aspect-ratio: 1;
+    background: blue;
 }

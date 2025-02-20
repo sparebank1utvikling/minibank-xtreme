@@ -7,6 +7,7 @@ export const SpaceInvadersSpill = () => {
   const [playing, setPlaying] = useState(false);
   const navigate = useNavigate();
 
+
   // Press ESC to return to main menu
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
@@ -15,16 +16,28 @@ export const SpaceInvadersSpill = () => {
     }
   });
 
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "6" || event.key === "ArrowRight") {
+      // Setting the css var --player-placement 10 pixels to the right
+      const movementSpeed = window.getComputedStyle(document.body).getPropertyValue("--player-movement-speed").replace("px", "");
+      const playerPlacement = window.getComputedStyle(document.body).getPropertyValue("--player-placement").replace("px", "");
+
+      console.log(movementSpeed + playerPlacement);
+
+      document.documentElement.style.setProperty("--player-placement", movementSpeed + playerPlacement);
+    }
+  });
+
   if (playing) {
     return (
       <div className={styles.canvas}>
-        <h1>GAME OVER</h1>
+        <div className={styles.player}></div>
       </div>
     )
 
   }
   return (
-    <div className={styles.canvas}>
+    <div id="canvas" className={styles.canvas}>
       <h1>Space Invaders</h1>
       <button onClick={() => setPlaying(true)}>START</button>
     </div>
