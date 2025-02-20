@@ -48,9 +48,12 @@ const createNewSnake = (oldSnake: Position[], direction: Direction) => {
     }
     return oldSnake[index - 1];
   });
-}
+};
 
-const getNextHeadPosition = (snakePositions: Position[], direction: Direction): Position | null =>  {
+const getNextHeadPosition = (
+  snakePositions: Position[],
+  direction: Direction
+): Position | null => {
   const head = snakePositions[0];
   switch (direction) {
     case "l":
@@ -73,13 +76,19 @@ const getNextHeadPosition = (snakePositions: Position[], direction: Direction): 
         return { x: head.x, y: head.y + 1 };
       }
       return null;
+    default:
+      return null;
   }
 };
 
 export const SpareslangenSpill = () => {
-  const [snakePositions, setSnakePositions] = useState<Position[]>(createSnake());
+  const [snakePositions, setSnakePositions] = useState<Position[]>(
+    createSnake()
+  );
   const [snakeDirection, setSnakeDirection] = useState<Direction>("u");
-  const [coinPosition, setCoinPosition] = useState<Position>(getNewCoinPosition());
+  const [coinPosition, setCoinPosition] = useState<Position>(
+    getNewCoinPosition()
+  );
   const [poisonPosition, setPoisonPosition] = useState<Position | null>(null);
   const [isPoisoned, setIsPoisoned] = useState<boolean>(false);
   const [nokSaved, setNokSaved] = useState(0);
@@ -90,17 +99,22 @@ export const SpareslangenSpill = () => {
       const nextPosition = {
         x: Math.floor(Math.random() * BOARD_SIZE),
         y: Math.floor(Math.random() * BOARD_SIZE),
-      }
-      if (snakePositions.some((it) => it.x === nextPosition.x && it.y === nextPosition.y)) {
+      };
+      if (
+        snakePositions.some(
+          (it) => it.x === nextPosition.x && it.y === nextPosition.y
+        )
+      ) {
         continue;
       }
-      return nextPosition
+      return nextPosition;
     }
   }
 
   function handleAteCoin() {
     setNokSaved(nokSaved + 1);
     setCoinPosition(getNewCoinPosition());
+
     if (!poisonPosition && Math.random() < 0.2) {
       const poisonPosition = getNewCoinPosition();
       setPoisonPosition(poisonPosition);
@@ -109,7 +123,7 @@ export const SpareslangenSpill = () => {
     setSnakePositions((prevSnake) => {
       const tail = prevSnake[prevSnake.length - 1];
       return [...createNewSnake(snakePositions, snakeDirection), tail];
-    })
+    });
   }
 
   function handleAtePoison() {
@@ -137,55 +151,59 @@ export const SpareslangenSpill = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const nextHeadPosition = getNextHeadPosition(snakePositions, snakeDirection);
+      const nextHeadPosition = getNextHeadPosition(
+        snakePositions,
+        snakeDirection
+      );
       if (nextHeadPosition === null) {
-        return;
-      }
-      else if (snakePositions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
         handleGameOver();
-      }
-      else if (nextHeadPosition.x === coinPosition.x && nextHeadPosition.y === coinPosition.y) {
+      } else if (snakePositions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
+        handleGameOver();
+      } else if (
+        nextHeadPosition.x === coinPosition.x &&
+        nextHeadPosition.y === coinPosition.y
+      ) {
         handleAteCoin();
-      }
-      else if (poisonPosition && nextHeadPosition.x === poisonPosition.x && nextHeadPosition.y === poisonPosition.y) {
+      } else if (poisonPosition && nextHeadPosition.x === poisonPosition.x && nextHeadPosition.y === poisonPosition.y) {
         handleAtePoison();
         moveSnake(snakeDirection);
-      }
-      else {
+      } else {
         moveSnake(snakeDirection);
       }
     }, 300);
     return () => clearInterval(interval);
   }, [snakePositions, snakeDirection]);
 
+  const eventKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case "ArrowLeft":
+      case "4":
+        if (snakeDirection != "r") setSnakeDirection("l");
+        break;
+      case "ArrowDown":
+      case "2":
+        if (snakeDirection != "u") setSnakeDirection("d");
+        break;
+      case "ArrowRight":
+      case "6":
+        if (snakeDirection != "l") setSnakeDirection("r");
+        break;
+      case "ArrowUp":
+      case "8":
+        if (snakeDirection != "d") setSnakeDirection("u");
+        break;
+    }
+  };
+
   useEffect(() => {
-    window.addEventListener("keydown", (event) => {
-      switch (event.key) {
-        case "ArrowLeft":
-        case "4":
-          setSnakeDirection("l");
-          break;
-        case "ArrowDown":
-        case "2":
-          setSnakeDirection("d");
-          break;
-        case "ArrowRight":
-        case "6":
-          setSnakeDirection("r");
-          break;
-        case "ArrowUp":
-        case "8":
-          setSnakeDirection("u");
-          break;
-      }
-    });
+    window.addEventListener("keydown", eventKeyDown);
     return () => {
-      window.removeEventListener("keydown", () => {});
+      window.removeEventListener("keydown", eventKeyDown);
     };
-  }, []);
+  }, [snakeDirection]);
 
   if (gameOver) {
-    return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />
+    return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />;
   }
 
   return (
