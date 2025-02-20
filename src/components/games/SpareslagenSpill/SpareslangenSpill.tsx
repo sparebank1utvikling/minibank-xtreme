@@ -93,10 +93,17 @@ export const SpareslangenSpill = () => {
   };
 
   function placeNewCoin() {
-    setCoinPosition({
-      x: Math.floor(Math.random() * BOARD_SIZE),
-      y: Math.floor(Math.random() * BOARD_SIZE),
-    });
+    while (true) {
+      const nextPosition = {
+        x: Math.floor(Math.random() * BOARD_SIZE),
+        y: Math.floor(Math.random() * BOARD_SIZE),
+      }
+      if (snakePositions.some((it) => it.x === nextPosition.x && it.y === nextPosition.y)) {
+        continue;
+      }
+      setCoinPosition(nextPosition);
+      break;
+    }
   }
 
   useEffect(() => {
