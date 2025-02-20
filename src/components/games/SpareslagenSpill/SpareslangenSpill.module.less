@@ -2,8 +2,8 @@
 @cell-size: 25px;
 @border-width: @cell-size;
 @checker-color: #4D689F;
-@text-color: #212529;
-@border-outline-color: @text-color;
+@text-color: #ffffff;
+@border-outline-color: #212529;
 
 .spareslangenSpill {
     display: flex;
@@ -53,4 +53,18 @@
 
 .snake {
     transition: background-color 0.5s;
+}
+
+.snakeLine {
+    display: flex;
+    margin-top: 40px;
+    gap: 10px;
+    font-size: 1.5rem;
+
+    p {
+        font-size: 1.2rem;
+        color: @text-color;
+        font-style: italic;
+        text-align: left;
+    }
 }

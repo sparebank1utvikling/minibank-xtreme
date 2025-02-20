@@ -4,6 +4,7 @@ import Mynt from "./mynt.svg?url";
 import Dnb from "./dnb.svg?url";
 import { BOARD_SPARESLANGEN_PATH } from "@/utils/constants";
 import { GameComplete } from "@/components/common/GameComplete";
+import {whatDoesTheSnakeSay} from "@/components/games/SpareslagenSpill/texts";
 
 const BOARD_SIZE = 20;
 const CELL_SIZE = 25;
@@ -97,6 +98,7 @@ export const SpareslangenSpill = () => {
   const [isPoisoned, setIsPoisoned] = useState<boolean>(false);
   const [nokSaved, setNokSaved] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [snakeLine, setSnakeLine] = useState<string>("What a nice day to sssssssave some money");
 
   function getNewCoinPosition() {
     while (true) {
@@ -118,6 +120,7 @@ export const SpareslangenSpill = () => {
   function handleAteCoin() {
     setNokSaved(nokSaved + 1);
     setCoinPosition(getNewCoinPosition());
+    setSnakeLine(whatDoesTheSnakeSay("coin"));
 
     if (!poisonPosition && Math.random() < 0.2) {
       const poisonPosition = getNewCoinPosition();
@@ -134,6 +137,7 @@ export const SpareslangenSpill = () => {
     setNokSaved(nokSaved - 5);
     setIsPoisoned(true);
     setPoisonPosition(null);
+    setSnakeLine(whatDoesTheSnakeSay("dnb"));
   }
 
   function handleGameOver() {
@@ -160,7 +164,7 @@ export const SpareslangenSpill = () => {
         snakeDirection
       );
       if (nextHeadPosition === null) {
-        handleGameOver();
+        //handleGameOver();
       } else if (snakePositions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
         handleGameOver();
       } else if (
@@ -174,7 +178,7 @@ export const SpareslangenSpill = () => {
       } else {
         moveSnake(snakeDirection);
       }
-    }, getSpeed(150, nokSaved));
+    }, getSpeed(200, nokSaved));
     return () => clearInterval(interval);
   }, [snakePositions, snakeDirection]);
 
@@ -263,6 +267,12 @@ export const SpareslangenSpill = () => {
             />
           ))}
         </div>
+        {snakeLine && (
+            <span className={styles.snakeLine}>
+              🐍{" "}
+              <p>"{snakeLine}"</p>
+            </span>
+        )}
       </div>
     </div>
   );
