@@ -5,7 +5,7 @@ import Mynt from "./mynt.svg?url";
 const BOARD_SIZE = 20;
 const CELL_SIZE = 25;
 
-type SnakePosition = {
+type Position = {
   x: number;
   y: number;
 };
@@ -21,7 +21,7 @@ const createSnake = () => {
   ];
 };
 
-const isNextValid = (snakePositions: SnakePosition[], direction: Direction) => {
+const isNextValid = (snakePositions: Position[], direction: Direction) => {
   const head = snakePositions[0];
   switch (direction) {
     case "l":
@@ -38,7 +38,13 @@ const isNextValid = (snakePositions: SnakePosition[], direction: Direction) => {
 export const SpareslangenSpill = () => {
   const [snakePositions, setSnakePositions] = useState(createSnake());
   const [snakeDirection, setSnakeDirection] = useState<Direction>("r");
-  const [coinPosition, setCoinPosition] = useState({ x: 0, y: 0 });
+  const [coinPosition, setCoinPosition] = useState<Position>({ x: 0, y: 0 });
+  const [nokSaved, setNokSaved] = useState(0);
+
+  function handleAteCoin() {
+    setNokSaved(nokSaved + 1);
+    placeNewCoin();
+  }
 
   const moveSnake = (direction: Direction) => {
     setSnakePositions((snakePositions) => {
@@ -105,8 +111,19 @@ export const SpareslangenSpill = () => {
   return (
     <>
       <h1>Spareslangen</h1>
+      <span className={styles.savings}>
+        <h2>
+          Så mye har du spart{" "}
+          <span style={{ color: "orange" }}>{nokSaved}</span>
+        </h2>
+        <img
+          style={{ width: CELL_SIZE, height: CELL_SIZE }}
+          src={Mynt}
+          alt="Mynt"
+        />
+      </span>
       <div className={styles.board}>
-        <div className={styles.coin} onClick={placeNewCoin}>
+        <div className={styles.coin} onClick={handleAteCoin}>
           <img
             style={{
               position: "relative",
@@ -117,7 +134,7 @@ export const SpareslangenSpill = () => {
             alt="Mynt"
           />
         </div>
-        {snakePositions.map((snakePosition: SnakePosition) => (
+        {snakePositions.map((snakePosition: Position) => (
           <div
             style={{
               position: "absolute",
