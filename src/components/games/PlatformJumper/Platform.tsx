@@ -7,6 +7,8 @@ const CANVAS_HEIGHT = 1000;
 
 const Platform: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  // requestId that is returned from requestAnimationFrame is stored here
+  // so that we can cancel it when unmounting the component
   const requestIdRef = useRef<number | null>(null);
 
   const gameState = useRef<GameState>({
