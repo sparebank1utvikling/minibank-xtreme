@@ -10,15 +10,18 @@ import { createFileForLeaderBoard } from "@/components/Leaderboard/LeaderBoardUt
 import "./configure-styles";
 import { LabyrintSpill } from "@/components/games/LabyrintSpill/LabyrintSpill";
 import {
-  BOARD_LABYRINT_PATH, BOARD_MENU,
+  BOARD_LABYRINT_PATH,
+  BOARD_MENU,
   BOARD_PAY_PATH,
   BOARD_PIN_PATH,
   GAME_TITLE_LABYRINT,
   GAME_TITLE_PAY_INVOICE,
-  GAME_TITLE_PIN, howToFaktura, howToPIN
+  GAME_TITLE_PIN,
+  howToFaktura,
+  howToPIN,
 } from "@/utils/constants";
 import LeaderboardMenu from "@/components/Leaderboard/LeaderboardMenu";
-
+import { SpareslangenSpill } from "./components/games/SpareslagenSpill/SpareslangenSpill";
 
 function App() {
   const fakturaFilePath = "./faktura.csv";
@@ -26,7 +29,6 @@ function App() {
   const labyrintFilePath = "./labyrint.csv";
   const pinFilePath = "./pin.csv";
   const pinSort = true;
-
   //create files
   createFileForLeaderBoard(fakturaFilePath);
   createFileForLeaderBoard(pinFilePath);
@@ -42,6 +44,7 @@ function App() {
           }
         />
         <Route path={"/faktura"} element={<FakturaSpill />} />
+        <Route path={"/slange"} element={<SpareslangenSpill />} />
         <Route
           path={"/pin/intro"}
           element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"} />}
@@ -120,10 +123,7 @@ function App() {
             />
           }
         />
-        <Route
-          path={BOARD_MENU}
-          element={<LeaderboardMenu/>}
-          />
+        <Route path={BOARD_MENU} element={<LeaderboardMenu />} />
       </Routes>
     </Router>
   );
