@@ -1,12 +1,19 @@
 import React, { useEffect, useRef } from "react";
-import {GameState, Player} from "@/components/games/PlatformJumper/types";
-import {handleInput} from "@/components/games/PlatformJumper/handleInput";
+import { GameState, Player } from "@/components/games/PlatformJumper/types";
+import { handleInput } from "@/components/games/PlatformJumper/handleInput";
+import bunnySprite from "./assets/bunny_idle_1.png";
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 1000;
-const PLAYER_WIDTH = 50;
-const PLAYER_HEIGHT = 50;
+const PLAYER_WIDTH = 33;
+const PLAYER_HEIGHT = 54;
 const GRAVITY = 2000;
+
+function loadPlayerSprite(): CanvasImageSource {
+  const player = new Image();
+  player.src = bunnySprite;
+  return player;
+}
 
 const Platform: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -41,12 +48,19 @@ const Platform: React.FC = () => {
     const state = gameState.current;
 
     // Clear canvas with sky blue background
-    ctx.fillStyle = "#87CEEB";
+    ctx.fillStyle = "#005AA4";
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     // Draw player
     ctx.fillStyle = "yellow";
-    ctx.fillRect(state.playerX, state.playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
+    ctx.drawImage(
+      loadPlayerSprite(),
+      state.playerX,
+      state.playerY,
+      PLAYER_WIDTH,
+      PLAYER_HEIGHT,
+    );
+    // ctx.fillRect(state.playerX, state.playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
   };
 
   const gameLoop = (timestamp: number): void => {
@@ -70,14 +84,14 @@ const Platform: React.FC = () => {
     requestIdRef.current = requestAnimationFrame(gameLoop);
 
     // Add event listener for keypresses
-    window.addEventListener("keydown", e => handleInput(e, gameState));
+    window.addEventListener("keydown", (e) => handleInput(e, gameState));
 
     // Cleanup function
     return () => {
       if (requestIdRef.current) {
         cancelAnimationFrame(requestIdRef.current);
       }
-      window.removeEventListener("keydown", e => handleInput(e, gameState))
+      window.removeEventListener("keydown", (e) => handleInput(e, gameState));
     };
   }, []);
 
