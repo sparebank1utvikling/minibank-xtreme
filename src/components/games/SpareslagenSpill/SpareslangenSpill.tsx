@@ -112,6 +112,9 @@ export const SpareslangenSpill = () => {
       if (nextHeadPosition === null) {
         return;
       }
+      else if (snakePositions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
+        handleGameOver();
+      }
       else if (nextHeadPosition.x === coinPosition.x && nextHeadPosition.y === coinPosition.y) {
         handleAteCoin();
       }
