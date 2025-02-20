@@ -18,6 +18,7 @@ import {
   GAME_TITLE_PIN, howToFaktura, howToPIN
 } from "@/utils/constants";
 import LeaderboardMenu from "@/components/Leaderboard/LeaderboardMenu";
+import Platform from "@/components/games/PlatformJumper/Platform";
 
 
 function App() {
@@ -124,6 +125,10 @@ function App() {
           path={BOARD_MENU}
           element={<LeaderboardMenu/>}
           />
+        <Route
+          path={'/platformGame'}
+          element={<Platform/>}
+        />
       </Routes>
     </Router>
   );

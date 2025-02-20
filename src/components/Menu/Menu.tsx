@@ -23,9 +23,9 @@ const Menu = () => {
       case "4":
         navigate("/labyrint");
         break;
-      //case "6": // TODO Kommenter inn lenken til ditt eget spill
-      //  navigate(BOARD_PIN_PATH);
-      //  break;
+      case "6":
+        navigate('/platformGame');
+        break;
       //case "1":
       //  navigate(BOARD_LABYRINT_PATH);
       //  break;
@@ -75,8 +75,8 @@ const Menu = () => {
             {" "}
             <h3>
               <Link to={
-                '/' // TODO bytt ut lenken og teksten med det som passer ditt eget spill
-              }>6) DITT NYE SPILL</Link>
+                '/platformGame'
+              }>6) Platformer</Link>
             </h3>
           </div>
           <div className={"menu-item--left menu-button"}>
