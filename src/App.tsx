@@ -13,10 +13,10 @@ import {
   BOARD_LABYRINT_PATH,
   BOARD_MENU,
   BOARD_PAY_PATH,
-  BOARD_PIN_PATH,
+  BOARD_PIN_PATH, BOARD_SPARESLANGEN_PATH,
   GAME_TITLE_LABYRINT,
   GAME_TITLE_PAY_INVOICE,
-  GAME_TITLE_PIN,
+  GAME_TITLE_PIN, GAME_TITLE_SPARESLANGEN,
   howToFaktura,
   howToPIN,
 } from "@/utils/constants";
@@ -28,6 +28,7 @@ function App() {
   const fakturaSort = false;
   const labyrintFilePath = "./labyrint.csv";
   const pinFilePath = "./pin.csv";
+  const spareslangenFilePath = "./spareslangen.csv";
   const pinSort = true;
   //create files
   createFileForLeaderBoard(fakturaFilePath);
@@ -45,6 +46,30 @@ function App() {
         />
         <Route path={"/faktura"} element={<FakturaSpill />} />
         <Route path={"/slange"} element={<SpareslangenSpill />} />
+        <Route
+          path={BOARD_SPARESLANGEN_PATH}
+          element={
+            <Leaderboard
+              gameTitle={GAME_TITLE_SPARESLANGEN}
+              filePath={spareslangenFilePath}
+              registerNew={false}
+              sortAscending={false}
+              scoreMetric="nok"
+            />
+          }
+        />
+        <Route
+          path={`${BOARD_SPARESLANGEN_PATH}/:score`}
+          element={
+            <Leaderboard
+              gameTitle={GAME_TITLE_SPARESLANGEN}
+              filePath={spareslangenFilePath}
+              registerNew={true}
+              sortAscending={false}
+              scoreMetric="nok"
+            />
+          }
+        />
         <Route
           path={"/pin/intro"}
           element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"} />}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import styles from "./SpareslangenSpill.module.less";
 import Mynt from "./mynt.svg?url";
+import { BOARD_SPARESLANGEN_PATH } from "@/utils/constants";
+import { GameComplete } from "@/components/common/GameComplete";
 
 const BOARD_SIZE = 20;
 const CELL_SIZE = 25;
@@ -58,6 +60,7 @@ export const SpareslangenSpill = () => {
   const [snakeDirection, setSnakeDirection] = useState<Direction>("r");
   const [coinPosition, setCoinPosition] = useState<Position>({ x: 0, y: 0 });
   const [nokSaved, setNokSaved] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
 
   function handleAteCoin() {
     setNokSaved(nokSaved + 1);
@@ -67,6 +70,10 @@ export const SpareslangenSpill = () => {
       const tail = prevSnake[prevSnake.length - 1];
       return [...createNewSnake(snakePositions, snakeDirection), tail];
     })
+  }
+
+  function handleGameOver() {
+    setGameOver(true);
   }
 
   const moveSnake = (direction: Direction) => {
@@ -117,6 +124,11 @@ export const SpareslangenSpill = () => {
       window.removeEventListener("keydown", () => {});
     };
   }, []);
+
+  if (gameOver) {
+    return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />
+  }
+
   return (
     <>
       <h1>Spareslangen</h1>
@@ -156,6 +168,7 @@ export const SpareslangenSpill = () => {
           />
         ))}
       </div>
+      <button onClick={handleGameOver}>End game</button>
     </>
   );
 };
