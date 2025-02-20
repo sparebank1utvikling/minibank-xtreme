@@ -75,6 +75,8 @@ const getNextHeadPosition = (
         return { x: head.x, y: head.y + 1 };
       }
       return null;
+    default:
+      return null;
   }
 };
 
@@ -131,12 +133,8 @@ export const SpareslangenSpill = () => {
         snakeDirection
       );
       if (nextHeadPosition === null) {
-        return;
-      } else if (
-        snakePositions.some(
-          (it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y
-        )
-      ) {
+        handleGameOver();
+      } else if (snakePositions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
         handleGameOver();
       } else if (
         nextHeadPosition.x === coinPosition.x &&
