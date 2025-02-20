@@ -208,6 +208,7 @@ export const SpareslangenSpill = () => {
         </div>
         {snakePositions.map((snakePosition: Position) => (
           <div
+            key={`${snakePosition.x}-${snakePosition.y}`}
             style={{
               position: "absolute",
               top: `${snakePosition.y * 25}px`,
