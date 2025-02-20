@@ -18,6 +18,7 @@ import {
   GAME_TITLE_PIN, howToFaktura, howToPIN
 } from "@/utils/constants";
 import LeaderboardMenu from "@/components/Leaderboard/LeaderboardMenu";
+import {SpaceInvadersSpill} from "@/components/games/SpaceInvadersSpill/SpaceInvadersSpill";
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
           element={<HowToSequence howToPlayList={howToPIN} gamePath={"/pin"} />}
         />
         <Route path={"/labyrint"} element={<LabyrintSpill />} />
+        <Route path={"/space-invaders"} element={<SpaceInvadersSpill />} />
         <Route
           path={BOARD_LABYRINT_PATH}
           element={

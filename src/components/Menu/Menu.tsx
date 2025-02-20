@@ -29,6 +29,9 @@ const Menu = () => {
       //case "1":
       //  navigate(BOARD_LABYRINT_PATH);
       //  break;
+      case "6":
+       navigate("/space-invaders");
+       break;
       case "3":
         navigate(BOARD_MENU);
         break;
