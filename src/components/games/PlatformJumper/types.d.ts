@@ -8,6 +8,7 @@ export interface GameState {
   isMoving: boolean;
   isJumping: boolean;
   speed: number;
+  initialized: boolean;
 }
 
 export interface PlatformType {

@@ -8,7 +8,7 @@ import {
   renderPlatform,
   updatePlatforms
 } from "@/components/games/PlatformJumper/PlatformObject";
-import {VIEWPORT_HEIGHT, VIEWPORT_WIDTH} from "@/components/games/PlatformJumper/constants";
+import {PLATFORM_HEIGHT, VIEWPORT_HEIGHT, VIEWPORT_WIDTH} from "@/components/games/PlatformJumper/constants";
 
 const CANVAS_WIDTH = VIEWPORT_WIDTH;
 const CANVAS_HEIGHT = VIEWPORT_HEIGHT;
@@ -39,22 +39,43 @@ const Platform: React.FC = () => {
     isMoving: false,
     isJumping: false,
     speed: 100, // pixels per second
+    initialized: false
   });
 
 
   const platformStates = useRef<PlatformType[]>([])
-
+  const getPlatformCollision = () => {
+    const state = gameState.current
+    if (state.speedY < 0) {
+      return []
+    }
+    return platformStates.current.filter((platform) => {
+      return state.playerX < platform.x + platform.width &&
+        state.playerX > platform.x &&
+        state.playerY >= platform.y - PLAYER_HEIGHT && // På eller i plattformen
+        state.playerY <= platform.y // Ikke lavere enn plattformen
+    })
+  }
   const update = (deltaTime: number): void => {
-    platformStates.current = updatePlatforms(platformStates.current, gameState.current.speed * deltaTime)
     const state = gameState.current;
-
+    const oldPlayerY = state.playerY;
     state.playerX += gameState.current.speedX * deltaTime;
     state.playerY += gameState.current.speedY * deltaTime;
-    if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) {
+
+    platformStates.current = updatePlatforms(platformStates.current, oldPlayerY - state.playerY)
+
+    const collision = getPlatformCollision()
+    if(state.initialized && collision.length > 0) { // Hit a platform
+      state.speedY = 0
+      state.isJumping = false
+      const collidingPlatform = collision[0]
+      state.playerY = collidingPlatform.y - PLAYER_HEIGHT + 1
+    } else if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) { // Hit the ground
       state.isJumping = false;
       state.speedY = 0;
       state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
-    } else {
+      state.initialized = true
+    } else { // Falling
       state.speedY += GRAVITY * deltaTime;
     }
     if (state.isMoving) {
@@ -89,7 +110,7 @@ const Platform: React.FC = () => {
     // ctx.fillRect(state.playerX, state.playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
 
     // Draw platforms
-   // renderPlatform(ctx, {x: 150, y: 250, width: 50, color: "green"});
+    //renderPlatform(ctx, {x: 20, y: 250, width: 350, color: "green"});
     renderAllPlatforms(ctx, platformStates.current)
   };
 
@@ -118,7 +139,7 @@ const Platform: React.FC = () => {
     window.addEventListener("keyup", (e) => handleKeyUp(e, gameState));
 
     // Initialize platforms
-    platformStates.current = createPlatforms(100, 100)
+    platformStates.current = createPlatforms(100, 100, 0)
 
     // Cleanup function
     return () => {
