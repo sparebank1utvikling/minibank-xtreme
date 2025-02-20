@@ -27,7 +27,6 @@ export const handleKeyDown = (
   }
 };
 
-
 export const handleKeyUp = (event: KeyboardEvent, playerPlacement: MutableRefObject<number>, bullets: IBullet[], setBullets: Dispatch<SetStateAction<IBullet[]>>) => {
   event.preventDefault();
 

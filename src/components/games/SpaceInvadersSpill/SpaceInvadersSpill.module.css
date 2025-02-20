@@ -26,3 +26,26 @@
     height: 10px;
     background: white;
 }
+
+.monsterContainer {
+    position: relative;
+    width: 440px;
+    margin: 0 auto;
+    animation: 2s linear moveMonsters infinite;
+}
+
+@keyframes moveMonsters {
+    0%,100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(40px);
+    }
+}
+
+.monster {
+    position: absolute;
+    width: 25px;
+    aspect-ratio: 1;
+    background: red;
+}

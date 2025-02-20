@@ -25,6 +25,7 @@ export const createBullet = (playerPlacement: MutableRefObject<number>, bullets:
   bullet.style.bottom = BULLET_START_HEIGHT + "px";
   bullet.style.left = (playerPlacement.current + PLAYER_SIZE/2) + "px";
 
+  console.log('bullet', bullet);
   const bulletElement = {
     id: id,
     element: bullet,
