@@ -17,8 +17,16 @@ type Direction = "l" | "r" | "u" | "d";
 const createSnake = () => {
   return [
     {
-      x: 0,
-      y: 0,
+      x: 10,
+      y: 10,
+    },
+    {
+      x: 10,
+      y: 11,
+    },
+    {
+      x: 10,
+      y: 12,
     },
   ];
 };
@@ -69,14 +77,27 @@ const getNextHeadPosition = (snakePositions: Position[], direction: Direction): 
 
 export const SpareslangenSpill = () => {
   const [snakePositions, setSnakePositions] = useState<Position[]>(createSnake());
-  const [snakeDirection, setSnakeDirection] = useState<Direction>("r");
-  const [coinPosition, setCoinPosition] = useState<Position>({ x: 0, y: 0 });
+  const [snakeDirection, setSnakeDirection] = useState<Direction>("u");
+  const [coinPosition, setCoinPosition] = useState<Position>(getNewCoinPosition());
   const [nokSaved, setNokSaved] = useState(0);
   const [gameOver, setGameOver] = useState(false);
 
+  function getNewCoinPosition() {
+    while (true) {
+      const nextPosition = {
+        x: Math.floor(Math.random() * BOARD_SIZE),
+        y: Math.floor(Math.random() * BOARD_SIZE),
+      }
+      if (snakePositions.some((it) => it.x === nextPosition.x && it.y === nextPosition.y)) {
+        continue;
+      }
+      return nextPosition
+    }
+  }
+
   function handleAteCoin() {
     setNokSaved(nokSaved + 1);
-    placeNewCoin();
+    setCoinPosition(getNewCoinPosition());
 
     setSnakePositions((prevSnake) => {
       const tail = prevSnake[prevSnake.length - 1];
@@ -91,20 +112,6 @@ export const SpareslangenSpill = () => {
   const moveSnake = (direction: Direction) => {
     setSnakePositions(createNewSnake(snakePositions, direction));
   };
-
-  function placeNewCoin() {
-    while (true) {
-      const nextPosition = {
-        x: Math.floor(Math.random() * BOARD_SIZE),
-        y: Math.floor(Math.random() * BOARD_SIZE),
-      }
-      if (snakePositions.some((it) => it.x === nextPosition.x && it.y === nextPosition.y)) {
-        continue;
-      }
-      setCoinPosition(nextPosition);
-      break;
-    }
-  }
 
   useEffect(() => {
     const interval = setInterval(() => {
