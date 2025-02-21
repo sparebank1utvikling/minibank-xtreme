@@ -1,6 +1,7 @@
 import styles from "@/components/games/SpareslagenSpill/SpareslangenSpill.module.less";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Direction, Position } from "@/components/games/SpareslagenSpill/types";
+import { useDirection } from "@/components/games/SpareslagenSpill/Slange/useDirection";
 
 const createSnake = () => {
   return [
@@ -56,7 +57,7 @@ type Props = {
 
 export const Slange = forwardRef<SlangeHandle, Props>(({ savings, onGameOver }, ref) => {
   const [bodyPositions, setBodyPositions] = useState<Position[]>(createSnake());
-  const [direction, setDirection] = useState<Direction>(INITIAL_DIRECTION);
+  const direction = useDirection();
   const [isPoisoned, setIsPoisoned] = useState(false);
 
   useImperativeHandle(ref, () => ({

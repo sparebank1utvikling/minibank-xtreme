@@ -43,17 +43,16 @@ const getNextHeadPosition = (
 };
 
 export const SpareslangenSpill = () => {
-  const [snakeDirection, setSnakeDirection] = useState<Direction>("u");
+  const slangeRef = useRef<SlangeHandle>(null);
   const [coinPosition, setCoinPosition] = useState<Position>(
-    getNewCoinPosition()
+    getNewFoodPosition()
   );
   const [poisonPosition, setPoisonPosition] = useState<Position | null>(null);
   const [nokSaved, setNokSaved] = useState(0);
   const [gameOver, setGameOver] = useState(false);
-  const slangeRef = useRef<SlangeHandle>(null);
   const [snakeLine, setSnakeLine] = useState<string>("What a nice day to sssssssave some money");
 
-  function getNewCoinPosition() {
+  function getNewFoodPosition() {
     while (true) {
       const nextPosition = {
         x: Math.floor(Math.random() * BOARD_SIZE),
@@ -68,11 +67,11 @@ export const SpareslangenSpill = () => {
 
   function handleAteCoin() {
     setNokSaved(nokSaved + 1);
-    setCoinPosition(getNewCoinPosition());
+    setCoinPosition(getNewFoodPosition());
     setSnakeLine(whatDoesTheSnakeSay("coin"));
 
     if (!poisonPosition && Math.random() < 0.2) {
-      const poisonPosition = getNewCoinPosition();
+      const poisonPosition = getNewFoodPosition();
       setPoisonPosition(poisonPosition);
     }
 
@@ -103,33 +102,6 @@ export const SpareslangenSpill = () => {
     }
   }, [slangeRef.current?.head]);
 
-  const eventKeyDown = (event: KeyboardEvent) => {
-    switch (event.key) {
-      case "ArrowLeft":
-      case "4":
-        if (snakeDirection != "r") setSnakeDirection("l");
-        break;
-      case "ArrowDown":
-      case "2":
-        if (snakeDirection != "u") setSnakeDirection("d");
-        break;
-      case "ArrowRight":
-      case "6":
-        if (snakeDirection != "l") setSnakeDirection("r");
-        break;
-      case "ArrowUp":
-      case "8":
-        if (snakeDirection != "d") setSnakeDirection("u");
-        break;
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", eventKeyDown);
-    return () => {
-      window.removeEventListener("keydown", eventKeyDown);
-    };
-  }, [snakeDirection]);
 
   if (gameOver) {
     return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />;
