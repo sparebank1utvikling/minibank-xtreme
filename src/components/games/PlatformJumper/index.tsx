@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import { GameState, PlatformType } from "@/components/games/PlatformJumper/types";
 import {handleKeyDown, handleKeyUp} from "@/components/games/PlatformJumper/handleInput";
 import bunnySprite from "./assets/bunny_idle_1.png";
@@ -6,8 +6,8 @@ import {
   createPlatforms,
   renderAllPlatforms,
   updatePlatforms
-} from "@/components/games/PlatformJumper/PlatformObject";
-import {PLATFORM_HEIGHT, VIEWPORT_HEIGHT, VIEWPORT_WIDTH} from "@/components/games/PlatformJumper/constants";
+} from "@/components/games/PlatformJumper/platform";
+import {VIEWPORT_HEIGHT, VIEWPORT_WIDTH} from "@/components/games/PlatformJumper/constants";
 
 const CANVAS_WIDTH = VIEWPORT_WIDTH;
 const CANVAS_HEIGHT = VIEWPORT_HEIGHT;
@@ -22,10 +22,8 @@ function loadPlayerSprite(): CanvasImageSource {
   return player;
 }
 
-const Platform: React.FC = () => {
+function FluffyTower(): ReactNode {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  // requestId that is returned from requestAnimationFrame is stored here
-  // so that we can cancel it when unmounting the component
   const requestIdRef = useRef<number | null>(null);
 
   const gameState = useRef<GameState>({
@@ -43,7 +41,9 @@ const Platform: React.FC = () => {
 
 
   const platformStates = useRef<PlatformType[]>([])
-  const getPlatformCollision = () => {
+  platformStates.current = createPlatforms(100, 300, 0)
+
+  function getPlatformCollision() {
     const state = gameState.current
     if (state.speedY < 0) {
       return []
@@ -55,7 +55,8 @@ const Platform: React.FC = () => {
         state.playerY <= platform.y // Ikke lavere enn plattformen
     })
   }
-  const update = (deltaTime: number): void => {
+
+  function update(deltaTime: number): void {
     const state = gameState.current;
     const oldPlayerY = state.playerY;
     state.playerX += gameState.current.speedX * deltaTime;
@@ -97,15 +98,14 @@ const Platform: React.FC = () => {
     }
   };
 
-  const render = (ctx: CanvasRenderingContext2D): void => {
+  function render(ctx: CanvasRenderingContext2D): void {
     const state = gameState.current;
 
-    // Clear canvas with sky blue background
     ctx.fillStyle = "#005AA4";
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     // Draw player
-    ctx.save(); // Save the current context state
+    ctx.save();
 
     if (state.direction === "RIGHT") {
       // Flip context horizontally for right-facing sprite
@@ -128,15 +128,12 @@ const Platform: React.FC = () => {
       );
     }
 
-    ctx.restore(); // Restore the context state
-    // ctx.fillRect(state.playerX, state.playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
+    ctx.restore();
 
-    // Draw platforms
-    //renderPlatform(ctx, {x: 20, y: 250, width: 350, color: "green"});
     renderAllPlatforms(ctx, platformStates.current)
   };
 
-  const gameLoop = (timestamp: number): void => {
+  function gameLoop(timestamp: number): void {
     const state = gameState.current;
     const deltaTime = (timestamp - state.lastTime) / 1000; // Convert to seconds
     state.lastTime = timestamp;
@@ -148,29 +145,11 @@ const Platform: React.FC = () => {
     update(deltaTime);
     render(ctx);
 
-    // Continue the game loop
     requestIdRef.current = requestAnimationFrame(gameLoop);
   };
 
-  useEffect(() => {
-    // Start the game loop
-    requestIdRef.current = requestAnimationFrame(gameLoop);
-
-    // Add event listener for keypresses
-    window.addEventListener("keydown", (e) => handleKeyDown(e, gameState));
-    window.addEventListener("keyup", (e) => handleKeyUp(e, gameState));
-
-    // Initialize platforms
-    platformStates.current = createPlatforms(100, 300, 0)
-
-    // Cleanup function
-    return () => {
-      if (requestIdRef.current) {
-        cancelAnimationFrame(requestIdRef.current);
-      }
-      window.removeEventListener("keydown", (e) => handleKeyDown(e, gameState));
-    };
-  }, []);
+  useInputEventListeners(gameState.current)
+  useGameLoop(requestIdRef, gameLoop);
 
   const containerStyle: React.CSSProperties = {
     display: "flex",
@@ -181,14 +160,32 @@ const Platform: React.FC = () => {
 
   return (
     <div style={containerStyle}>
-      <canvas
-        ref={canvasRef}
-        width={CANVAS_WIDTH}
-        height={CANVAS_HEIGHT}
-        style={{ border: "1px solid #ccc" }}
-      />
+      <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT}/>
     </div>
   );
 };
 
-export default Platform;
+function useGameLoop(requestIdRef: React.MutableRefObject<number | null>, gameLoop: (timestamp: number) => void) {
+    useEffect(() => {
+        requestIdRef.current = requestAnimationFrame(gameLoop);
+
+        return () => {
+            if (requestIdRef.current) {
+                cancelAnimationFrame(requestIdRef.current);
+            }
+        };
+    }, []);
+}
+
+function useInputEventListeners(gameState: GameState) {
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => handleKeyDown(e, gameState));
+    window.addEventListener("keyup", (e) => handleKeyUp(e, gameState));
+
+    return () => {
+      window.removeEventListener("keydown", (e) => handleKeyDown(e, gameState));
+    };
+  }, []);
+}
+
+export default FluffyTower;

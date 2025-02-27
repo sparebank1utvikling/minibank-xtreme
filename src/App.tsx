@@ -18,7 +18,7 @@ import {
   GAME_TITLE_PIN, howToFaktura, howToPIN
 } from "@/utils/constants";
 import LeaderboardMenu from "@/components/Leaderboard/LeaderboardMenu";
-import Platform from "@/components/games/PlatformJumper/Platform";
+import FluffyTower from "@/components/games/PlatformJumper";
 
 
 function App() {
@@ -127,7 +127,7 @@ function App() {
           />
         <Route
           path={'/platformGame'}
-          element={<Platform/>}
+          element={<FluffyTower/>}
         />
       </Routes>
     </Router>
