@@ -1,13 +1,22 @@
 import React, { ReactNode, useEffect, useRef } from "react";
-import { GameState, PlatformType } from "@/components/games/PlatformJumper/types";
-import {handleKeyDown, handleKeyUp} from "@/components/games/PlatformJumper/handleInput";
+import {
+  GameState,
+  PlatformType,
+} from "@/components/games/PlatformJumper/types";
+import {
+  handleKeyDown,
+  handleKeyUp,
+} from "@/components/games/PlatformJumper/handleInput";
 import bunnySprite from "./assets/bunny_idle_1.png";
 import {
   createPlatforms,
   renderAllPlatforms,
-  updatePlatforms
+  updatePlatforms,
 } from "@/components/games/PlatformJumper/platform";
-import {VIEWPORT_HEIGHT, VIEWPORT_WIDTH} from "@/components/games/PlatformJumper/constants";
+import {
+  VIEWPORT_HEIGHT,
+  VIEWPORT_WIDTH,
+} from "@/components/games/PlatformJumper/constants";
 
 const CANVAS_WIDTH = VIEWPORT_WIDTH;
 const CANVAS_HEIGHT = VIEWPORT_HEIGHT;
@@ -30,30 +39,31 @@ function FluffyTower(): ReactNode {
     lastTime: 0,
     playerX: 100,
     playerY: 100,
-    direction: 'LEFT',
+    direction: "LEFT",
     speedX: 0, // pixels per second
     speedY: 0,
     isMoving: false,
     isJumping: false,
     speed: 100, // pixels per second
-    initialized: false
+    initialized: false,
   });
 
-
-  const platformStates = useRef<PlatformType[]>([])
-  platformStates.current = createPlatforms(100, 300, 0)
+  const platformStates = useRef<PlatformType[]>([]);
+  platformStates.current = createPlatforms(100, 300, 0);
 
   function getPlatformCollision() {
-    const state = gameState.current
+    const state = gameState.current;
     if (state.speedY < 0) {
-      return []
+      return [];
     }
     return platformStates.current.filter((platform) => {
-      return state.playerX < platform.x + platform.width &&
+      return (
+        state.playerX < platform.x + platform.width &&
         state.playerX > platform.x &&
         state.playerY >= platform.y - PLAYER_HEIGHT && // På eller i plattformen
-        state.playerY <= platform.y // Ikke lavere enn plattformen
-    })
+        state.playerY <= platform.y
+      ); // Ikke lavere enn plattformen
+    });
   }
 
   function update(deltaTime: number): void {
@@ -62,41 +72,46 @@ function FluffyTower(): ReactNode {
     state.playerX += gameState.current.speedX * deltaTime;
     state.playerY += gameState.current.speedY * deltaTime;
 
-    const collision = getPlatformCollision()
-    if(state.initialized && collision.length > 0) { // Hit a platform
-      if(state.playerY < VIEWPORT_HEIGHT * (2/3)) {
-        platformStates.current = updatePlatforms(platformStates.current, 50)
+    const collision = getPlatformCollision();
+    if (state.initialized && collision.length > 0) {
+      // Hit a platform
+      if (state.playerY < VIEWPORT_HEIGHT * (2 / 3)) {
+        platformStates.current = updatePlatforms(platformStates.current, 50);
       }
-      state.speedY = 0
-      state.isJumping = false
-      const collidingPlatform = collision[0]
-      state.playerY = collidingPlatform.y - PLAYER_HEIGHT + 1
-    } else if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) { // Hit the ground
+      state.speedY = 0;
+      state.isJumping = false;
+      const collidingPlatform = collision[0];
+      state.playerY = collidingPlatform.y - PLAYER_HEIGHT + 1;
+    } else if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) {
+      // Hit the ground
       state.isJumping = false;
       state.speedY = 0;
       state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
-      state.initialized = true
-    } else { // Falling
+      state.initialized = true;
+    } else {
+      // Falling
       state.speedY += GRAVITY * deltaTime;
       state.isJumping = true;
     }
     if (state.isMoving) {
-        if (state.direction === "LEFT") {
-            state.speedX -= PLAYER_ACCELERATION * deltaTime;
-        } else {
-            state.speedX += PLAYER_ACCELERATION * deltaTime;
-        }
+      if (state.direction === "LEFT") {
+        state.speedX -= PLAYER_ACCELERATION * deltaTime;
+      } else {
+        state.speedX += PLAYER_ACCELERATION * deltaTime;
+      }
     } else {
       if (!state.isJumping) {
         state.speedX = 0;
       }
     }
 
-    if(oldPlayerY - state.playerY > 0 || !state.initialized) {
-      platformStates.current = updatePlatforms(platformStates.current, (oldPlayerY - state.playerY))
-
+    if (oldPlayerY - state.playerY > 0 || !state.initialized) {
+      platformStates.current = updatePlatforms(
+        platformStates.current,
+        oldPlayerY - state.playerY,
+      );
     }
-  };
+  }
 
   function render(ctx: CanvasRenderingContext2D): void {
     const state = gameState.current;
@@ -130,8 +145,8 @@ function FluffyTower(): ReactNode {
 
     ctx.restore();
 
-    renderAllPlatforms(ctx, platformStates.current)
-  };
+    renderAllPlatforms(ctx, platformStates.current);
+  }
 
   function gameLoop(timestamp: number): void {
     const state = gameState.current;
@@ -146,9 +161,9 @@ function FluffyTower(): ReactNode {
     render(ctx);
 
     requestIdRef.current = requestAnimationFrame(gameLoop);
-  };
+  }
 
-  useInputEventListeners(gameState.current)
+  useInputEventListeners(gameState.current);
   useGameLoop(requestIdRef, gameLoop);
 
   const containerStyle: React.CSSProperties = {
@@ -160,21 +175,24 @@ function FluffyTower(): ReactNode {
 
   return (
     <div style={containerStyle}>
-      <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT}/>
+      <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
     </div>
   );
-};
+}
 
-function useGameLoop(requestIdRef: React.MutableRefObject<number | null>, gameLoop: (timestamp: number) => void) {
-    useEffect(() => {
-        requestIdRef.current = requestAnimationFrame(gameLoop);
+function useGameLoop(
+  requestIdRef: React.MutableRefObject<number | null>,
+  gameLoop: (timestamp: number) => void,
+) {
+  useEffect(() => {
+    requestIdRef.current = requestAnimationFrame(gameLoop);
 
-        return () => {
-            if (requestIdRef.current) {
-                cancelAnimationFrame(requestIdRef.current);
-            }
-        };
-    }, []);
+    return () => {
+      if (requestIdRef.current) {
+        cancelAnimationFrame(requestIdRef.current);
+      }
+    };
+  }, []);
 }
 
 function useInputEventListeners(gameState: GameState) {

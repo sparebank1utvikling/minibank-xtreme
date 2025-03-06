@@ -2,10 +2,7 @@ import { GameState } from "@/components/games/PlatformJumper/types";
 
 const JUMP_FORCE = -1000;
 
-export const handleKeyDown = (
-  event: KeyboardEvent,
-  state: GameState,
-) => {
+export const handleKeyDown = (event: KeyboardEvent, state: GameState) => {
   switch (event.key) {
     case "ArrowLeft":
     case "a":
@@ -27,10 +24,7 @@ export const handleKeyDown = (
   }
 };
 
-export const handleKeyUp = (
-    event: KeyboardEvent,
-    state: GameState,
-) => {
+export const handleKeyUp = (event: KeyboardEvent, state: GameState) => {
   switch (event.key) {
     case "ArrowLeft":
     case "a":
@@ -41,4 +35,4 @@ export const handleKeyUp = (
       state.isMoving = false;
       break;
   }
-}
+};
