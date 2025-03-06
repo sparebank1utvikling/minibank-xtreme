@@ -1,29 +1,26 @@
-import { PlatformType } from "@/components/games/PlatformJumper/types";
+import { Platform } from "@/components/games/PlatformJumper/types";
 import {
   PLATFORM_HEIGHT,
   VIEWPORT_HEIGHT,
   VIEWPORT_WIDTH,
 } from "@/components/games/PlatformJumper/constants";
 
-const renderPlatform = (
-  ctx: CanvasRenderingContext2D,
-  platform: PlatformType,
-) => {
+const renderPlatform = (ctx: CanvasRenderingContext2D, platform: Platform) => {
   ctx.fillStyle = platform.color;
   ctx.fillRect(platform.x, platform.y, platform.width, PLATFORM_HEIGHT);
 };
 
 export const renderAllPlatforms = (
   ctx: CanvasRenderingContext2D,
-  platformArray: PlatformType[],
+  platforms: Platform[],
 ) => {
-  platformArray.forEach((platform) => {
+  platforms.forEach((platform) => {
     renderPlatform(ctx, platform);
   });
 };
 
 export const createPlatforms = (n: number, spacing: number, curY: number) => {
-  const platformArray: PlatformType[] = [];
+  const platformArray: Platform[] = [];
   let i = 0;
   while (i < n) {
     const baseWidth = VIEWPORT_WIDTH / 1.5 - i * 2;
@@ -37,10 +34,7 @@ export const createPlatforms = (n: number, spacing: number, curY: number) => {
   return platformArray;
 };
 
-export const updatePlatforms = (
-  platformArray: PlatformType[],
-  speed: number,
-) => {
+export const updatePlatforms = (platformArray: Platform[], speed: number) => {
   platformArray.forEach((platform) => {
     platform.y += speed;
   });

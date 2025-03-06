@@ -1,5 +1,4 @@
 export interface GameState {
-  lastTime: number;
   playerX: number;
   playerY: number;
   direction: "LEFT" | "RIGHT";
@@ -7,11 +6,10 @@ export interface GameState {
   speedY: number;
   isMoving: boolean;
   isJumping: boolean;
-  speed: number;
-  initialized: boolean;
+  platforms: Platform[];
 }
 
-export interface PlatformType {
+export interface Platform {
   x: number;
   y: number;
   width: number;

@@ -1,8 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from "react";
-import {
-  GameState,
-  PlatformType,
-} from "@/components/games/PlatformJumper/types";
+import { GameState } from "@/components/games/PlatformJumper/types";
 import {
   handleKeyDown,
   handleKeyUp,
@@ -10,33 +7,22 @@ import {
 import bunnySprite from "./assets/bunny_idle_1.png";
 import {
   createPlatforms,
-  renderAllPlatforms,
+  renderAllPlatforms as renderPlatforms,
   updatePlatforms,
 } from "@/components/games/PlatformJumper/platform";
 import {
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+  GRAVITY,
+  PLAYER_ACCELERATION,
+  PLAYER_HEIGHT,
+  PLAYER_WIDTH,
   VIEWPORT_HEIGHT,
-  VIEWPORT_WIDTH,
 } from "@/components/games/PlatformJumper/constants";
-
-const CANVAS_WIDTH = VIEWPORT_WIDTH;
-const CANVAS_HEIGHT = VIEWPORT_HEIGHT;
-const PLAYER_WIDTH = 33;
-const PLAYER_HEIGHT = 54;
-const GRAVITY = 2000;
-const PLAYER_ACCELERATION = 1000;
-
-function loadPlayerSprite(): CanvasImageSource {
-  const player = new Image();
-  player.src = bunnySprite;
-  return player;
-}
 
 function FluffyTower(): ReactNode {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const requestIdRef = useRef<number | null>(null);
-
   const gameState = useRef<GameState>({
-    lastTime: 0,
     playerX: 100,
     playerY: 100,
     direction: "LEFT",
@@ -44,50 +30,31 @@ function FluffyTower(): ReactNode {
     speedY: 0,
     isMoving: false,
     isJumping: false,
-    speed: 100, // pixels per second
-    initialized: false,
+    platforms: createPlatforms(100, 300, 0),
   });
-
-  const platformStates = useRef<PlatformType[]>([]);
-  platformStates.current = createPlatforms(100, 300, 0);
-
-  function getPlatformCollision() {
-    const state = gameState.current;
-    if (state.speedY < 0) {
-      return [];
-    }
-    return platformStates.current.filter((platform) => {
-      return (
-        state.playerX < platform.x + platform.width &&
-        state.playerX > platform.x &&
-        state.playerY >= platform.y - PLAYER_HEIGHT && // På eller i plattformen
-        state.playerY <= platform.y
-      ); // Ikke lavere enn plattformen
-    });
-  }
 
   function update(deltaTime: number): void {
     const state = gameState.current;
-    const oldPlayerY = state.playerY;
-    state.playerX += gameState.current.speedX * deltaTime;
-    state.playerY += gameState.current.speedY * deltaTime;
+    const previousPlayerY = state.playerY;
 
-    const collision = getPlatformCollision();
-    if (state.initialized && collision.length > 0) {
+    updatePlayerPosition(state, deltaTime);
+
+    const collidingPlatforms = getCollidingPlatforms(gameState.current);
+
+    if (collidingPlatforms.length > 0) {
       // Hit a platform
       if (state.playerY < VIEWPORT_HEIGHT * (2 / 3)) {
-        platformStates.current = updatePlatforms(platformStates.current, 50);
+        gameState.current.platforms = updatePlatforms(state.platforms, 50);
       }
       state.speedY = 0;
       state.isJumping = false;
-      const collidingPlatform = collision[0];
+      const collidingPlatform = collidingPlatforms[0];
       state.playerY = collidingPlatform.y - PLAYER_HEIGHT + 1;
     } else if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) {
       // Hit the ground
       state.isJumping = false;
       state.speedY = 0;
       state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
-      state.initialized = true;
     } else {
       // Falling
       state.speedY += GRAVITY * deltaTime;
@@ -105,66 +72,22 @@ function FluffyTower(): ReactNode {
       }
     }
 
-    if (oldPlayerY - state.playerY > 0 || !state.initialized) {
-      platformStates.current = updatePlatforms(
-        platformStates.current,
-        oldPlayerY - state.playerY,
+    if (previousPlayerY - state.playerY > 0) {
+      state.platforms = updatePlatforms(
+        state.platforms,
+        previousPlayerY - state.playerY,
       );
     }
   }
 
-  function render(ctx: CanvasRenderingContext2D): void {
-    const state = gameState.current;
-
-    ctx.fillStyle = "#005AA4";
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-    // Draw player
-    ctx.save();
-
-    if (state.direction === "RIGHT") {
-      // Flip context horizontally for right-facing sprite
-      ctx.scale(-1, 1);
-      ctx.drawImage(
-        loadPlayerSprite(),
-        -state.playerX - PLAYER_WIDTH, // Adjust x position when flipped
-        state.playerY,
-        PLAYER_WIDTH,
-        PLAYER_HEIGHT,
-      );
-    } else {
-      // Draw normally for left-facing sprite
-      ctx.drawImage(
-        loadPlayerSprite(),
-        state.playerX,
-        state.playerY,
-        PLAYER_WIDTH,
-        PLAYER_HEIGHT,
-      );
-    }
-
-    ctx.restore();
-
-    renderAllPlatforms(ctx, platformStates.current);
-  }
-
-  function gameLoop(timestamp: number): void {
-    const state = gameState.current;
-    const deltaTime = (timestamp - state.lastTime) / 1000; // Convert to seconds
-    state.lastTime = timestamp;
-
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current.getContext("2d");
-    if (!ctx) return;
-
-    update(deltaTime);
-    render(ctx);
-
-    requestIdRef.current = requestAnimationFrame(gameLoop);
+  function render(ctx: CanvasRenderingContext2D, state: GameState): void {
+    renderBackground(ctx);
+    renderPlayer(ctx, state);
+    renderPlatforms(ctx, state.platforms);
   }
 
   useInputEventListeners(gameState.current);
-  useGameLoop(requestIdRef, gameLoop);
+  useGameLoop(canvasRef, gameState.current, update, render);
 
   const containerStyle: React.CSSProperties = {
     display: "flex",
@@ -180,10 +103,74 @@ function FluffyTower(): ReactNode {
   );
 }
 
+function updatePlayerPosition(gameState: GameState, deltaTime: number) {
+  gameState.playerX += gameState.speedX * deltaTime;
+  gameState.playerY += gameState.speedY * deltaTime;
+}
+
+function renderBackground(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "#005AA4";
+  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+}
+
+function renderPlayer(ctx: CanvasRenderingContext2D, state: GameState) {
+  function loadPlayerSprite(): CanvasImageSource {
+    const player = new Image();
+    player.src = bunnySprite;
+    return player;
+  }
+
+  ctx.save();
+
+  if (state.direction === "RIGHT") {
+    // Flip context horizontally for right-facing sprite
+    ctx.scale(-1, 1);
+    ctx.drawImage(
+      loadPlayerSprite(),
+      -state.playerX - PLAYER_WIDTH, // Adjust x position when flipped
+      state.playerY,
+      PLAYER_WIDTH,
+      PLAYER_HEIGHT,
+    );
+  } else {
+    // Draw normally for left-facing sprite
+    ctx.drawImage(
+      loadPlayerSprite(),
+      state.playerX,
+      state.playerY,
+      PLAYER_WIDTH,
+      PLAYER_HEIGHT,
+    );
+  }
+
+  ctx.restore();
+}
+
 function useGameLoop(
-  requestIdRef: React.MutableRefObject<number | null>,
-  gameLoop: (timestamp: number) => void,
+  canvasRef: React.RefObject<HTMLCanvasElement>,
+  gameState: GameState,
+  update: (deltaTime: number) => void,
+  render: (ctx: CanvasRenderingContext2D, state: GameState) => void,
 ) {
+  const requestIdRef = useRef<number | null>(null);
+  let lastTime = 0;
+
+  function gameLoop(timestamp: number): void {
+    const deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
+    lastTime = timestamp;
+
+    const ctx = canvasRef?.current?.getContext("2d");
+
+    if (!ctx) {
+      return;
+    }
+
+    update(deltaTime);
+    render(ctx, gameState);
+
+    requestIdRef.current = requestAnimationFrame(gameLoop);
+  }
+
   useEffect(() => {
     requestIdRef.current = requestAnimationFrame(gameLoop);
 
@@ -192,7 +179,7 @@ function useGameLoop(
         cancelAnimationFrame(requestIdRef.current);
       }
     };
-  }, []);
+  }, [canvasRef, update, render]);
 }
 
 function useInputEventListeners(gameState: GameState) {
@@ -202,8 +189,28 @@ function useInputEventListeners(gameState: GameState) {
 
     return () => {
       window.removeEventListener("keydown", (e) => handleKeyDown(e, gameState));
+      window.removeEventListener("keyup", (e) => handleKeyUp(e, gameState));
     };
   }, []);
+}
+
+/**
+ * Returns an array of platforms that the player is colliding with.
+ */
+function getCollidingPlatforms(state: GameState) {
+  // Allow jumping through platforms
+  if (state.speedY < 0) {
+    return [];
+  }
+
+  return state.platforms.filter((platform) => {
+    return (
+      state.playerX < platform.x + platform.width &&
+      state.playerX > platform.x &&
+      state.playerY >= platform.y - PLAYER_HEIGHT && // På eller i plattformen
+      state.playerY <= platform.y // Ikke lavere enn plattformen
+    );
+  });
 }
 
 export default FluffyTower;
