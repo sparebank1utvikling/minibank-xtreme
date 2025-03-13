@@ -1,12 +1,10 @@
-import React, { ReactNode, useEffect, useRef } from "react";
-import { GameState } from "@/components/games/PlatformJumper/types";
-import {
-  handleKeyDown,
-  handleKeyUp,
-} from "@/components/games/PlatformJumper/handleInput";
+import React, {ReactNode, useEffect, useRef} from "react";
+import {GameState} from "@/components/games/PlatformJumper/types";
+import {handleKeyDown, handleKeyUp,} from "@/components/games/PlatformJumper/handleInput";
 import bunnySprite from "./assets/bunny_idle_1.png";
 import {
   createPlatforms,
+  getCollidingPlatforms,
   renderAllPlatforms as renderPlatforms,
   updatePlatforms,
 } from "@/components/games/PlatformJumper/platform";
@@ -41,25 +39,31 @@ function FluffyTower(): ReactNode {
 
     const collidingPlatforms = getCollidingPlatforms(gameState.current);
 
-    if (collidingPlatforms.length > 0) {
-      // Hit a platform
+    // Hit a platform
+    if (state.speedY > 0 && collidingPlatforms.length > 0) {
+
       if (state.playerY < VIEWPORT_HEIGHT * (2 / 3)) {
-        gameState.current.platforms = updatePlatforms(state.platforms, 50);
+        gameState.current.platforms = updatePlatforms(state.platforms, 500);
       }
       state.speedY = 0;
       state.isJumping = false;
       const collidingPlatform = collidingPlatforms[0];
       state.playerY = collidingPlatform.y - PLAYER_HEIGHT + 1;
-    } else if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) {
-      // Hit the ground
-      state.isJumping = false;
-      state.speedY = 0;
-      state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
     } else {
       // Falling
       state.speedY += GRAVITY * deltaTime;
       state.isJumping = true;
     }
+
+    // det skal være GAMEOVER
+    // TODO
+    if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) {
+      // Hit the ground
+      state.isJumping = false;
+      state.speedY = 0;
+      state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
+    }
+
     if (state.isMoving) {
       if (state.direction === "LEFT") {
         state.speedX -= PLAYER_ACCELERATION * deltaTime;
@@ -192,25 +196,6 @@ function useInputEventListeners(gameState: GameState) {
       window.removeEventListener("keyup", (e) => handleKeyUp(e, gameState));
     };
   }, []);
-}
-
-/**
- * Returns an array of platforms that the player is colliding with.
- */
-function getCollidingPlatforms(state: GameState) {
-  // Allow jumping through platforms
-  if (state.speedY < 0) {
-    return [];
-  }
-
-  return state.platforms.filter((platform) => {
-    return (
-      state.playerX < platform.x + platform.width &&
-      state.playerX > platform.x &&
-      state.playerY >= platform.y - PLAYER_HEIGHT && // På eller i plattformen
-      state.playerY <= platform.y // Ikke lavere enn plattformen
-    );
-  });
 }
 
 export default FluffyTower;

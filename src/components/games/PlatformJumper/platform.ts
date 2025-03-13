@@ -1,6 +1,7 @@
-import { Platform } from "@/components/games/PlatformJumper/types";
+import {GameState, Platform} from "@/components/games/PlatformJumper/types";
 import {
   PLATFORM_HEIGHT,
+  PLAYER_HEIGHT,
   VIEWPORT_HEIGHT,
   VIEWPORT_WIDTH,
 } from "@/components/games/PlatformJumper/constants";
@@ -40,3 +41,17 @@ export const updatePlatforms = (platformArray: Platform[], speed: number) => {
   });
   return platformArray;
 };
+
+/**
+ * Returns an array of platforms that the player is colliding with.
+ */
+export function getCollidingPlatforms(state: GameState) {
+  return state.platforms.filter((platform) => {
+    return (
+        state.playerX < platform.x + platform.width &&
+        state.playerX > platform.x &&
+        state.playerY >= platform.y - PLAYER_HEIGHT && // På eller i plattformen
+        state.playerY <= platform.y // Ikke lavere enn plattformen
+    );
+  });
+}
