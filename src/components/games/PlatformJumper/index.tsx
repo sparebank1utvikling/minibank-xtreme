@@ -39,11 +39,10 @@ function FluffyTower(): ReactNode {
 
     updatePlayerPosition(state, deltaTime);
 
-    handlePlatformCollision(state);
+    const isStandingOnPlatform = handlePlatformCollision(state);
 
     // handle gravity
-    const collidingPlatform = getCollidingPlatform(gameState.current);
-    if (!collidingPlatform) {
+    if (!isStandingOnPlatform) {
       // Falling
       state.speedY += GRAVITY * deltaTime;
       state.isJumping = true;
@@ -60,15 +59,10 @@ function FluffyTower(): ReactNode {
 
     // set player speed based on input
     if (state.isMovementInput) {
-      if (state.direction === "LEFT") {
-        state.speedX -= PLAYER_ACCELERATION * deltaTime;
-      } else {
-        state.speedX += PLAYER_ACCELERATION * deltaTime;
-      }
-    } else {
-      if (!state.isJumping) {
-        state.speedX = 0;
-      }
+      const direction = state.direction === "LEFT" ? -1 : 1;
+      state.speedX += PLAYER_ACCELERATION * direction * deltaTime;
+    } else if (!state.isJumping) {
+      state.speedX = 0;
     }
 
     // move all platforms down when player is moving up
@@ -80,13 +74,19 @@ function FluffyTower(): ReactNode {
     }
   }
 
+  /**
+   * Returns true if player is stanfind on a platform
+   */
   function handlePlatformCollision(state: GameState) {
     const collidingPlatform = getCollidingPlatform(gameState.current);
-    if (state.speedY > 0 && collidingPlatform) {
-      state.speedY = 0;
-      state.isJumping = false;
-      state.playerY = collidingPlatform.y - PLAYER_HEIGHT + 1;
+    if (state.speedY <= 0 || !collidingPlatform) {
+      return false;
     }
+
+    state.speedY = 0;
+    state.isJumping = false;
+    state.playerY = collidingPlatform.y - PLAYER_HEIGHT;
+    return true;
   }
 
   function render(ctx: CanvasRenderingContext2D, state: GameState): void {
