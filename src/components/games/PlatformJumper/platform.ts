@@ -1,9 +1,9 @@
-import {GameState, Platform} from "@/components/games/PlatformJumper/types";
+import { GameState, Platform } from "@/components/games/PlatformJumper/types";
 import {
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
   PLATFORM_HEIGHT,
   PLAYER_HEIGHT,
-  VIEWPORT_HEIGHT,
-  VIEWPORT_WIDTH,
 } from "@/components/games/PlatformJumper/constants";
 
 const renderPlatform = (ctx: CanvasRenderingContext2D, platform: Platform) => {
@@ -24,10 +24,10 @@ export const createPlatforms = (n: number, spacing: number, curY: number) => {
   const platformArray: Platform[] = [];
   let i = 0;
   while (i < n) {
-    const baseWidth = VIEWPORT_WIDTH / 1.5 - i * 2;
+    const baseWidth = CANVAS_WIDTH / 1.5 - i * 2;
     const width = Math.max(Math.random() * 5 + baseWidth, 50);
-    const x = Math.max(Math.random() * VIEWPORT_WIDTH - width, 0);
-    const y = i * spacing - n * spacing + VIEWPORT_HEIGHT * 1.8;
+    const x = Math.max(Math.random() * CANVAS_WIDTH - width, 0);
+    const y = i * spacing - n * spacing + CANVAS_HEIGHT * 1.8;
     const color = "green";
     platformArray.push({ x, y, width, color });
     i++;
@@ -35,9 +35,12 @@ export const createPlatforms = (n: number, spacing: number, curY: number) => {
   return platformArray;
 };
 
-export const updatePlatforms = (platformArray: Platform[], speed: number) => {
+export const updatePlatforms = (
+  platformArray: Platform[],
+  deltaPlayerY: number,
+) => {
   platformArray.forEach((platform) => {
-    platform.y += speed;
+    platform.y += deltaPlayerY;
   });
   return platformArray;
 };
@@ -48,10 +51,11 @@ export const updatePlatforms = (platformArray: Platform[], speed: number) => {
 export function getCollidingPlatforms(state: GameState) {
   return state.platforms.filter((platform) => {
     return (
-        state.playerX < platform.x + platform.width &&
-        state.playerX > platform.x &&
-        state.playerY >= platform.y - PLAYER_HEIGHT && // På eller i plattformen
-        state.playerY <= platform.y // Ikke lavere enn plattformen
+      state.playerX < platform.x + platform.width &&
+      state.playerX > platform.x &&
+      state.playerY >= platform.y - PLAYER_HEIGHT && // På eller i plattformen
+      state.playerY <= platform.y // Ikke lavere enn plattformen
     );
-  });
+  })[0];
 }
+

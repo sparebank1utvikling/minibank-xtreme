@@ -4,7 +4,7 @@ export interface GameState {
   direction: "LEFT" | "RIGHT";
   speedX: number;
   speedY: number;
-  isMoving: boolean;
+  isMovementInput: boolean;
   isJumping: boolean;
   platforms: Platform[];
 }

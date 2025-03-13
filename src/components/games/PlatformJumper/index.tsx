@@ -1,10 +1,13 @@
-import React, {ReactNode, useEffect, useRef} from "react";
-import {GameState} from "@/components/games/PlatformJumper/types";
-import {handleKeyDown, handleKeyUp,} from "@/components/games/PlatformJumper/handleInput";
+import React, { ReactNode, useEffect, useRef } from "react";
+import { GameState } from "@/components/games/PlatformJumper/types";
+import {
+  handleKeyDown,
+  handleKeyUp,
+} from "@/components/games/PlatformJumper/handleInput";
 import bunnySprite from "./assets/bunny_idle_1.png";
 import {
   createPlatforms,
-  getCollidingPlatforms,
+  getCollidingPlatforms as getCollidingPlatform,
   renderAllPlatforms as renderPlatforms,
   updatePlatforms,
 } from "@/components/games/PlatformJumper/platform";
@@ -15,7 +18,6 @@ import {
   PLAYER_ACCELERATION,
   PLAYER_HEIGHT,
   PLAYER_WIDTH,
-  VIEWPORT_HEIGHT,
 } from "@/components/games/PlatformJumper/constants";
 
 function FluffyTower(): ReactNode {
@@ -26,7 +28,7 @@ function FluffyTower(): ReactNode {
     direction: "LEFT",
     speedX: 0, // pixels per second
     speedY: 0,
-    isMoving: false,
+    isMovementInput: false,
     isJumping: false,
     platforms: createPlatforms(100, 300, 0),
   });
@@ -37,19 +39,11 @@ function FluffyTower(): ReactNode {
 
     updatePlayerPosition(state, deltaTime);
 
-    const collidingPlatforms = getCollidingPlatforms(gameState.current);
+    handlePlatformCollision(state);
 
-    // Hit a platform
-    if (state.speedY > 0 && collidingPlatforms.length > 0) {
-
-      if (state.playerY < VIEWPORT_HEIGHT * (2 / 3)) {
-        gameState.current.platforms = updatePlatforms(state.platforms, 500);
-      }
-      state.speedY = 0;
-      state.isJumping = false;
-      const collidingPlatform = collidingPlatforms[0];
-      state.playerY = collidingPlatform.y - PLAYER_HEIGHT + 1;
-    } else {
+    // handle gravity
+    const collidingPlatform = getCollidingPlatform(gameState.current);
+    if (!collidingPlatform) {
       // Falling
       state.speedY += GRAVITY * deltaTime;
       state.isJumping = true;
@@ -64,7 +58,8 @@ function FluffyTower(): ReactNode {
       state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
     }
 
-    if (state.isMoving) {
+    // set player speed based on input
+    if (state.isMovementInput) {
       if (state.direction === "LEFT") {
         state.speedX -= PLAYER_ACCELERATION * deltaTime;
       } else {
@@ -76,11 +71,21 @@ function FluffyTower(): ReactNode {
       }
     }
 
-    if (previousPlayerY - state.playerY > 0) {
+    // move all platforms down when player is moving up
+    if (state.speedY < 0) {
       state.platforms = updatePlatforms(
         state.platforms,
         previousPlayerY - state.playerY,
       );
+    }
+  }
+
+  function handlePlatformCollision(state: GameState) {
+    const collidingPlatform = getCollidingPlatform(gameState.current);
+    if (state.speedY > 0 && collidingPlatform) {
+      state.speedY = 0;
+      state.isJumping = false;
+      state.playerY = collidingPlatform.y - PLAYER_HEIGHT + 1;
     }
   }
 

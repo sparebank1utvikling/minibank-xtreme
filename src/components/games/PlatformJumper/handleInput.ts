@@ -7,12 +7,12 @@ export const handleKeyDown = (event: KeyboardEvent, state: GameState) => {
     case "ArrowLeft":
     case "a":
       state.direction = "LEFT";
-      state.isMoving = true;
+      state.isMovementInput = true;
       break;
     case "ArrowRight":
     case "d":
       state.direction = "RIGHT";
-      state.isMoving = true;
+      state.isMovementInput = true;
       break;
     case "ArrowUp":
     case " ":
@@ -28,11 +28,11 @@ export const handleKeyUp = (event: KeyboardEvent, state: GameState) => {
   switch (event.key) {
     case "ArrowLeft":
     case "a":
-      state.isMoving = false;
+      state.isMovementInput = false;
       break;
     case "ArrowRight":
     case "d":
-      state.isMoving = false;
+      state.isMovementInput = false;
       break;
   }
 };
