@@ -22,26 +22,25 @@ export const renderAllPlatforms = (
 
 export const createPlatforms = (n: number, spacing: number, curY: number) => {
   const platformArray: Platform[] = [];
+
+  // Add a full-width platform at the bottom of the viewport
+  platformArray.push({
+    x: 0,
+    y: CANVAS_HEIGHT - 30, // Position it slightly above the bottom edge
+    width: CANVAS_WIDTH,
+    color: "#33AF85",
+  });
+
   let i = 0;
   while (i < n) {
     const baseWidth = CANVAS_WIDTH / 1.5 - i * 2;
     const width = Math.max(Math.random() * 5 + baseWidth, 50);
     const x = Math.max(Math.random() * CANVAS_WIDTH - width, 0);
     const y = i * spacing - n * spacing + CANVAS_HEIGHT * 1.8;
-    const color = "green";
+    const color = "#33AF85";
     platformArray.push({ x, y, width, color });
     i++;
   }
-  return platformArray;
-};
-
-export const updatePlatforms = (
-  platformArray: Platform[],
-  deltaPlayerY: number,
-) => {
-  platformArray.forEach((platform) => {
-    platform.y += deltaPlayerY;
-  });
   return platformArray;
 };
 
@@ -58,4 +57,3 @@ export function getCollidingPlatforms(state: GameState) {
     );
   })[0];
 }
-

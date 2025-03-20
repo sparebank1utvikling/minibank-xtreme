@@ -1,6 +1,8 @@
 export interface GameState {
   playerX: number;
   playerY: number;
+  cameraX: number;
+  cameraY: number;
   direction: "LEFT" | "RIGHT";
   speedX: number;
   speedY: number;

@@ -9,7 +9,6 @@ import {
   createPlatforms,
   getCollidingPlatforms as getCollidingPlatform,
   renderAllPlatforms as renderPlatforms,
-  updatePlatforms,
 } from "@/components/games/PlatformJumper/platform";
 import {
   CANVAS_HEIGHT,
@@ -23,38 +22,40 @@ import {
 function FluffyTower(): ReactNode {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const gameState = useRef<GameState>({
-    playerX: 100,
-    playerY: 100,
+    playerX: CANVAS_WIDTH / 2 - PLAYER_WIDTH,
+    playerY: CANVAS_HEIGHT - PLAYER_HEIGHT * 4,
+    cameraX: 0,
+    cameraY: 0,
     direction: "LEFT",
     speedX: 0, // pixels per second
     speedY: 0,
     isMovementInput: false,
     isJumping: false,
-    platforms: createPlatforms(100, 300, 0),
+    platforms: createPlatforms(100, 230, 0),
   });
 
   function update(deltaTime: number): void {
     const state = gameState.current;
-    const previousPlayerY = state.playerY;
 
     updatePlayerPosition(state, deltaTime);
+    updateCameraPosition(state, deltaTime);
 
     const isStandingOnPlatform = handlePlatformCollision(state);
 
     // handle gravity
     if (!isStandingOnPlatform) {
-      // Falling
       state.speedY += GRAVITY * deltaTime;
       state.isJumping = true;
     }
 
     // det skal være GAMEOVER
     // TODO
-    if (gameState.current.playerY >= CANVAS_HEIGHT - PLAYER_HEIGHT) {
-      // Hit the ground
+    if (state.playerY >= CANVAS_HEIGHT * 2) {
       state.isJumping = false;
       state.speedY = 0;
-      state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT;
+      state.playerX = CANVAS_WIDTH / 2 - PLAYER_WIDTH; // Reset player position
+      state.playerY = CANVAS_HEIGHT - PLAYER_HEIGHT * 4;
+      state.platforms = createPlatforms(100, 230, 0); // Reset platforms
     }
 
     // set player speed based on input
@@ -64,22 +65,41 @@ function FluffyTower(): ReactNode {
     } else if (!state.isJumping) {
       state.speedX = 0;
     }
-
-    // move all platforms down when player is moving up
-    if (state.speedY < 0) {
-      state.platforms = updatePlatforms(
-        state.platforms,
-        previousPlayerY - state.playerY,
-      );
-    }
   }
 
   /**
-   * Returns true if player is stanfind on a platform
+   * Update camera position to center on the player with damping for smooth movement
+   * @param state Game state
+   * @param deltaTime Time since last update in seconds (needed for time-based damping)
+   */
+  function updateCameraPosition(state: GameState, deltaTime: number) {
+    const targetCameraX = state.playerX - CANVAS_WIDTH / 2 + PLAYER_WIDTH / 2;
+
+    const horizontalDamping = 5;
+    const verticalDamping = 3;
+
+    state.cameraX +=
+      (targetCameraX - state.cameraX) * horizontalDamping * deltaTime;
+
+    // Only update vertical camera position when jumping up
+    // if (state.speedY < 0) {
+    const targetCameraY = state.playerY - CANVAS_HEIGHT / 2 + PLAYER_HEIGHT / 2;
+    state.cameraY +=
+      (targetCameraY - state.cameraY) * verticalDamping * deltaTime;
+    // } else if (state.playerY < state.cameraY + CANVAS_HEIGHT / 4) {
+    // Buffer zone when player is too high in the viewport while falling
+    // const targetCameraY = state.playerY - CANVAS_HEIGHT / 4;
+    // state.cameraY +=
+    //   (targetCameraY - state.cameraY) * verticalDamping * deltaTime;
+    // }
+  }
+
+  /**
+   * Returns true if player is standing on a platform
    */
   function handlePlatformCollision(state: GameState) {
     const collidingPlatform = getCollidingPlatform(gameState.current);
-    if (state.speedY <= 0 || !collidingPlatform) {
+    if (state.speedY < 0 || !collidingPlatform) {
       return false;
     }
 
@@ -91,8 +111,18 @@ function FluffyTower(): ReactNode {
 
   function render(ctx: CanvasRenderingContext2D, state: GameState): void {
     renderBackground(ctx);
+
+    ctx.save();
+
+    // Apply camera transform - translate everything by negative camera position
+    ctx.translate(-state.cameraX, -state.cameraY);
+
     renderPlayer(ctx, state);
     renderPlatforms(ctx, state.platforms);
+
+    ctx.restore();
+
+    renderDebugInfo(ctx, state);
   }
 
   useInputEventListeners(gameState.current);
@@ -153,6 +183,62 @@ function renderPlayer(ctx: CanvasRenderingContext2D, state: GameState) {
   }
 
   ctx.restore();
+
+  renderPlayerHitbox(ctx, state);
+}
+
+function renderPlayerHitbox(ctx: CanvasRenderingContext2D, state: GameState) {
+  const debug = false;
+  if (debug) {
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(state.playerX, state.playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
+  }
+}
+
+/**
+ * Renders a debug information box in the top-left corner
+ */
+function renderDebugInfo(ctx: CanvasRenderingContext2D, state: GameState) {
+  const padding = 10;
+  const lineHeight = 18;
+
+  // Enable the debug display
+  const debug = true;
+
+  if (debug) {
+    // Format values to be more readable (fixed decimal places)
+    const playerX = state.playerX.toFixed(1);
+    const playerY = state.playerY.toFixed(1);
+    const cameraX = state.cameraX.toFixed(1);
+    const cameraY = state.cameraY.toFixed(1);
+    const speedX = state.speedX.toFixed(2);
+    const speedY = state.speedY.toFixed(2);
+
+    // Create debug text lines
+    const debugInfo = [
+      `Player: (${playerX}, ${playerY})`,
+      `Camera: (${cameraX}, ${cameraY})`,
+      `Speed: (${speedX}, ${speedY})`,
+      `Direction: ${state.direction}`,
+      `Jumping: ${state.isJumping}`,
+      `Movement Input: ${state.isMovementInput}`,
+      `Platforms: ${state.platforms.length}`,
+    ];
+
+    // Draw semi-transparent background for debug panel
+    ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+    ctx.fillRect(0, 0, 220, debugInfo.length * lineHeight + padding * 2);
+
+    // Draw debug text
+    ctx.fillStyle = "white";
+    ctx.font = "14px monospace";
+    ctx.textBaseline = "top";
+
+    debugInfo.forEach((line, index) => {
+      ctx.fillText(line, padding, padding + index * lineHeight);
+    });
+  }
 }
 
 function useGameLoop(
