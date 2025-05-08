@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { GameState } from "@/components/games/PlatformJumper/types";
 import {
   handleKeyDown,
@@ -289,4 +289,46 @@ function useInputEventListeners(gameState: GameState) {
   }, []);
 }
 
-export default FluffyTower;
+function FluffyTowerWasm() {
+  useEffect(() => {
+    const scriptSrc = `/mq_js_bundle.js`;
+
+    const script = document.createElement("script");
+    script.src = scriptSrc;
+    script.async = true;
+
+    script.onload = () => {
+      if (typeof window.load === "function") {
+        window.load("fluffytower.wasm");
+      }
+    };
+
+    // Add script to document
+    document.body.appendChild(script);
+
+    // Cleanup
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  return (
+    <canvas
+      id="glcanvas"
+      tabIndex={1}
+      style={{
+        margin: "0px",
+        padding: "0px",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        position: "absolute",
+        background: "black",
+        zIndex: "0",
+        left: "0",
+      }}
+    ></canvas>
+  );
+}
+
+export default FluffyTowerWasm;
