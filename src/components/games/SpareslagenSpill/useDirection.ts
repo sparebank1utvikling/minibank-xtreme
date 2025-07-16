@@ -6,7 +6,7 @@ export const useDirection = () => {
   const [currentDirection, setCurrentDirection] = useState<Direction>(INITIAL_DIRECTION);
   const [nextDirection, setNextDirection] = useState<Direction>(INITIAL_DIRECTION);
 
-  function getNextSnakeDirection() {
+  function getNextDirection() {
     setCurrentDirection(nextDirection)
     return nextDirection;
   }
@@ -39,5 +39,5 @@ export const useDirection = () => {
     };
   }, [currentDirection]);
   
-  return [currentDirection, getNextSnakeDirection] as const;
+  return [currentDirection, getNextDirection] as const;
 }
