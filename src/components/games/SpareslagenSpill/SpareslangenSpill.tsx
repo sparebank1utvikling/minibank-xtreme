@@ -6,6 +6,7 @@ import { BOARD_SPARESLANGEN_PATH } from "@/utils/constants";
 import { GameComplete } from "@/components/common/GameComplete";
 import { whatDoesTheSnakeSay } from "@/components/games/SpareslagenSpill/texts";
 import { useDirection } from "@/components/games/SpareslagenSpill/useDirection";
+import { Slange } from "@/components/games/SpareslagenSpill/slange";
 
 const BOARD_SIZE = 20;
 const CELL_SIZE = 25;
@@ -219,20 +220,7 @@ export const SpareslangenSpill = () => {
               alt="Giftig merkevare"
             />
           </div>)}
-          {snakePositions.map((snakePosition: Position) => (
-            <div
-              className={styles.snake}
-              key={`${snakePosition.x}-${snakePosition.y}`}
-              style={{
-                position: "absolute",
-                top: `${snakePosition.y * 25}px`,
-                left: `${snakePosition.x * 25}px`,
-                width: "25px",
-                height: "25px",
-                backgroundColor: isPoisoned ? "purple" : "green",
-              }}
-            />
-          ))}
+        <Slange positions={snakePositions} isPoisoned={isPoisoned} />
         </div>
         {snakeLine && (
             <span className={styles.snakeLine}>
