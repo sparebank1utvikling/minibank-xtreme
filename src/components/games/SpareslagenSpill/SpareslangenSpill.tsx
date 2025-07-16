@@ -4,17 +4,11 @@ import Mynt from "./mynt.svg?url";
 import Dnb from "./dnb.svg?url";
 import { BOARD_SPARESLANGEN_PATH } from "@/utils/constants";
 import { GameComplete } from "@/components/common/GameComplete";
-import {whatDoesTheSnakeSay} from "@/components/games/SpareslagenSpill/texts";
+import { whatDoesTheSnakeSay } from "@/components/games/SpareslagenSpill/texts";
+import { useDirection } from "@/components/games/SpareslagenSpill/useDirection";
 
 const BOARD_SIZE = 20;
 const CELL_SIZE = 25;
-
-type Position = {
-  x: number;
-  y: number;
-};
-
-type Direction = "l" | "r" | "u" | "d";
 
 const createSnake = () => {
   return [
@@ -90,7 +84,7 @@ export const SpareslangenSpill = () => {
   const [snakePositions, setSnakePositions] = useState<Position[]>(
     createSnake()
   );
-  const [snakeDirection, setSnakeDirection] = useState<Direction>("u");
+  const snakeDirection = useDirection();
   const [coinPosition, setCoinPosition] = useState<Position>(
     getNewCoinPosition()
   );
@@ -181,34 +175,6 @@ export const SpareslangenSpill = () => {
     }, getSpeed(200, nokSaved));
     return () => clearInterval(interval);
   }, [snakePositions, snakeDirection]);
-
-  const eventKeyDown = (event: KeyboardEvent) => {
-    switch (event.key) {
-      case "ArrowLeft":
-      case "4":
-        if (snakeDirection != "r") setSnakeDirection("l");
-        break;
-      case "ArrowDown":
-      case "2":
-        if (snakeDirection != "u") setSnakeDirection("d");
-        break;
-      case "ArrowRight":
-      case "6":
-        if (snakeDirection != "l") setSnakeDirection("r");
-        break;
-      case "ArrowUp":
-      case "8":
-        if (snakeDirection != "d") setSnakeDirection("u");
-        break;
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", eventKeyDown);
-    return () => {
-      window.removeEventListener("keydown", eventKeyDown);
-    };
-  }, [snakeDirection]);
 
   if (gameOver) {
     return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />;
