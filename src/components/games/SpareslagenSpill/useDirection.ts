@@ -3,25 +3,31 @@ import { useEffect, useState } from "react";
 const INITIAL_DIRECTION = 'u';
 
 export const useDirection = () => {
-  const [direction, setDirection] = useState<Direction>(INITIAL_DIRECTION);
+  const [currentDirection, setCurrentDirection] = useState<Direction>(INITIAL_DIRECTION);
+  const [nextDirection, setNextDirection] = useState<Direction>(INITIAL_DIRECTION);
+
+  function getNextSnakeDirection() {
+    setCurrentDirection(nextDirection)
+    return nextDirection;
+  }
 
   const eventKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
       case "ArrowLeft":
       case "4":
-        if (direction != "r") setDirection("l");
+        if (currentDirection != "r") setNextDirection("l");
         break;
       case "ArrowDown":
       case "2":
-        if (direction != "u") setDirection("d");
+        if (currentDirection != "u") setNextDirection("d");
         break;
       case "ArrowRight":
       case "6":
-        if (direction != "l") setDirection("r");
+        if (currentDirection != "l") setNextDirection("r");
         break;
       case "ArrowUp":
       case "8":
-        if (direction != "d") setDirection("u");
+        if (currentDirection != "d") setNextDirection("u");
         break;
     }
   };
@@ -31,7 +37,7 @@ export const useDirection = () => {
     return () => {
       window.removeEventListener("keydown", eventKeyDown);
     };
-  }, [direction]);
+  }, [currentDirection]);
   
-  return direction
+  return [currentDirection, getNextSnakeDirection] as const;
 }

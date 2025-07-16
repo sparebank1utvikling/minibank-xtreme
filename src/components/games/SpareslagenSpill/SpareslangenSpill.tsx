@@ -84,7 +84,7 @@ export const SpareslangenSpill = () => {
   const [snakePositions, setSnakePositions] = useState<Position[]>(
     createSnake()
   );
-  const snakeDirection = useDirection();
+  const [currentSnakeDirection, getNextSnakeDirection] = useDirection();
   const [coinPosition, setCoinPosition] = useState<Position>(
     getNewCoinPosition()
   );
@@ -111,7 +111,7 @@ export const SpareslangenSpill = () => {
     }
   }
 
-  function handleAteCoin() {
+  function handleAteCoin(snakeDirection: Direction) {
     setNokSaved(nokSaved + 1);
     setCoinPosition(getNewCoinPosition());
     setSnakeLine(whatDoesTheSnakeSay("coin"));
@@ -153,6 +153,7 @@ export const SpareslangenSpill = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      const snakeDirection = getNextSnakeDirection();
       const nextHeadPosition = getNextHeadPosition(
         snakePositions,
         snakeDirection
@@ -165,7 +166,7 @@ export const SpareslangenSpill = () => {
         nextHeadPosition.x === coinPosition.x &&
         nextHeadPosition.y === coinPosition.y
       ) {
-        handleAteCoin();
+        handleAteCoin(snakeDirection);
       } else if (poisonPosition && nextHeadPosition.x === poisonPosition.x && nextHeadPosition.y === poisonPosition.y) {
         handleAtePoison();
         moveSnake(snakeDirection);
@@ -174,7 +175,7 @@ export const SpareslangenSpill = () => {
       }
     }, getSpeed(200, nokSaved));
     return () => clearInterval(interval);
-  }, [snakePositions, snakeDirection]);
+  }, [snakePositions]);
 
   if (gameOver) {
     return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />;
@@ -196,7 +197,7 @@ export const SpareslangenSpill = () => {
           />
         </span>
         <div className={styles.board}>
-          <div className={styles.food} onClick={handleAteCoin}>
+          <div className={styles.food} onClick={() => handleAteCoin(currentSnakeDirection)}>
             <img
               style={{
                 position: "relative",
