@@ -1,6 +1,12 @@
 import SpareBankLogo from "@/assets/rgb_SpareBank1_neg.png";
 import {Link, useNavigate} from "react-router-dom";
-import {BOARD_LABYRINT_PATH, BOARD_MENU, BOARD_PAY_PATH, BOARD_PIN_PATH} from "@/utils/constants";
+import {
+  BOARD_LABYRINT_PATH,
+  BOARD_MENU,
+  BOARD_PAY_PATH,
+  BOARD_PIN_PATH,
+  BOARD_SPARESLANGEN_PATH
+} from "@/utils/constants";
 import React, {useEffect, useRef} from "react";
 
 
@@ -72,8 +78,8 @@ const LeaderboardMenu = () => {
             {" "}
             <h3>
               <Link to={
-                BOARD_MENU // TODO bytt ut lenken og teksten med det som passer ditt eget spill
-              }>6) Top 30 - DITT NYE SPILL</Link>
+                BOARD_SPARESLANGEN_PATH // TODO bytt ut lenken og teksten med det som passer ditt eget spill
+              }>6) Top 30 - Spareslangen</Link>
             </h3>
           </div>
           <div className={"menu-item--left menu-button"}>

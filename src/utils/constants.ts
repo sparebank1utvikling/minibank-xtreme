@@ -2,9 +2,11 @@ export const BOARD_MENU = "/leaderboards"
 export const BOARD_PIN_PATH = "/leaderboardPin";
 export const BOARD_PAY_PATH = "/leaderboardPay";
 export const BOARD_LABYRINT_PATH = "/leaderboardLabyrint";
+export const BOARD_SPARESLANGEN_PATH = "/leaderboardSpareslangen";
 export const GAME_TITLE_PIN = "PIN";
 export const GAME_TITLE_PAY_INVOICE = "Pay invoice";
 export const GAME_TITLE_LABYRINT = "Maze";
+export const GAME_TITLE_SPARESLANGEN = "Spareslangen";
 export const NUMPAD_HOME = "/";
 
 
@@ -20,6 +22,14 @@ export const howToPIN = [
   "In this game you will be prompted with new PIN codes for your card. These will only be displayed on the screen for a limited time.",
   "Once they disappear, enter the PIN code you were given in the input field.",
   "Goal: Correctly remember and enter as many PINs as you can! The catch?  The time to remember get shorter each time! Are you attentive enough?",
+];
+
+export const howToSlange = [
+  "Welcome to Spareslangen! In this game, you will collect coins to save in your account.",
+  "Use the number keys to navigate the snake around the screen.",
+  "Each time the snake collects a coin, it will grow longer, and your savings will increase.",
+  "Be careful not to run into the walls or the snake's own body, or the game will end.",
+  "Goal: Collect as many coins as possible to maximize your savings. How much can you save?"
 ];
 
 // TODO legg inn how-to tekst her
