@@ -7,47 +7,28 @@ import { GameComplete } from "@/components/common/GameComplete";
 import { whatDoesTheSnakeSay } from "@/components/games/SpareslagenSpill/texts";
 import { Snake } from "@/components/games/SpareslagenSpill/snake/snake";
 import { useSnake } from "@/components/games/SpareslagenSpill/snake/useSnake";
-
-const BOARD_SIZE = 20;
-const CELL_SIZE = 25;
+import { useCoin } from "./coin/useCoin";
+import { CELL_SIZE } from "./board";
+import { getAvailableCell } from "@/components/games/SpareslagenSpill/board";
 
 const getSpeed = (base: number, nokSaved: number) =>
     base - Math.floor(nokSaved / 2) * 10;
 
 export const SpareslangenSpill = () => {
   const snake = useSnake();
-  const [coinPosition, setCoinPosition] = useState<Position>(
-    getNewCoinPosition()
-  );
+  const [coinPosition, updateCoinPosition] = useCoin();
   const [poisonPosition, setPoisonPosition] = useState<Position | null>(null);
   const [nokSaved, setNokSaved] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [snakeLine, setSnakeLine] = useState<string>("What a nice day to sssssssave some money");
 
-  function getNewCoinPosition() {
-    while (true) {
-      const nextPosition = {
-        x: Math.floor(Math.random() * BOARD_SIZE),
-        y: Math.floor(Math.random() * BOARD_SIZE),
-      };
-      if (
-        snake.positions.some(
-          (it) => it.x === nextPosition.x && it.y === nextPosition.y
-        )
-      ) {
-        continue;
-      }
-      return nextPosition;
-    }
-  }
-
   function handleAteCoin(snakeDirection: Direction) {
     setNokSaved(nokSaved + 1);
-    setCoinPosition(getNewCoinPosition());
+    updateCoinPosition(snake.positions);
     setSnakeLine(whatDoesTheSnakeSay("coin"));
 
     if (!poisonPosition && Math.random() < 0.2) {
-      const poisonPosition = getNewCoinPosition();
+      const poisonPosition = getAvailableCell(snake.positions);
       setPoisonPosition(poisonPosition);
     }
 
