@@ -1,8 +1,8 @@
-import { Dispatch, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 interface CounterProps {
   timeGiven: number
-  setDone: Dispatch<React.SetStateAction<boolean>>
+  setDone: (done: boolean) => void
 }
 
 export const Countdown = ({timeGiven, setDone}: CounterProps) => {
