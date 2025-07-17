@@ -5,92 +5,21 @@ import Dnb from "./dnb.svg?url";
 import { BOARD_SPARESLANGEN_PATH } from "@/utils/constants";
 import { GameComplete } from "@/components/common/GameComplete";
 import { whatDoesTheSnakeSay } from "@/components/games/SpareslagenSpill/texts";
-import { useDirection } from "@/components/games/SpareslagenSpill/useDirection";
 import { Snake } from "@/components/games/SpareslagenSpill/snake/snake";
+import { useSnake } from "@/components/games/SpareslagenSpill/snake/useSnake";
 
 const BOARD_SIZE = 20;
 const CELL_SIZE = 25;
 
-const createSnake = () => {
-  return [
-    {
-      x: 10,
-      y: 10,
-    },
-    {
-      x: 10,
-      y: 11,
-    },
-    {
-      x: 10,
-      y: 12,
-    },
-  ];
-};
-
-const createNewSnake = (oldSnake: Position[], direction: Direction) => {
-  return oldSnake.map((it, index) => {
-    if (index === 0) {
-      switch (direction) {
-        case "l":
-          return { x: it.x - 1, y: it.y };
-        case "r":
-          return { x: it.x + 1, y: it.y };
-        case "u":
-          return { x: it.x, y: it.y - 1 };
-        case "d":
-          return { x: it.x, y: it.y + 1 };
-      }
-    }
-    return oldSnake[index - 1];
-  });
-};
-
-const getNextHeadPosition = (
-  snakePositions: Position[],
-  direction: Direction
-): Position | null => {
-  const head = snakePositions[0];
-  switch (direction) {
-    case "l":
-      if (head.x > 0) {
-        return { x: head.x - 1, y: head.y };
-      }
-      return null;
-    case "r":
-      if (head.x < 19) {
-        return { x: head.x + 1, y: head.y };
-      }
-      return null;
-    case "u":
-      if (head.y > 0) {
-        return { x: head.x, y: head.y - 1 };
-      }
-      return null;
-    case "d":
-      if (head.y < 19) {
-        return { x: head.x, y: head.y + 1 };
-      }
-      return null;
-    default:
-      return null;
-  }
-};
-
 const getSpeed = (base: number, nokSaved: number) =>
     base - Math.floor(nokSaved / 2) * 10;
 
-
 export const SpareslangenSpill = () => {
-  const [snakePositions, setSnakePositions] = useState<Position[]>(
-    createSnake()
-  );
-  const [currentSnakeDirection, getNextSnakeDirection] = useDirection();
+  const snake = useSnake();
   const [coinPosition, setCoinPosition] = useState<Position>(
     getNewCoinPosition()
   );
   const [poisonPosition, setPoisonPosition] = useState<Position | null>(null);
-  const [isPoisoned, setIsPoisoned] = useState<boolean>(false);
   const [nokSaved, setNokSaved] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [snakeLine, setSnakeLine] = useState<string>("What a nice day to sssssssave some money");
@@ -102,7 +31,7 @@ export const SpareslangenSpill = () => {
         y: Math.floor(Math.random() * BOARD_SIZE),
       };
       if (
-        snakePositions.some(
+        snake.positions.some(
           (it) => it.x === nextPosition.x && it.y === nextPosition.y
         )
       ) {
@@ -122,15 +51,12 @@ export const SpareslangenSpill = () => {
       setPoisonPosition(poisonPosition);
     }
 
-    setSnakePositions((prevSnake) => {
-      const tail = prevSnake[prevSnake.length - 1];
-      return [...createNewSnake(snakePositions, snakeDirection), tail];
-    });
+    snake.eatCoin(snakeDirection);
   }
 
   function handleAtePoison() {
     setNokSaved(nokSaved - 5);
-    setIsPoisoned(true);
+    snake.poison();
     setPoisonPosition(null);
     setSnakeLine(whatDoesTheSnakeSay("dnb"));
   }
@@ -139,29 +65,13 @@ export const SpareslangenSpill = () => {
     setGameOver(true);
   }
 
-  const moveSnake = (direction: Direction) => {
-    setSnakePositions(createNewSnake(snakePositions, direction));
-  };
-
   useEffect(() => {
     const interval = setInterval(() => {
-      if (isPoisoned) {
-        setIsPoisoned(false);
-      }
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [isPoisoned, setIsPoisoned]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const snakeDirection = getNextSnakeDirection();
-      const nextHeadPosition = getNextHeadPosition(
-        snakePositions,
-        snakeDirection
-      );
+      const snakeDirection = snake.getNextDirection();
+      const nextHeadPosition = snake.getNextHeadPosition(snakeDirection);
       if (nextHeadPosition === null) {
         handleGameOver();
-      } else if (snakePositions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
+      } else if (snake.positions.some((it) => it.x === nextHeadPosition.x && it.y === nextHeadPosition.y)) {
         handleGameOver();
       } else if (
         nextHeadPosition.x === coinPosition.x &&
@@ -170,13 +80,13 @@ export const SpareslangenSpill = () => {
         handleAteCoin(snakeDirection);
       } else if (poisonPosition && nextHeadPosition.x === poisonPosition.x && nextHeadPosition.y === poisonPosition.y) {
         handleAtePoison();
-        moveSnake(snakeDirection);
+        snake.move(snakeDirection);
       } else {
-        moveSnake(snakeDirection);
+        snake.move(snakeDirection);
       }
     }, getSpeed(200, nokSaved));
     return () => clearInterval(interval);
-  }, [snakePositions]);
+  }, [snake.positions]);
 
   if (gameOver) {
     return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />;
@@ -198,7 +108,7 @@ export const SpareslangenSpill = () => {
           />
         </span>
         <div className={styles.board}>
-          <div className={styles.food} onClick={() => handleAteCoin(currentSnakeDirection)}>
+          <div className={styles.food} onClick={() => handleAteCoin(snake.currentDirection)}>
             <img
               style={{
                 position: "relative",
@@ -220,7 +130,7 @@ export const SpareslangenSpill = () => {
               alt="Giftig merkevare"
             />
           </div>)}
-        <Snake positions={snakePositions} isPoisoned={isPoisoned} />
+        <Snake positions={snake.positions} isPoisoned={snake.isPoisoned} />
         </div>
         {snakeLine && (
             <span className={styles.snakeLine}>
