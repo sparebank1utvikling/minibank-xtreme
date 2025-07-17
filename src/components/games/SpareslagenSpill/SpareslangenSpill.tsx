@@ -6,7 +6,7 @@ import { BOARD_SPARESLANGEN_PATH } from "@/utils/constants";
 import { GameComplete } from "@/components/common/GameComplete";
 import { whatDoesTheSnakeSay } from "@/components/games/SpareslagenSpill/texts";
 import { useDirection } from "@/components/games/SpareslagenSpill/useDirection";
-import { Slange } from "@/components/games/SpareslagenSpill/slange";
+import { Snake } from "@/components/games/SpareslagenSpill/snake/snake";
 
 const BOARD_SIZE = 20;
 const CELL_SIZE = 25;
@@ -220,7 +220,7 @@ export const SpareslangenSpill = () => {
               alt="Giftig merkevare"
             />
           </div>)}
-        <Slange positions={snakePositions} isPoisoned={isPoisoned} />
+        <Snake positions={snakePositions} isPoisoned={isPoisoned} />
         </div>
         {snakeLine && (
             <span className={styles.snakeLine}>
