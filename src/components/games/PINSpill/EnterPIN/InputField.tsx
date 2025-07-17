@@ -1,4 +1,4 @@
-import { Dispatch, useEffect } from "react"
+import { useEffect } from "react"
 
 interface InputFieldProps {
   data: string
@@ -9,7 +9,7 @@ interface InputFieldProps {
   answer: string
   validator: (input: string, answer: string) => boolean
   success: boolean
-  successHook: Dispatch<React.SetStateAction<boolean>>
+  successHook: (success: boolean) => void
   inputRef: React.RefObject<HTMLInputElement>
 }
 
