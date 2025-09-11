@@ -10,11 +10,13 @@ import { useSnake } from "@/components/games/SpareslagenSpill/snake/useSnake";
 import { useCoin } from "./coin/useCoin";
 import { CELL_SIZE } from "./board";
 import { getAvailableCell } from "@/components/games/SpareslagenSpill/board";
+import { useHomeButton } from "@/components/common/useHomeButton";
 
 const getSpeed = (base: number, nokSaved: number) =>
     base - Math.floor(nokSaved / 2) * 10;
 
 export const SpareslangenSpill = () => {
+  useHomeButton();
   const snake = useSnake();
   const [coinPosition, updateCoinPosition] = useCoin();
   const [poisonPosition, setPoisonPosition] = useState<Position | null>(null);
@@ -70,7 +72,11 @@ export const SpareslangenSpill = () => {
   }, [snake.positions]);
 
   if (gameOver) {
-    return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />;
+    return (
+      <div className={styles.gameOver}>
+        <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />
+      </div>
+    );
   }
 
   return (
