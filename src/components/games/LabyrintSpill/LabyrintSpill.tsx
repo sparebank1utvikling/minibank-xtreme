@@ -5,6 +5,7 @@ import { CountdownBar, CountdownBarHandle } from "@/components/games/LabyrintSpi
 import { GameComplete } from '../../common/GameComplete';
 import {getGameLevel} from "@/components/games/LabyrintSpill/levels/getGameLevels";
 import {BOARD_LABYRINT_PATH} from "@/utils/constants";
+import { useHomeButton } from "@/components/common/useHomeButton";
 
 const LOCAL_STORAGE_KEY = 'Labyrint-disk'
 const BEGYNT_PTR = 'vR6g$';
@@ -19,6 +20,7 @@ enum GameState {
 }
 
 export const LabyrintSpill = () => {
+  useHomeButton();
   const [gameState, setGameState] = useState(GameState.LOADING);
   const [count, setCount] = useState(3);
   const [level, setLevel] = useState(1);

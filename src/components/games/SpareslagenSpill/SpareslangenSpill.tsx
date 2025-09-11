@@ -10,7 +10,7 @@ import { useSnake } from "@/components/games/SpareslagenSpill/snake/useSnake";
 import { useCoin } from "./coin/useCoin";
 import { CELL_SIZE } from "./board";
 import { getAvailableCell } from "@/components/games/SpareslagenSpill/board";
-import { useHomeButton } from "@/components/games/SpareslagenSpill/useHomeButton";
+import { useHomeButton } from "@/components/common/useHomeButton";
 
 const getSpeed = (base: number, nokSaved: number) =>
     base - Math.floor(nokSaved / 2) * 10;
