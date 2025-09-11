@@ -70,7 +70,11 @@ export const SpareslangenSpill = () => {
   }, [snake.positions]);
 
   if (gameOver) {
-    return <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />;
+    return (
+      <div className={styles.gameOver}>
+        <GameComplete gamePath={BOARD_SPARESLANGEN_PATH} score={nokSaved} />
+      </div>
+    );
   }
 
   return (

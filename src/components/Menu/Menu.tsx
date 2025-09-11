@@ -24,7 +24,7 @@ const Menu = () => {
         navigate("/labyrint");
         break;
       case "6":
-        navigate("/slange");
+        navigate("/slange/intro");
         break;
       //case "1":
       //  navigate(BOARD_LABYRINT_PATH);
