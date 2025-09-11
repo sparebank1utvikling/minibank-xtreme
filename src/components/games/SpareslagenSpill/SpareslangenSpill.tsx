@@ -10,11 +10,13 @@ import { useSnake } from "@/components/games/SpareslagenSpill/snake/useSnake";
 import { useCoin } from "./coin/useCoin";
 import { CELL_SIZE } from "./board";
 import { getAvailableCell } from "@/components/games/SpareslagenSpill/board";
+import { useHomeButton } from "@/components/games/SpareslagenSpill/useHomeButton";
 
 const getSpeed = (base: number, nokSaved: number) =>
     base - Math.floor(nokSaved / 2) * 10;
 
 export const SpareslangenSpill = () => {
+  useHomeButton();
   const snake = useSnake();
   const [coinPosition, updateCoinPosition] = useCoin();
   const [poisonPosition, setPoisonPosition] = useState<Position | null>(null);
